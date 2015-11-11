@@ -2,7 +2,7 @@
 
 
 '''
- Author: Gerben Visser (0x90)
+ Author: Gerben Visser (0x90) -- @N0_Operation
  A forked project of reconscan.py -- a recon/enumeration script by Mike Czumak (T_v3rn1x) -- @SecuritySift
 '''
 
@@ -118,10 +118,16 @@ def nmapScan(ip_address):
     print "INFO: Running general TCP/UDP nmap scans for " + ip_address
     serv_dict = {}
     checkpath("./results/nmap")
-    TCPSCAN = "nmap -vv -Pn -A -sC -sS -T 4 -p- -oN './results/nmap/%s.nmap' -oX './results/nmap/%s_nmap_scan_import.xml' %s" % (
+
+    TCPSCAN = "nmap -sS -sU -p T:1-65535 -vv -A -n --min-rtt-timeout 50ms --max-rtt-timeout 60ms --initial-rtt-timeout 100ms --scan-delay 0 --min-rate 450 --max-rate 15000 --max-retries 3 -Pn -PE -PS21-23,25,53,80,110-111,135,139,143,443,445,993,995,1723,3306,3389,5900,8080 -PU53,67-69,123,135,137-139,161-162,445,500,514,520,631,1434,1900,4500,49152 --defeat-rst-ratelimit --open --privileged -g 88 172.26.164.20 --stats-every 10s -oN './results/nmap/%s.nmap' -oX './results/nmap/%s_nmap_scan_import.xml' %s" % (
     ip_address, ip_address, ip_address)
+    #UDPSCAN = "nmap -sS -sU -p T:1-65535 -vv -A -n --min-rtt-timeout 50ms --max-rtt-timeout 60ms --initial-rtt-timeout 100ms --scan-delay 0 --min-rate 450 --max-rate 15000 --max-retries 3 -Pn -PE -PS21-23,25,53,80,110-111,135,139,143,443,445,993,995,1723,3306,3389,5900,8080 -PU53,67-69,123,135,137-139,161-162,445,500,514,520,631,1434,1900,4500,49152 --defeat-rst-ratelimit --open --privileged -g 88 172.26.164.20 --stats-every 10s -oN './results/nmap/%s.nmap' -oX './results/nmap/%s_nmap_scan_import.xml' %s" % (
+    #ip_address, ip_address, ip_address)
+    #TCPSCAN = "nmap -vv -Pn -A -sC -sS -T 4 -p- -oN './results/nmap/%s.nmap' -oX './results/nmap/%s_nmap_scan_import.xml' %s" % (
+    #ip_address, ip_address, ip_address)
     UDPSCAN = "nmap -vv -Pn -A -sC -sU -T 4 --top-ports 200 -oN './results/nmap/%sU.nmap' -oX './results/nmap/%sU_nmap_scan_import.xml' %s" % (
     ip_address, ip_address, ip_address)
+
     results = subprocess.check_output(TCPSCAN, shell=True)
     udpresults = subprocess.check_output(UDPSCAN, shell=True)
     lines = results.split("\n")
