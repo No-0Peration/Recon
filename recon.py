@@ -117,9 +117,10 @@ def nmapScan(ip_address):
     ip_address = ip_address.strip()
     print "INFO: Running general TCP/UDP nmap scans for " + ip_address
     serv_dict = {}
-    TCPSCAN = "nmap -vv -Pn -A -sC -sS -T 4 -p- -oN '/root/scripts/recon_enum/results/exam/%s.nmap' -oX '/root/scripts/recon_enum/results/exam/nmap/%s_nmap_scan_import.xml' %s" % (
+    checkpath("./results/nmap")
+    TCPSCAN = "nmap -vv -Pn -A -sC -sS -T 4 -p- -oN './results/nmap/%s.nmap' -oX './results/nmap/%s_nmap_scan_import.xml' %s" % (
     ip_address, ip_address, ip_address)
-    UDPSCAN = "nmap -vv -Pn -A -sC -sU -T 4 --top-ports 200 -oN '/root/scripts/recon_enum/results/exam/%sU.nmap' -oX '/root/scripts/recon_enum/results/exam/nmap/%sU_nmap_scan_import.xml' %s" % (
+    UDPSCAN = "nmap -vv -Pn -A -sC -sU -T 4 --top-ports 200 -oN './results/nmap/%sU.nmap' -oX './results/nmap/%sU_nmap_scan_import.xml' %s" % (
     ip_address, ip_address, ip_address)
     results = subprocess.check_output(TCPSCAN, shell=True)
     udpresults = subprocess.check_output(UDPSCAN, shell=True)
