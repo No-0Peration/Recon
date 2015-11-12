@@ -7,10 +7,15 @@ if len(sys.argv) != 2:
     sys.exit(0)
 
 ip_address = sys.argv[1]
-HOSTNAME = "nmblookup -A %s | grep '<00>' | grep -v '<GROUP>' | cut -d' ' -f1" % (ip_address)# grab the hostname         
+#HOSTNAME = "nmblookup -A %s | grep '<00>' | grep -v '<GROUP>' | cut -d' ' -f1" % (ip_address)
+HOSTNAME = "host %s | cut -d ' ' -f5 | cut -d '.' -f1,2,3" % (ip_address)
+DOMAINNAME = "host %s | cut -d ' ' -f5 | cut -d '.' -f2,3" % (ip_address)
+
+# grab the hostname
 host = subprocess.check_output(HOSTNAME, shell=True).strip()
+domain = subprocess.check_output(DOMAINNAME, shell=True).strip()
 print "INFO: Attempting Domain Transfer on " + host
-ZT = "dig @%s.thinc.local thinc.local axfr" % (host)
+ZT = "dig @%s %s axfr" % (host, domain)
 ztresults = subprocess.check_output(ZT, shell=True)
 if "failed" in ztresults:
     print "INFO: Zone Transfer failed for " + host
@@ -19,5 +24,4 @@ else:
     outfile = "results/exam/" + ip_address+ "_zonetransfer.txt"
     dnsf = open(outfile, "w")
     dnsf.write(ztresults)
-    dnsf.close
-
+    dnsf.close()
