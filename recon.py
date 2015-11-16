@@ -12,7 +12,6 @@ import multiprocessing
 import os
 import errno
 
-
 def checkpath(path):
     try:
         os.makedirs(path)
@@ -186,9 +185,12 @@ def nmapScan(ip_address):
 
 
 # grab the discover scan results and start scanning up hosts
-print "############################################################"
-print "####                      RECON                         ####"
-print "############################################################"
+print "////////////////////////////////////////////////////////////"
+print "///                 Enumeration script                   ///"
+print "///                         --                           ///"
+print "///                                                      ///"
+print "///                 0x90:N0_Operation                    ///"
+print "////////////////////////////////////////////////////////////"
 
 if __name__ == '__main__':
     try:
