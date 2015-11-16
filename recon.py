@@ -118,9 +118,6 @@ def nmapScan(ip_address):
     serv_dict = {}
     checkpath("./results/nmap")
 
-    #TCPSCAN = "nmap -sS -sC -p- -vv -A -Pn --min-rtt-timeout 50ms --max-rtt-timeout 60ms --initial-rtt-timeout 100ms --scan-delay 0 --min-rate 450 --max-rate 15000 --max-retries 3 -PE -PS21-23,25,53,80,110-111,135,139,143,443,445,993,995,1723,3306,3389,5900,8080 -PU53,67-69,123,135,137-139,161-162,445,500,514,520,631,1434,1900,4500,49152 --defeat-rst-ratelimit --open --privileged -g --stats-every 10s -oN './results/nmap/%s.nmap' -oX './results/nmap/%s_nmap_scan_import.xml' %s" % (ip_address, ip_address, ip_address)
-    #UDPSCAN = "nmap -sS -sU -p T:1-65535 -vv -A -n --min-rtt-timeout 50ms --max-rtt-timeout 60ms --initial-rtt-timeout 100ms --scan-delay 0 --min-rate 450 --max-rate 15000 --max-retries 3 -Pn -PE -PS21-23,25,53,80,110-111,135,139,143,443,445,993,995,1723,3306,3389,5900,8080 -PU53,67-69,123,135,137-139,161-162,445,500,514,520,631,1434,1900,4500,49152 --defeat-rst-ratelimit --open --privileged -g 88 172.26.164.20 --stats-every 10s -oN './results/nmap/%s.nmap' -oX './results/nmap/%s_nmap_scan_import.xml' %s" % (
-    #ip_address, ip_address, ip_address)
     TCPSCAN = "nmap -vv -Pn -A -sC -sS -T 4 -p- -oN './results/nmap/%s.nmap' -oX './results/nmap/%s_nmap_scan_import.xml' %s" % (
     ip_address, ip_address, ip_address)
     UDPSCAN = "nmap -vv -Pn -A -sC -sU -T 4 --top-ports 200 -oN './results/nmap/%sU.nmap' -oX './results/nmap/%sU_nmap_scan_import.xml' %s" % (ip_address, ip_address, ip_address)
@@ -130,12 +127,14 @@ def nmapScan(ip_address):
     for line in lines:
         ports = []
         line = line.strip()
+        print line
         if ("tcp" in line) and ("open" in line) and not ("Discovered" in line):
             while "  " in line:
                 line = line.replace("  ", " ")
                 linesplit = line.split(" ")
                 service = linesplit[2]  # grab the service name
                 port = line.split(" ")[0]  # grab the port/proto
+                print service, port
                 if service in serv_dict:
                     ports = serv_dict[service]  # if the service is already in the dict, grab the port list
                     ports.append(port)
