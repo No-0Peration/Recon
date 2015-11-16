@@ -127,14 +127,12 @@ def nmapScan(ip_address):
     for line in lines:
         ports = []
         line = line.strip()
-        print line
         if ("tcp" in line) and ("open" in line) and not ("Discovered" in line):
             while "  " in line:
                 line = line.replace("  ", " ")
             linesplit = line.split(" ")
             service = linesplit[2]  # grab the service name
             port = line.split(" ")[0]  # grab the port/proto
-            print service, port
             if service in serv_dict:
                 ports = serv_dict[service]  # if the service is already in the dict, grab the port list
             ports.append(port)
