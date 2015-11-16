@@ -131,14 +131,14 @@ def nmapScan(ip_address):
         if ("tcp" in line) and ("open" in line) and not ("Discovered" in line):
             while "  " in line:
                 line = line.replace("  ", " ")
-                linesplit = line.split(" ")
-                service = linesplit[2]  # grab the service name
-                port = line.split(" ")[0]  # grab the port/proto
-                print service, port
-                if service in serv_dict:
-                    ports = serv_dict[service]  # if the service is already in the dict, grab the port list
-                    ports.append(port)
-                    serv_dict[service] = ports  # add service to the dictionary along with the associated port(2)
+            linesplit = line.split(" ")
+            service = linesplit[2]  # grab the service name
+            port = line.split(" ")[0]  # grab the port/proto
+            print service, port
+            if service in serv_dict:
+                ports = serv_dict[service]  # if the service is already in the dict, grab the port list
+            ports.append(port)
+            serv_dict[service] = ports  # add service to the dictionary along with the associated port(2)
     # go through the service dictionary to call additional targeted enumeration functions
     for serv in serv_dict:
         ports = serv_dict[serv]
