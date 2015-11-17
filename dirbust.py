@@ -10,7 +10,7 @@ if len(sys.argv) != 3:
 
 url = str(sys.argv[1])
 name = str(sys.argv[2])
-folders = ["./"]
+folders = ["./wordlists"]
 
 found = []
 print "INFO: Starting dirb scan for " + url
@@ -18,7 +18,6 @@ for folder in folders:
     for filename in os.listdir(folder):
         outfile = " -o " + "./results/" + name + "_dirb_" + filename
         DIRBSCAN = "dirb %s %s/%s %s -S -r" % (url, folder, filename, outfile)
-        print DIRBSCAN
         try:
             results = subprocess.check_output(DIRBSCAN, shell=True)
             resultarr = results.split("\n")
@@ -36,3 +35,6 @@ try:
             print "   " + item
 except:
     print "INFO: No items found during dirb scan of " + url
+
+
+
