@@ -10,7 +10,7 @@ if len(sys.argv) != 3:
 
 url = str(sys.argv[1])
 name = str(sys.argv[2])
-folders = ["/usr/share/dirb/wordlists", "/usr/share/dirb/wordlists/vulns"]
+folders = ["./"]
 
 found = []
 print "INFO: Starting dirb scan for " + url
