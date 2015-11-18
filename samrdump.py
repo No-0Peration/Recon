@@ -9,20 +9,22 @@
 #
 # Author:
 #  Javier Kohen <jkohen@coresecurity.com>
-#  Alberto Solino (@agsolino)
+#  Alberto Solino <bethus@gmail.com>
 #
 # Reference for:
 #  DCE/RPC for SAMR
 
+import socket
+import string
 import sys
+import types
 import logging
-import argparse
 
-from impacket.examples import logger
-from impacket import version
+from impacket import uuid, version
 from impacket.nt_errors import STATUS_MORE_ENTRIES
 from impacket.dcerpc.v5 import transport, samr
-from impacket.dcerpc.v5.rpcrt import DCERPCException
+from impacket.examples import logger
+import argparse
 
 
 class ListUsersException(Exception):
@@ -108,7 +110,7 @@ class SAMRDump:
 
         try:
             resp = samr.hSamrConnect(dce)
-            serverHandle = resp['ServerHandle']
+            serverHandle = resp['ServerHandle'] 
 
             resp = samr.hSamrEnumerateDomainsInSamServer(dce, serverHandle)
             domains = resp['Buffer']['Buffer']
@@ -124,25 +126,28 @@ class SAMRDump:
             resp = samr.hSamrOpenDomain(dce, serverHandle = serverHandle, domainId = resp['DomainId'])
             domainHandle = resp['DomainHandle']
 
+            done = False
+            
             status = STATUS_MORE_ENTRIES
             enumerationContext = 0
             while status == STATUS_MORE_ENTRIES:
                 try:
                     resp = samr.hSamrEnumerateUsersInDomain(dce, domainHandle, enumerationContext = enumerationContext)
-                except DCERPCException, e:
+                except Exception, e:
                     if str(e).find('STATUS_MORE_ENTRIES') < 0:
-                        raise
+                        raise 
                     resp = e.get_packet()
 
                 for user in resp['Buffer']['Buffer']:
-                    r = samr.hSamrOpenUser(dce, domainHandle, samr.MAXIMUM_ALLOWED, user['RelativeId'])
+                    r = samr.hSamrOpenUser(dce, domainHandle, samr.USER_READ_GENERAL | samr.USER_READ_PREFERENCES | samr.USER_READ_ACCOUNT, user['RelativeId'])
                     print "Found user: %s, uid = %d" % (user['Name'], user['RelativeId'] )
+    
                     info = samr.hSamrQueryInformationUser2(dce, r['UserHandle'],samr.USER_INFORMATION_CLASS.UserAllInformation)
                     entry = (user['Name'], user['RelativeId'], info['Buffer']['All'])
                     entries.append(entry)
                     samr.hSamrCloseHandle(dce, r['UserHandle'])
 
-                enumerationContext = resp['EnumerationContext']
+                enumerationContext = resp['EnumerationContext'] 
                 status = resp['ErrorCode']
 
         except ListUsersException, e:
@@ -155,8 +160,6 @@ class SAMRDump:
 
 # Process command-line arguments.
 if __name__ == '__main__':
-    # Init the example's logger theme
-    logger.init()
     print version.BANNER
 
     parser = argparse.ArgumentParser(add_help = True, description = "This script downloads the list of users for the target system.")
@@ -199,5 +202,3 @@ if __name__ == '__main__':
 
     dumper = SAMRDump(options.protocol, username, password, domain, options.hashes, options.aesKey, options.k)
     dumper.dump(address)
-
-
