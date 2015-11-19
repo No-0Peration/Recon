@@ -32,7 +32,8 @@ try:
     if found[0] != "":
         print "[*] Dirb found the following items..."
         for item in found:
-            print "   " + item
+            if ("CODE:400" not in item):
+                print "   " + item
 except:
     print "INFO: No items found during dirb scan of " + url
 
