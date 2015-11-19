@@ -2,7 +2,7 @@
 
 
 '''
- Author: Gerben Visser (0x90) -- @N0_Operation
+ Author: Gerben Visser (0x90) -- @N0_Operation ///
  A forked project of reconscan.py -- a recon/enumeration script by Mike Czumak (T_v3rn1x) -- @SecuritySift
 '''
 
