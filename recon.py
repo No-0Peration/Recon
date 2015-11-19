@@ -45,7 +45,7 @@ def httpEnum(ip_address, port):
     results = subprocess.check_output(HTTPSCAN, shell=True)
     DIRBUST = "./dirbust.py http://%s:%s %s" % (ip_address, port, ip_address)  # execute the python script
     subprocess.call(DIRBUST, shell=True)
-    NIKTOSCAN = "nikto -host %s -p %s > ./results/%s._nikto" % (ip_address, port, ip_address)
+    NIKTOSCAN = "nikto -host %s -p %s > ./results/%s.%s_nikto" % (ip_address, port, ip_address, port)
     subprocess.call(NIKTOSCAN, shell=True)
     return
 
