@@ -54,7 +54,7 @@ def httpsEnum(ip_address, port):
     print "INFO: Detected https on " + ip_address + ":" + port
     print "INFO: Performing nmap web script scan for " + ip_address + ":" + port
     checkpath("./results/nmap/")
-    HTTPSCANS = "nmap -sV -Pn -vv -p %s --script=http-vhosts,http-userdir-enum,http-apache-negotiation,http-backup-finder,http-config-backup,http-default-accounts,http-email-harvest,http-methods,http-method-tamper,http-passwd,http-robots.txt -oX ./results/nmap/%s_https.nmap %s" % (
+    HTTPSCANS = "nmap -sV -Pn -vv -p %s --script=http-vhosts,http-userdir-enum,http-apache-negotiation,http-backup-finder,http-config-backup,http-default-accounts,http-methods,http-method-tamper,http-passwd,http-robots.txt -oX ./results/nmap/%s_https.nmap %s" % (
     port, ip_address, ip_address)
     results = subprocess.check_output(HTTPSCANS, shell=True)
     DIRBUST = "./dirbust.py https://%s:%s %s" % (ip_address, port, ip_address)  # execute the python script
