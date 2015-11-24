@@ -1,18 +1,11 @@
 #!/usr/bin/env python
-
-
 '''
  Author: Gerben Visser (0x90) -- @N0_Operation
  A forked project of reconscan.py -- a recon/enumeration script by Mike Czumak (T_v3rn1x) -- @SecuritySift
 '''
 
-
-import subprocess
 import multiprocessing
-import os
-import errno
 import recon
-
 
 # grab the discover scan results and start scanning up hosts
 print "////////////////////////////////////////////////////////////"
