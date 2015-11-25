@@ -24,7 +24,7 @@ if results != "":
         SNMPWALK = "snmpwalk -c public -v1 %s 1 > results/%s_snmpwalk.txt" % (ip_address, ip_address)
         results = subprocess.check_output(SNMPWALK, shell=True)
 
-NMAPSCAN = "nmap -vv -sV -sU -Pn -p 161,162 --script=snmp-netstat,snmp-processes %s" % (ip_address)
+NMAPSCAN = "nmap -vv -sV -sU -Pn -p 161,162 --script=snmp-netstat,snmp-processes snmp-info.nse,snmp-interfaces.nse,snmp-ios-config.nse,snmp-sysdescr.nse,snmp-win32-services.nse,snmp-win32-shares.nse,snmp-win32-software.nse,snmp-win32-users.nse %s" % (ip_address)
 results = subprocess.check_output(NMAPSCAN, shell=True)
 resultsfile = "results/" + ip_address + "_snmprecon.txt"
 f = open(resultsfile, "w")

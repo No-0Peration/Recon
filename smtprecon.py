@@ -7,7 +7,7 @@ if len(sys.argv) != 2:
     print "Usage: smtprecon.py <ip address>"
     sys.exit(0)
 
-SMTPSCAN = "nmap -vv -sV -Pn -p 25,465,587 --script=smtp-vuln* %s" % (sys.argv[1])
+SMTPSCAN = "nmap -vv -sV -Pn -p 25,465,587 --script-args=unsafe=1 --script=smtp-vuln* %s" % (sys.argv[1])
 results = subprocess.check_output(SMTPSCAN, shell=True)
 
 f = open("results/smtpnmapresults.txt", "a")

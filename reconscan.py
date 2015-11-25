@@ -15,7 +15,7 @@ def scanner(ip_address):
     serv_dict = {}
     recon.checkpath("./results/nmap")
 
-    tcpscan = "nmap -vv -Pn -A -sC -sS -p- --min-rtt-timeout 50ms --max-rtt-timeout 60ms --initial-rtt-timeout 100ms --scan-delay 0 --min-rate 450 --max-rate 15000 --max-retries 3 -PE -PS21-23,25,53,80,110-111,135,139,143,443,445,993,995,1723,3306,3389,5900,8080 -PU53,67-69,123,135,137-139,161-162,445,500,514,520,631,1434,1900,4500,49152 --defeat-rst-ratelimit --open --privileged --stats-every 10s -oN './results/nmap/%s.nmap' -oX './results/nmap/%s_nmap_scan_import.xml' %s" % (ip_address, ip_address, ip_address)
+    tcpscan = "nmap -vv -Pn -A -sC -sS --top-ports 1000 --min-rtt-timeout 50ms --max-rtt-timeout 60ms --initial-rtt-timeout 100ms --scan-delay 0 --min-rate 450 --max-rate 15000 --max-retries 3 -PE -PS21-23,25,53,80,110-111,135,139,143,443,445,993,995,1723,3306,3389,5900,8080 -PU53,67-69,123,135,137-139,161-162,445,500,514,520,631,1434,1900,4500,49152 --defeat-rst-ratelimit --open --privileged --stats-every 10s -oN './results/nmap/%s.nmap' -oX './results/nmap/%s_nmap_scan_import.xml' %s" % (ip_address, ip_address, ip_address)
     udpscan = "nmap -vv -Pn -sC -sU -T 4 --top-ports 200 -oN './results/nmap/%sU.nmap' -oX './results/nmap/%sU_nmap_scan_import.xml' %s" % (ip_address, ip_address, ip_address)
 
     tcpresults = subprocess.check_output(tcpscan, shell=True)
@@ -41,7 +41,7 @@ def scanner(ip_address):
     # go through the service dictionary to call additional targeted enumeration functions
     for serv in serv_dict:
         ports = serv_dict[serv]
-        if serv == "http" or "tcpwrapped" in serv:
+        if serv == "http" in serv:
             for port in ports:
                 port = port.split("/")[0]
                 recon.multProc(recon.httpEnum, ip_address, port)

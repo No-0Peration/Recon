@@ -10,7 +10,7 @@ if len(sys.argv) != 3:
 
 url = str(sys.argv[1])
 name = str(sys.argv[2])
-folders = ["./wordlists"]
+folders = ["/usr/share/dirbuster/wordlists/"]
 
 found = []
 print "INFO: Starting dirb scan for " + url
@@ -32,7 +32,7 @@ try:
     if found[0] != "":
         print "[*] Dirb found the following items..."
         for item in found:
-            if ("CODE:400" not in item):
+            if ("CODE:200" in item):
                 print "   " + item
 except:
     print "INFO: No items found during dirb scan of " + url
