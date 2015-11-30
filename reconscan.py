@@ -107,7 +107,7 @@ if __name__ == '__main__':
     end_list = ip_end.split(".")
     top = int(start_list[3])
     bot = int(end_list[3])
-    network_id = str(start_list[0] + "." + start_list[1] + "." + start_list[2] + ".")
+    network_id = str(start_list[0]) + "." + str(start_list[1]) + "." + str(start_list[2]) + "."
     for scanip in range(top,bot):
         ip = str(network_id + scanip)
         jobs = []
