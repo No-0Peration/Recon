@@ -109,7 +109,7 @@ if __name__ == '__main__':
     bot = int(end_list[3])
     network_id = str(start_list[0]) + "." + str(start_list[1]) + "." + str(start_list[2]) + "."
     for scanip in range(top,bot):
-        ip = str(network_id + scanip)
+        ip = network_id + str(scanip)
         jobs = []
         p = multiprocessing.Process(target=scanner, args=(ip,))
         jobs.append(p)
