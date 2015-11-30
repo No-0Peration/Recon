@@ -100,4 +100,17 @@ if __name__ == '__main__':
             p.start()
         f.close()
     except:
-        print "Is there a file 'ips' containing the ipadresses you wanna scan?"
+        print "[INFO] No 'ips' file found going for manual ip input"
+    ip_start = raw_input("Please enter manual start ip /24  : ")
+    start_list = ip_start.split(".")
+    ip_end = raw_input("Please enter manual end ip  /24 : ")
+    end_list = ip_end.split(".")
+    top = int(start_list[3])
+    bot = int(end_list[3])
+    network_id = str(start_list[0] + "." + start_list[1] + "." + start_list[2] + ".")
+    for scanip in range(top,bot):
+        ip = str(network_id + scanip)
+        jobs = []
+        p = multiprocessing.Process(target=scanner, args=(ip,))
+        jobs.append(p)
+        p.start()
