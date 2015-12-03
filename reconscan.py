@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 '''
- Author: Gerben Visser (0x90) -- @N0_Operation zonder bas
+ Author: Gerben Visser (0x90) -- @N0_Operation
  This tool is an automation script for the reconphase during a pentest, its was inspired by a few github repos
 '''
 
