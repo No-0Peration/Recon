@@ -6,11 +6,11 @@
 
 import multiprocessing
 import subprocess
-import recon #all functions called by the main scanner function
+import recon # All functions called by the main scanner function
 
 
 def scanner(ip_address):
-	""" Start function wich takes ip_address to scan as argument"""
+    """ Start function wich takes ip_address to scan as argument """
     ip_address = ip_address.strip()
     print "INFO: Running general TCP/UDP nmap scans for " + ip_address
     serv_dict = {}
@@ -100,8 +100,8 @@ if __name__ == '__main__':
             jobs.append(p)
             p.start()
         f.close()
-    except:
-        print "[INFO] No 'ips' file found going for manual ip input"
+    except Exception as e:
+        print "[INFO] No 'ips' file found going for manual ip input", "Exception : %s" % e
     ip_start = raw_input("Please enter manual start ip /24  : ")
     start_list = ip_start.split(".")
     ip_end = raw_input("Please enter manual end ip  /24 : ")
@@ -112,6 +112,6 @@ if __name__ == '__main__':
     for scanip in range(top,bot):
         ip = network_id + str(scanip)
         jobs = []
-        p = multiprocessing.Process(target=scanner, args=(ip,))
+        p = multiprocessing.Process(target=scanner, args=(ip))
         jobs.append(p)
         p.start()
