@@ -8,7 +8,6 @@ import os
 import multiprocessing
 import subprocess
 import recon # All functions called by the main scanner function
-from IPy import IP
 
 # Check if root
 if os.getuid() == 0:
@@ -16,17 +15,6 @@ if os.getuid() == 0:
 else:
     print("I cannot run as a mortal. Sorry.")
     raise "Helaas"
-
-
-def getIp():
-    """ Defines the ip range to be scanned """
-    try:
-    	ip_start = raw_input("Please enter the ip's to scan (example 192.168.0.1/24)  : ")
-        ip = IP(ip_start)
-        return ip
-    except Exception as e:
-        raise Exception(e)
-    
 
 def scanner(ip_address):
     """ Start function which takes ip_address to scan as argument """
@@ -115,7 +103,7 @@ if __name__ == '__main__':
         recon.checkpath("./results/")
     except:
         pass
-    ips = getIp()
+    ips = recon.getIp()
     for ip in ips:
         jobs = []
         p = multiprocessing.Process(target=scanner, args=(ip))

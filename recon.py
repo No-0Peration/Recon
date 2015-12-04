@@ -2,6 +2,7 @@ import subprocess
 import multiprocessing
 import os
 import errno
+from IPy import IP
 
 def checkpath(path):
     try:
@@ -18,6 +19,14 @@ def multProc(targetin, scanip, port):
     p.start()
     return
 
+def getIp():
+    """ Defines the ip range to be scanned """
+    try:
+        ip_start = raw_input("Please enter the ip's to scan (example 192.168.0.1/24)  : ")
+        ip = IP(ip_start)
+        return ip
+    except Exception as e:
+        raise Exception(e)
 
 def dnsEnum(ip_address, port):
     print "INFO: Detected DNS on " + ip_address + ":" + port
