@@ -1,3 +1,5 @@
-Script to autimate discovery phase.
+ This tool is an automation script for the reconphase during a pentest, its was inspired by a few github repos.
 
-Start reconscan.py
+To start: 
+
+python reconscan.py

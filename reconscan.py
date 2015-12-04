@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 '''
- Author: Gerben Visser (0x90) -- @N0_Operation, And Bas b0x41s ;) <===8
+ Author: Gerben Visser (0x90) -- @N0_Operation, & Bas -- B0x41S.
  This tool is an automation script for the reconphase during a pentest, its was inspired by a few github repos
 '''
 
@@ -10,6 +10,7 @@ import recon #all functions called by the main scanner function
 
 
 def scanner(ip_address):
+	""" Start function wich takes ip_address to scan as argument"""
     ip_address = ip_address.strip()
     print "INFO: Running general TCP/UDP nmap scans for " + ip_address
     serv_dict = {}
