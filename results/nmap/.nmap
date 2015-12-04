@@ -1,4 +1,0 @@
-# Nmap 7.00 scan initiated Fri Dec  4 11:22:30 2015 as: nmap -vv -Pn -A -sC -sS --top-ports 1000 --min-rtt-timeout 50ms --max-rtt-timeout 60ms --initial-rtt-timeout 100ms --scan-delay 0 --min-rate 450 --max-rate 15000 --max-retries 3 -PE -PS21-23,25,53,80,110-111,135,139,143,443,445,993,995,1723,3306,3389,5900,8080 -PU53,67-69,123,135,137-139,161-162,445,500,514,520,631,1434,1900,4500,49152 --defeat-rst-ratelimit --open --privileged --stats-every 10s -oN ./results/nmap/.nmap -oX ./results/nmap/_nmap_scan_import.xml
-Read data files from: /usr/bin/../share/nmap
-WARNING: No targets were specified, so 0 hosts scanned.
-# Nmap done at Fri Dec  4 11:22:31 2015 -- 0 IP addresses (0 hosts up) scanned in 0.78 seconds
