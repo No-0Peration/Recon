@@ -92,10 +92,10 @@ def scanner(ip_address):
 
 # grab the discover scan results and start scanning up hosts
 print "////////////////////////////////////////////////////////////"
-print "///                 Enumeration script                   ///"
-print "///                         --                           ///"
+print "///                   Enumeration script                 ///"
+print "///                          --                          ///"
 print "///                          by                          ///"
-print "///          0x90:N0_Operation &  B0x41S                 ///"
+print "///              0x90:N0_Operation &  B0x41S             ///"
 print "////////////////////////////////////////////////////////////"
 
 if __name__ == '__main__':
