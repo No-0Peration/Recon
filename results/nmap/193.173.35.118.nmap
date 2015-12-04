@@ -1,0 +1,36 @@
+# Nmap 7.00 scan initiated Fri Dec  4 15:39:11 2015 as: nmap -vv -Pn -A -sC -sS --top-ports 1000 --min-rtt-timeout 50ms --max-rtt-timeout 60ms --initial-rtt-timeout 100ms --scan-delay 0 --min-rate 450 --max-rate 15000 --max-retries 3 -PE -PS21-23,25,53,80,110-111,135,139,143,443,445,993,995,1723,3306,3389,5900,8080 -PU53,67-69,123,135,137-139,161-162,445,500,514,520,631,1434,1900,4500,49152 --defeat-rst-ratelimit --open --privileged --stats-every 10s -oN ./results/nmap/193.173.35.118.nmap -oX ./results/nmap/193.173.35.118_nmap_scan_import.xml 193.173.35.118
+Nmap scan report for firewall118.interaccess.nl (193.173.35.118)
+Host is up, received user-set (0.00100s latency).
+Scanned at 2015-12-04 15:39:11 CET for 171s
+Not shown: 997 filtered ports
+Reason: 997 no-responses
+PORT     STATE SERVICE     REASON         VERSION
+21/tcp   open  ftp         syn-ack ttl 64 Microsoft ftpd
+554/tcp  open  rtsp?       syn-ack ttl 64
+7070/tcp open  realserver? syn-ack ttl 64
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Device type: WAP|storage-misc
+Running: Apple embedded, Peplink embedded
+OS CPE: cpe:/h:apple:airport_extreme cpe:/h:peplink:pepwave_surf_ap_200
+OS details: Apple AirPort Extreme WAP or Time Capsule NAS device, Peplink Pepwave Surf AP 200 WAP
+TCP/IP fingerprint:
+OS:SCAN(V=7.00%E=4%D=12/4%OT=21%CT=%CU=%PV=N%DS=1%DC=T%G=N%TM=5661A63A%P=x8
+OS:6_64-pc-linux-gnu)SEQ(SP=D2%GCD=1%ISR=DE%TI=I%TS=0)OPS(O1=M5B4NW0NNT01SN
+OS:N%O2=M5B4NW0NNT01SNN%O3=M5B4NW0NNT01%O4=M5B4NW0NNT01SNN%O5=M5B4NW0NNT01S
+OS:NN%O6=M5B4NNT01SNN)WIN(W1=8000%W2=8000%W3=8000%W4=8000%W5=8000%W6=8000)E
+OS:CN(R=Y%DF=Y%TG=40%W=8000%O=M5B4NW0SNN%CC=N%Q=)T1(R=Y%DF=Y%TG=40%S=O%A=S+
+OS:%F=AS%RD=0%Q=)T2(R=N)T3(R=N)T4(R=Y%DF=N%TG=40%W=0%S=A%A=Z%F=R%O=%RD=0%Q=
+OS:)U1(R=N)IE(R=N)
+
+Network Distance: 1 hop
+TCP Sequence Prediction: Difficulty=210 (Good luck!)
+IP ID Sequence Generation: Incremental
+Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
+
+TRACEROUTE (using port 21/tcp)
+HOP RTT     ADDRESS
+1   1.11 ms firewall118.interaccess.nl (193.173.35.118)
+
+Read data files from: /usr/bin/../share/nmap
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Fri Dec  4 15:42:02 2015 -- 1 IP address (1 host up) scanned in 171.73 seconds

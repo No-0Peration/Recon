@@ -1,0 +1,37 @@
+
+Starting Nmap 7.00 ( https://nmap.org ) at 2015-12-04 15:43 CET
+NSE: Loaded 41 scripts for scanning.
+NSE: Script Pre-scanning.
+NSE: Starting runlevel 1 (of 1) scan.
+Initiating NSE at 15:43
+Completed NSE at 15:43, 0.00s elapsed
+Initiating Parallel DNS resolution of 1 host. at 15:43
+Completed Parallel DNS resolution of 1 host. at 15:43, 0.00s elapsed
+Initiating System CNAME DNS resolution of 1 host. at 15:43
+Completed System CNAME DNS resolution of 1 host. at 15:43, 0.00s elapsed
+Initiating SYN Stealth Scan at 15:43
+Scanning firewall118.interaccess.nl (193.173.35.118) [1 port]
+Discovered open port 21/tcp on 193.173.35.118
+Completed SYN Stealth Scan at 15:43, 0.04s elapsed (1 total ports)
+Initiating Service scan at 15:43
+Scanning 1 service on firewall118.interaccess.nl (193.173.35.118)
+Completed Service scan at 15:43, 0.02s elapsed (1 service on 1 host)
+NSE: Script scanning 193.173.35.118.
+NSE: Starting runlevel 1 (of 1) scan.
+Initiating NSE at 15:43
+Completed NSE at 15:43, 0.25s elapsed
+Nmap scan report for firewall118.interaccess.nl (193.173.35.118)
+Host is up, received user-set (0.00035s latency).
+Scanned at 2015-12-04 15:43:15 CET for 0s
+PORT   STATE SERVICE REASON         VERSION
+21/tcp open  ftp     syn-ack ttl 64 Microsoft ftpd
+Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
+
+NSE: Script Post-scanning.
+NSE: Starting runlevel 1 (of 1) scan.
+Initiating NSE at 15:43
+Completed NSE at 15:43, 0.00s elapsed
+Read data files from: /usr/bin/../share/nmap
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 0.97 seconds
+           Raw packets sent: 1 (44B) | Rcvd: 1 (44B)

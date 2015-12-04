@@ -4,20 +4,41 @@
  This tool is an automation script for the reconphase during a pentest, its was inspired by a few github repos
 '''
 
+import os
 import multiprocessing
 import subprocess
 import recon # All functions called by the main scanner function
+import socket
+from IPy import IP
 
+# Check if root
+if os.getuid() == 0:
+    print("r00tness!")
+else:
+    print("I cannot run as a mortal. Sorry.")
+    raise "Helaas"
+
+
+def getIp():
+    """ Defines the ip range to be scanned """
+    try:
+    	ip_start = raw_input("Please enter the ip's to scan (example 192.168.0.1/24)  : ")
+        ip = IP(ip_start)
+        return ip
+    except Exception as e:
+        raise Exception(e)
+    
 
 def scanner(ip_address):
     """ Start function wich takes ip_address to scan as argument """
-    ip_address = ip_address.strip()
+    ip_address = str(ip_address)
     print "INFO: Running general TCP/UDP nmap scans for " + ip_address
     serv_dict = {}
     recon.checkpath("./results/nmap")
 
     tcpscan = "nmap -vv -Pn -A -sC -sS --top-ports 1000 --min-rtt-timeout 50ms --max-rtt-timeout 60ms --initial-rtt-timeout 100ms --scan-delay 0 --min-rate 450 --max-rate 15000 --max-retries 3 -PE -PS21-23,25,53,80,110-111,135,139,143,443,445,993,995,1723,3306,3389,5900,8080 -PU53,67-69,123,135,137-139,161-162,445,500,514,520,631,1434,1900,4500,49152 --defeat-rst-ratelimit --open --privileged --stats-every 10s -oN './results/nmap/%s.nmap' -oX './results/nmap/%s_nmap_scan_import.xml' %s" % (ip_address, ip_address, ip_address)
     udpscan = "nmap -vv -Pn -sC -sU -T 4 --top-ports 200 -oN './results/nmap/%sU.nmap' -oX './results/nmap/%sU_nmap_scan_import.xml' %s" % (ip_address, ip_address, ip_address)
+
 
     tcpresults = subprocess.check_output(tcpscan, shell=True)
     udpresults = subprocess.check_output(udpscan, shell=True)
@@ -87,30 +108,16 @@ print "////////////////////////////////////////////////////////////"
 print "///                 Enumeration script                   ///"
 print "///                         --                           ///"
 print "///                                                      ///"
-print "///                 0x90:N0_Operation       x            ///"
+print "///                 0x90:N0_Operation                    ///" # is het alleen jou script?
 print "////////////////////////////////////////////////////////////"
 
 if __name__ == '__main__':
     try:
         recon.checkpath("./results/")
-        f = open('./ips', 'r')  # CHANGE THIS!! grab the alive hosts from the discovery scan for enum
-        for scanip in f:
-            jobs = []
-            p = multiprocessing.Process(target=scanner, args=(scanip,))
-            jobs.append(p)
-            p.start()
-        f.close()
-    except Exception as e:
-        print "[INFO] No 'ips' file found going for manual ip input", "Exception : %s" % e
-    ip_start = raw_input("Please enter manual start ip /24  : ")
-    start_list = ip_start.split(".")
-    ip_end = raw_input("Please enter manual end ip  /24 : ")
-    end_list = ip_end.split(".")
-    top = int(start_list[3])
-    bot = int(end_list[3])
-    network_id = str(start_list[0]) + "." + str(start_list[1]) + "." + str(start_list[2]) + "."
-    for scanip in range(top,bot):
-        ip = network_id + str(scanip)
+    except:
+    	pass
+    ips = getIp()
+    for ip in ips:
         jobs = []
         p = multiprocessing.Process(target=scanner, args=(ip))
         jobs.append(p)
