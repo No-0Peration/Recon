@@ -4,7 +4,7 @@
  This tool is an automation script for the reconphase during a pentest, it was inspired by a few github repos
 '''
 
-import os
+import os, sys
 import multiprocessing
 import subprocess
 import recon # All functions called by the main scanner function
@@ -14,6 +14,8 @@ if os.getuid() == 0:
     print("r00tness!")
 else:
     sys.exit("I cannot run as a mortal. Sorry.")
+
+
 
 def scanner(ip_address):
     """ Start function which takes ip_address to scan as argument """
