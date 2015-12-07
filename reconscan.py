@@ -13,8 +13,7 @@ import recon # All functions called by the main scanner function
 if os.getuid() == 0:
     print("r00tness!")
 else:
-    print("I cannot run as a mortal. Sorry.")
-    raise "Helaas"
+    sys.exit("I cannot run as a mortal. Sorry.")
 
 def scanner(ip_address):
     """ Start function which takes ip_address to scan as argument """
