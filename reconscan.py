@@ -1,15 +1,13 @@
 #!/usr/bin/env python
 '''
- Author: Gerben Visser (0x90) -- @N0_Operation, & Bas -- B0x41S.
- This tool is an automation script for the reconphase during a pentest, its was inspired by a few github repos
+ Author: Gerben Visser (0x90) -- @N0_Operation & Bas -- B0x41S.
+ This tool is an automation script for the reconphase during a pentest, it was inspired by a few github repos
 '''
 
 import os
 import multiprocessing
 import subprocess
 import recon # All functions called by the main scanner function
-import socket
-from IPy import IP
 
 # Check if root
 if os.getuid() == 0:
@@ -18,19 +16,8 @@ else:
     print("I cannot run as a mortal. Sorry.")
     raise "Helaas"
 
-
-def getIp():
-    """ Defines the ip range to be scanned """
-    try:
-    	ip_start = raw_input("Please enter the ip's to scan (example 192.168.0.1/24)  : ")
-        ip = IP(ip_start)
-        return ip
-    except Exception as e:
-        raise Exception(e)
-    
-
 def scanner(ip_address):
-    """ Start function wich takes ip_address to scan as argument """
+    """ Start function which takes ip_address to scan as argument """
     ip_address = str(ip_address)
     print "INFO: Running general TCP/UDP nmap scans for " + ip_address
     serv_dict = {}
@@ -105,18 +92,18 @@ def scanner(ip_address):
 
 # grab the discover scan results and start scanning up hosts
 print "////////////////////////////////////////////////////////////"
-print "///                 Enumeration script                   ///"
-print "///                         --                           ///"
-print "///                                                      ///"
-print "///                 0x90:N0_Operation                    ///" # is het alleen jou script?
+print "///                   Enumeration script                 ///"
+print "///                          --                          ///"
+print "///                          by                          ///"
+print "///              0x90:N0_Operation &  B0x41S             ///"
 print "////////////////////////////////////////////////////////////"
 
 if __name__ == '__main__':
     try:
         recon.checkpath("./results/")
     except:
-    	pass
-    ips = getIp()
+        pass
+    ips = recon.getIp()
     for ip in ips:
         jobs = []
         p = multiprocessing.Process(target=scanner, args=(ip))
