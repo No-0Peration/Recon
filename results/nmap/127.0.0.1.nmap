@@ -1,0 +1,39 @@
+# Nmap 7.00 scan initiated Mon Dec  7 08:27:43 2015 as: nmap -vv -Pn -A -sC -sS --top-ports 1000 --min-rtt-timeout 50ms --max-rtt-timeout 60ms --initial-rtt-timeout 100ms --scan-delay 0 --min-rate 450 --max-rate 15000 --max-retries 3 -PE -PS21-23,25,53,80,110-111,135,139,143,443,445,993,995,1723,3306,3389,5900,8080 -PU53,67-69,123,135,137-139,161-162,445,500,514,520,631,1434,1900,4500,49152 --defeat-rst-ratelimit --open --privileged --stats-every 10s -oN ./results/nmap/127.0.0.1.nmap -oX ./results/nmap/127.0.0.1_nmap_scan_import.xml 127.0.0.1
+Nmap scan report for localhost (127.0.0.1)
+Host is up, received user-set (0.000046s latency).
+Scanned at 2015-12-07 08:27:44 CET for 7s
+Not shown: 999 closed ports
+Reason: 999 resets
+PORT    STATE SERVICE REASON         VERSION
+631/tcp open  ipp     syn-ack ttl 64 CUPS 1.7
+| http-methods: 
+|   Supported Methods: GET HEAD OPTIONS POST PUT
+|_  Potentially risky methods: PUT
+| http-robots.txt: 1 disallowed entry 
+|_/
+|_http-server-header: CUPS/1.7 IPP/2.1
+|_http-title: Home - CUPS 1.7.5
+Device type: general purpose
+Running: Linux 3.X
+OS CPE: cpe:/o:linux:linux_kernel:3
+OS details: Linux 3.8 - 3.19
+TCP/IP fingerprint:
+OS:SCAN(V=7.00%E=4%D=12/7%OT=631%CT=1%CU=34577%PV=N%DS=0%DC=L%G=Y%TM=566534
+OS:F7%P=x86_64-pc-linux-gnu)SEQ(SP=105%GCD=1%ISR=10C%TI=Z%CI=I%II=I%TS=8)OP
+OS:S(O1=MFFD7ST11NWA%O2=MFFD7ST11NWA%O3=MFFD7NNT11NWA%O4=MFFD7ST11NWA%O5=MF
+OS:FD7ST11NWA%O6=MFFD7ST11)WIN(W1=AAAA%W2=AAAA%W3=AAAA%W4=AAAA%W5=AAAA%W6=A
+OS:AAA)ECN(R=Y%DF=Y%T=40%W=AAAA%O=MFFD7NNSNWA%CC=Y%Q=)T1(R=Y%DF=Y%T=40%S=O%
+OS:A=S+%F=AS%RD=0%Q=)T2(R=N)T3(R=N)T4(R=Y%DF=Y%T=40%W=0%S=A%A=Z%F=R%O=%RD=0
+OS:%Q=)T5(R=Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)T6(R=Y%DF=Y%T=40%W=0%S
+OS:=A%A=Z%F=R%O=%RD=0%Q=)T7(R=Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)U1(R
+OS:=Y%DF=N%T=40%IPL=164%UN=0%RIPL=G%RID=G%RIPCK=G%RUCK=G%RUD=G)IE(R=Y%DFI=N
+OS:%T=40%CD=S)
+
+Uptime guess: 0.011 days (since Mon Dec  7 08:12:30 2015)
+Network Distance: 0 hops
+TCP Sequence Prediction: Difficulty=261 (Good luck!)
+IP ID Sequence Generation: All zeros
+
+Read data files from: /usr/bin/../share/nmap
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Mon Dec  7 08:27:51 2015 -- 1 IP address (1 host up) scanned in 8.57 seconds
