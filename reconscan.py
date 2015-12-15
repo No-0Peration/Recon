@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 '''
  Author: Gerben Visser (0x90) -- @N0_Operation & Bas -- B0x41S.
- This tool is an automation script for the reconphase during a pentest, it was inspired by a few github repos
+ This tool is an automation script for the reconphase during a pentest, it was inspired by a few github repos.
 '''
 
 import os, sys
@@ -34,7 +34,7 @@ def scanner(ip_address):
 
     lines = results.split("\n")
 
-    #the forloop below parses the nmap results and looks for open service on which it knows to act.
+    # The forloop below parses the nmap results and looks for open service on which it knows to act.
     for line in lines:
         ports = []
         line = line.strip()
@@ -48,7 +48,7 @@ def scanner(ip_address):
                 ports = serv_dict[service]  # if the service is already in the dict, grab the port list
             ports.append(port)
             serv_dict[service] = ports  # add service to the dictionary along with the associated port(2)
-    # go through the service dictionary to call additional targeted enumeration functions
+    # Go through the service dictionary to call additional targeted enumeration functions
     for serv in serv_dict:
         ports = serv_dict[serv]
         if serv == "http" in serv:
@@ -86,7 +86,7 @@ def scanner(ip_address):
         elif "ms-sql" in serv:
             for port in ports:
                 port = port.split("/")[0]
-                recon.multProc(recon.httpEnum, ip_address, port)
+                recon.multProc(recon.mssqlEnum, ip_address, port)
 
     print "INFO: TCP/UDP Nmap scans completed for " + ip_address
     return
