@@ -86,6 +86,10 @@ def scanner(ip_address):
             for port in ports:
                 port = port.split("/")[0]
                 recon.multProc(recon.mssqlEnum, ip_address, port)
+        elif "telnet" in serv:
+            for port in ports:
+                port = port.split("/")[0]
+                recon.multProc(recon.telnetEnum, ip_address, port)
 
     print "INFO: TCP/UDP Nmap scans completed for " + ip_address
     return
