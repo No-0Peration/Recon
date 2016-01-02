@@ -7,9 +7,16 @@ if len(sys.argv) != 2:
     sys.exit(0)
 
 ip_address = sys.argv[1]
-#HOSTNAME = "nmblookup -A %s | grep '<00>' | grep -v '<GROUP>' | cut -d' ' -f1" % (ip_address)
 HOSTNAME = "host %s | cut -d ' ' -f5 | cut -d '.' -f1,2,3" % (ip_address)
 DOMAINNAME = "host %s | cut -d ' ' -f5 | cut -d '.' -f2,3" % (ip_address)
+
+print "INFO: Performing nmap DNS script scan for " + ip_address + ":" + port
+DNSSCAN = "nmap -sV -Pn -vv -p T:53 U:53 --script=dns-* -oN './results/%s_dns.nmap' %s" % (ip_address, ip_address)
+results = subprocess.check_output(DNSSCAN, shell=True)
+outfile = "results/" + ip_address + "_dnsrecon.txt"
+f = open(outfile, "w")
+f.write(results)
+f.close
 
 # grab the hostname
 host = subprocess.check_output(HOSTNAME, shell=True).strip()
