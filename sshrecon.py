@@ -19,3 +19,11 @@ try:
 	    print "[*] Valid ssh credentials found: " + result 
 except:
     print "INFO: No valid ssh credentials found"
+
+print "INFO: Performing nmap SSH script scan for " + ip_address + ":" + port
+SSHSCAN = "nmap -sV -Pn -vv -p %s --script=ssh-* -oN './results/%s_ssh.nmap' %s" % (port, ip_address, ip_address)
+results = subprocess.check_output(SSHSCAN, shell=True)
+outfile = "results/" + ip_address + "_sshrecon.txt"
+f = open(outfile, "w")
+f.write(results)
+f.close
