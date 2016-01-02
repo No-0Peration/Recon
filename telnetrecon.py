@@ -16,7 +16,7 @@ try:
     resultarr = results.split("\n")
     for result in resultarr:
         if "login:" in result:
-	    print "[*] Valid Telnet credentials found: " + result
+            print "[*] Valid Telnet credentials found: " + result
 except:
     print "INFO: No valid Telnet credentials found"
 
