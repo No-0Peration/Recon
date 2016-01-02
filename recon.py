@@ -65,6 +65,11 @@ def sshEnum(ip_address, port):
     subprocess.call(SCRIPT, shell=True)
     return
 
+def telnetEnum(ip_address, port):
+    print "INFO: Detected Telnet on " + ip_address + ":" + port
+    SCRIPT = "./telnetrecon.py %s %s" % (ip_address, port)
+    subprocess.call(SCRIPT, shell=True)
+    return
 
 def snmpEnum(ip_address, port):
     print "INFO: Detected snmp on " + ip_address + ":" + port
