@@ -23,4 +23,4 @@ results = subprocess.check_output(HYDRA, shell=True)
 resultarr = results.split("\n")
 for result in resultarr:
     if "login:" in result:
-	print "[*] Valid ftp credentials found: " + result 
+        print "[*] Valid ftp credentials found: " + result
