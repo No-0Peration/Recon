@@ -6,16 +6,26 @@
 
 import os, sys
 import multiprocessing
+import multiprocessing.pool
 import subprocess
 import recon # All functions called by the main scanner function
+
+class NoDaemonProcess(multiprocessing.Process):
+    # make 'daemon' attribute always return False
+    def _get_daemon(self):
+        return False
+    def _set_daemon(self, value):
+        pass
+    daemon = property(_get_daemon, _set_daemon)
+
+class MyPool(multiprocessing.pool.Pool):
+    Process = NoDaemonProcess
 
 # Check if root
 if os.getuid() == 0:
     print("r00tness!")
 else:
     sys.exit("I cannot run as a mortal. Sorry.")
-
-
 
 def scanner(ip_address):
     """ Start function which takes ip_address to scan as argument """
@@ -99,7 +109,7 @@ print "////////////////////////////////////////////////////////////"
 print "///                   Enumeration script                 ///"
 print "///                          --                          ///"
 print "///                          by                          ///"
-print "///       0x90:N0_Operation & B0x41S & DTCTD             ///"
+print "///          0x90:N0_Operation & B0x41S & DTCTD          ///"
 print "////////////////////////////////////////////////////////////"
 
 if __name__ == '__main__':
@@ -110,5 +120,5 @@ if __name__ == '__main__':
 
     ips = recon.getIp()
     num_threads = 4 * multiprocessing.cpu_count()
-    p = multiprocessing.Pool(num_threads)
-    p.map(scanner, [ip for ip in ips])
+    pool = MyPool(num_threads)
+    pool.map(scanner, [ip for ip in ips])
