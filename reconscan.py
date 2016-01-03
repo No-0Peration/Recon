@@ -25,7 +25,7 @@ def scanner(ip_address):
     recon.checkpath("./results/nmap")
 
     udpscan = "nmap -vv -Pn -sU -sV -A -O -T4 -p 53,67,68,88,161,162,137,138,139,389,520,2049 -oN './results/nmap/%sU.nmap' -oX './results/nmap/%sU_nmap_scan_import.xml' %s" % (ip_address, ip_address, ip_address)
-    tcpscan = "nmap -vv -Pn -A -O -sS -sV -T4 -p --top-ports 100 --open -oN './results/nmap/%s.nmap' -oX './results/nmap/%s_nmap_scan_import.xml' %s" % (ip_address, ip_address, ip_address)
+    tcpscan = "nmap -vv -Pn -A -O -sS -sV -T4 --top-ports 100 --open -oN './results/nmap/%s.nmap' -oX './results/nmap/%s_nmap_scan_import.xml' %s" % (ip_address, ip_address, ip_address)
 
     tcpresults = subprocess.check_output(tcpscan, shell=True)
     udpresults = subprocess.check_output(udpscan, shell=True)
