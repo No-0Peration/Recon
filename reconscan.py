@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 '''
- Author: Gerben Visser (0x90) -- @N0_Operation & Bas -- B0x41S.
+ Author: Gerben Visser (0x90) -- @N0_Operation & Bas -- B0x41S & Sander -- DTCTD.
  This tool is an automation script for the reconphase during a pentest, it was inspired by a few github repos.
 '''
 
@@ -99,7 +99,7 @@ print "////////////////////////////////////////////////////////////"
 print "///                   Enumeration script                 ///"
 print "///                          --                          ///"
 print "///                          by                          ///"
-print "///              0x90:N0_Operation &  B0x41S             ///"
+print "///       0x90:N0_Operation & B0x41S & DTCTD             ///"
 print "////////////////////////////////////////////////////////////"
 
 if __name__ == '__main__':
@@ -107,9 +107,8 @@ if __name__ == '__main__':
         recon.checkpath("./results/")
     except:
         pass
+
     ips = recon.getIp()
-    for ip in ips:
-        jobs = []
-        p = multiprocessing.Process(target=scanner, args=(ip))
-        jobs.append(p)
-        p.start()
+    num_threads = 4 * multiprocessing.cpu_count()
+    p = multiprocessing.Pool(num_threads)
+    p.map(scanner, [ip for ip in ips])
