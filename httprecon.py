@@ -20,10 +20,15 @@ f = open(outfile, "w")
 f.write(results)
 f.close
 
-#incorporate Wafw00f // whatweb // xsstracer // wpscan // sqlmap // arachni
+#TODO: incorporate Wafw00f // whatweb // xsstracer // wpscan // sqlmap // arachni
 #wafw00f http://$TARGET
+
 #whatweb http://$TARGET
+
 #xsstracer $TARGET 80
+
 #wpscan --url http://$TARGET --batch
+
 #sqlmap -u "http://$TARGET" --batch --crawl=5 -f
+
 #arachni http://$TARGET --output-only-positives --scope-include-subdomains
