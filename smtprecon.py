@@ -31,5 +31,3 @@ for name in names:
         print "[*] SMTP VRFY Account found on " + sys.argv[1] + ": " + name.strip()
     s.close()
 
-quit()
-
