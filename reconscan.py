@@ -4,19 +4,25 @@
  This tool is an automation script for the reconphase during a pentest, it was inspired by a few github repos.
 '''
 
-import os, sys
+import os
+import sys
 import multiprocessing
 import multiprocessing.pool
 import subprocess
-import recon # All functions called by the main scanner function
+import gzip
+import re
+import recon  # All functions called by the main scanner function
+
 
 class NoDaemonProcess(multiprocessing.Process):
     # make 'daemon' attribute always return False
     def _get_daemon(self):
         return False
+
     def _set_daemon(self, value):
         pass
     daemon = property(_get_daemon, _set_daemon)
+
 
 class MyPool(multiprocessing.pool.Pool):
     Process = NoDaemonProcess
@@ -27,36 +33,92 @@ if os.getuid() == 0:
 else:
     sys.exit("I cannot run as a mortal. Sorry.")
 
+if os.path.isfile("/usr/share/wordlists/rockyou.txt"):
+    print("Rockyou wordlist present")
+else:
+    print("Rockyou wordlist is missing trying to decompress...")
+    try:
+        inFile = gzip.GzipFile("/usr/share/wordlists/rockyou.txt.gz", "rb")
+        s = inFile.read()
+        inFile.close()
+
+        outFile = file("/usr/share/wordlists/rockyou.txt", "wb")
+        outFile.write(s)
+        outFile.close()
+    except:
+        pass
+    if os.path.isfile("/usr/share/wordlists/rockyou.txt"):
+        print("Rockyou wordlist is decompressed!")
+    else:
+        print("Decompression of rockyou.txt failed!")
+
+
 def scanner(ip_address):
-    """ Start function which takes ip_address to scan as argument """
+    # Start function which takes ip_address to scan as argument
     ip_address = str(ip_address)
-    print "INFO: Running general TCP/UDP nmap scans for " + ip_address
     serv_dict = {}
     recon.checkpath("./results/nmap")
 
-    udpscan = "nmap -vv -Pn -sU -sV -A -O -T4 -p 53,67,68,88,161,162,137,138,139,389,520,2049 -oN './results/nmap/%sU.nmap' -oX './results/nmap/%sU_nmap_scan_import.xml' %s" % (ip_address, ip_address, ip_address)
-    tcpscan = "nmap -vv -Pn -A -O -sS -sV -T4 --top-ports 100 --open -oN './results/nmap/%s.nmap' -oX './results/nmap/%s_nmap_scan_import.xml' %s" % (ip_address, ip_address, ip_address)
+    # if os.path.isfile("./results/nmap/%sU.nmap" % ip_address) and os.path.isfile("./results/nmap/%sU_nmap_scan_import.xml" % ip_address):
+    #     with open("./results/nmap/%sU_nmap_scan_import.xml" % ip_address) as f:
+    #         found = False
+    #         for line in f:
+    #             if 'exit="success"' in line:
+    #                 print("INFO: %s already scanned for UDP ports..." % ip_address)
+    #                 udpresults = file("./results/nmap/%sU_nmap_scan_import.xml" % ip_address, "r")
+    #                 found = True
+    #     if not found:
+    #         print("INFO: scan on %s was interrupted restarting UDP nmap scan" % ip_address)
+    #         os.remove("./results/nmap/%sU.nmap" % ip_address)
+    #         os.remove("./results/nmap/%sU_nmap_scan_import.xml" % ip_address)
+    #         udpscan = "nmap -vv -Pn -sU -sV -A -O -T4 -p 53,67,68,88,161,162,137,138,139,389,520,2049 -oN './results/nmap/%sU.nmap' -oX './results/nmap/%sU_nmap_scan_import.xml' %s" % (ip_address, ip_address, ip_address)
+    #         udpresults = subprocess.check_output(udpscan, shell=True)
+    # else:
+    #     print "INFO: Running general UDP nmap scans for " + ip_address
+    #     udpscan = "nmap -vv -Pn -sU -sV -A -O -T4 -p 53,67,68,88,161,162,137,138,139,389,520,2049 -oN './results/nmap/%sU.nmap' -oX './results/nmap/%sU_nmap_scan_import.xml' %s" % (ip_address, ip_address, ip_address)
+    #     udpresults = subprocess.check_output(udpscan, shell=True)
 
-    tcpresults = subprocess.check_output(tcpscan, shell=True)
-    udpresults = subprocess.check_output(udpscan, shell=True)
-    results = tcpresults
-
-    lines = results.split("\n")
+    if os.path.isfile("./results/nmap/%s.nmap" % ip_address) and os.path.isfile("./results/nmap/%s_nmap_scan_import.xml" % ip_address):
+        with open("./results/nmap/%s_nmap_scan_import.xml" % ip_address) as f:
+            found = False
+            for line in f:
+                if 'exit="success"' in line:
+                    print("INFO: %s already scanned for TCP ports..." % ip_address)
+                    tcpresults = file("./results/nmap/%s_nmap_scan_import.xml" % ip_address, "r")
+                    found = True
+                    lines = tcpresults
+        if not found:
+            print("INFO: scan on %s was interrupted restarting TCP nmap scan" % ip_address)
+            os.remove("./results/nmap/%s.nmap" % ip_address)
+            os.remove("./results/nmap/%s_nmap_scan_import.xml" % ip_address)
+            tcpscan = "nmap -vv -Pn -A -O -sS -sV -T4 --top-ports 100 --open -oN './results/nmap/%s.nmap' -oX './results/nmap/%s_nmap_scan_import.xml' %s" % (ip_address, ip_address, ip_address)
+            with open(os.devnull, "w") as f:
+                subprocess.call(tcpscan, shell=True, stdout=f)
+            tcpresults = file("./results/nmap/%s_nmap_scan_import.xml" % ip_address, "r")
+            lines = tcpresults
+    else:
+        print "INFO: Running general TCP nmap scans for " + ip_address
+        tcpscan = "nmap -vv -Pn -A -O -sS -sV -T4 --top-ports 100 --open -oN './results/nmap/%s.nmap' -oX './results/nmap/%s_nmap_scan_import.xml' %s" % (ip_address, ip_address, ip_address)
+        with open(os.devnull, "w") as f:
+            subprocess.call(tcpscan, shell=True, stdout=f)
+        tcpresults = file("./results/nmap/%s_nmap_scan_import.xml" % ip_address, "r")
+        lines = tcpresults
 
     # The forloop below parses the nmap results and looks for open service on which it knows to act.
     for line in lines:
         ports = []
-        line = line.strip()
-        if ("tcp" in line) and ("open" in line) and not ("Discovered" in line):
-            while "  " in line:
-                line = line.replace("  ", " ")
-            linesplit = line.split(" ")
-            service = linesplit[2]  # grab the service name
-            port = line.split(" ")[0]  # grab the port/proto
+        if ("tcp" in line) and ("open" in line) and ("service name=" in line) and not ("Discovered" in line):
+            port = (re.search("portid=\"(.*?)\"", line))
+            service = (re.search("service name=\"(.*?)\"", line))
+            port = (port.group().split("\""))[1]
+            service = (service.group().split("\""))[1]
+
             if service in serv_dict:
                 ports = serv_dict[service]  # if the service is already in the dict, grab the port list
+
             ports.append(port)
             serv_dict[service] = ports  # add service to the dictionary along with the associated port(2)
+
     # Go through the service dictionary to call additional targeted enumeration functions
     for serv in serv_dict:
         ports = serv_dict[serv]
@@ -118,7 +180,15 @@ if __name__ == '__main__':
     except:
         pass
 
-    ips = recon.getIp()
-    num_threads = 4 * multiprocessing.cpu_count()
+    # ips = recon.getIp()
+    ips = '192.168.16.0/23'
+    # Do a quick scan to get active hosts to scan thoroughly
+    print "INFO: Performing sweep to create a target list"
+    fastscan = "nmap -sP %s | grep \"Nmap scan report for\" | cut -d \" \" -f5" % (str(ips))
+    scanresults = subprocess.check_output(fastscan, shell=True)
+
+    num_threads = 1 * multiprocessing.cpu_count()
     pool = MyPool(num_threads)
-    pool.map(scanner, [ip for ip in ips])
+    pool.map(scanner, [ip for ip in (str(scanresults)).split()])
+
+    print "[-] all scipts finished"

@@ -10,7 +10,7 @@ ip_address = sys.argv[1].strip()
 port = sys.argv[2].strip()
 
 print "INFO: Performing hydra ssh scan against " + ip_address 
-HYDRA = "hydra -L /usr/share/wordlists/metasploit/unix_users.txt -P /usr/share/wordlists/rockyou,txt -f -o /root/scripts/recon_enum/results/%s_sshhydra.txt -u %s -s %s ssh" % (ip_address, ip_address, port)
+HYDRA = "hydra -L /usr/share/wordlists/metasploit/unix_users.txt -P /usr/share/wordlists/rockyou.txt -f -o /root/scripts/recon_enum/results/%s_sshhydra.txt -u %s -s %s ssh" % (ip_address, ip_address, port)
 try:
     results = subprocess.check_output(HYDRA, shell=True)
     resultarr = results.split("\n")

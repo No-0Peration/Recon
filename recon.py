@@ -1,8 +1,20 @@
 import subprocess
 import multiprocessing
+import multiprocessing.pool
 import os
 import errno
 from IPy import IP
+
+class NoDaemonProcess(multiprocessing.Process):
+    # make 'daemon' attribute always return False
+    def _get_daemon(self):
+        return False
+    def _set_daemon(self, value):
+        pass
+    daemon = property(_get_daemon, _set_daemon)
+
+class MyPool(multiprocessing.pool.Pool):
+    Process = NoDaemonProcess
 
 def checkpath(path):
     try:
@@ -11,12 +23,17 @@ def checkpath(path):
         if exception.errno != errno.EEXIST:
             raise
 
-
 def multProc(targetin, scanip, port):
     jobs = []
     p = multiprocessing.Process(target=targetin, args=(scanip, port))
     jobs.append(p)
     p.start()
+    return
+
+def PoolProc(targetin, scanip, port):
+    num_threads = 4 * multiprocessing.cpu_count()
+    pool = MyPool(num_threads)
+    pool.map(targetin(scanip, port))
     return
 
 def getIp():
@@ -39,7 +56,7 @@ def dnsEnum(ip_address, port):
 def httpEnum(ip_address, port):
     print "INFO: Detected http on " + ip_address + ":" + port
     checkpath("./results/nmap")
-    SCRIPT = "./httprecon.py %s" % (ip_address)  # execute the python script
+    SCRIPT = "./httprecon.py %s" % (ip_address, port)  # execute the python script
     subprocess.call(SCRIPT, shell=True)
     return
 
