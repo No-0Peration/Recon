@@ -13,11 +13,11 @@ name = str(sys.argv[2])
 folders = ["/usr/share/dirbuster/wordlists/"]
 
 found = []
-print "INFO: Starting dirb scan for " + url
+print "INFO: Starting dirb scan for {0}".format(url)
 for folder in folders:
     for filename in os.listdir(folder):
-        outfile = " -o " + "./results/" + name + "_dirb_" + filename
-        DIRBSCAN = "dirb %s %s/%s %s -S -r" % (url, folder, filename, outfile)
+        outfile = "results/{0}/{0}_dirbuster.txt".format(ip_address)
+        DIRBSCAN = "dirb {0} {1}/{2} {3} -S -r".format(url, folder, filename, outfile)
         try:
             results = subprocess.check_output(DIRBSCAN, shell=True)
             resultarr = results.split("\n")

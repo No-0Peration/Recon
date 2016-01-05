@@ -99,48 +99,48 @@ def scanner(ip_address):
             serv_dict[service] = ports  # add service to the dictionary along with the associated port(2)
 
     # Go through the service dictionary to call additional targeted enumeration functions
-    for serv in serv_dict:
-        ports = serv_dict[serv]
-        if serv == "http" in serv:
-            for port in ports:
-                port = port.split("/")[0]
-                recon.multProc(recon.httpEnum, ip_address, port)
-        elif serv == "ssl/http" or "https" in serv:
-            for port in ports:
-                port = port.split("/")[0]
-                recon.multProc(recon.httpEnum, ip_address, port)
-        elif "ssh" in serv:
-            for port in ports:
-                port = port.split("/")[0]
-                recon.multProc(recon.sshEnum, ip_address, port)
-        elif "smtp" in serv:
-            for port in ports:
-                port = port.split("/")[0]
-                recon.multProc(recon.smtpEnum, ip_address, port)
-        elif "snmp" in serv:
-            for port in ports:
-                port = port.split("/")[0]
-                recon.multProc(recon.snmpEnum, ip_address, port)
-        elif "domain" in serv:
-            for port in ports:
-                port = port.split("/")[0]
-                recon.multProc(recon.dnsEnum, ip_address, port)
-        elif "ftp" in serv:
-            for port in ports:
-                port = port.split("/")[0]
-                recon.multProc(recon.ftpEnum, ip_address, port)
-        elif "microsoft-ds" in serv:
-            for port in ports:
-                port = port.split("/")[0]
-                recon.multProc(recon.smbEnum, ip_address, port)
-        elif "ms-sql" in serv:
-            for port in ports:
-                port = port.split("/")[0]
-                recon.multProc(recon.mssqlEnum, ip_address, port)
-        elif "telnet" in serv:
-            for port in ports:
-                port = port.split("/")[0]
-                recon.multProc(recon.telnetEnum, ip_address, port)
+    # for serv in serv_dict:
+    #     ports = serv_dict[serv]
+    #     if serv == "http" in serv:
+    #         for port in ports:
+    #             port = port.split("/")[0]
+    #             recon.multProc(recon.httpEnum, ip_address, port)
+    #     elif serv == "ssl/http" or "https" in serv:
+    #         for port in ports:
+    #             port = port.split("/")[0]
+    #             recon.multProc(recon.httpEnum, ip_address, port)
+    #     elif "ssh" in serv:
+    #         for port in ports:
+    #             port = port.split("/")[0]
+    #             recon.multProc(recon.sshEnum, ip_address, port)
+    #     elif "smtp" in serv:
+    #         for port in ports:
+    #             port = port.split("/")[0]
+    #             recon.multProc(recon.smtpEnum, ip_address, port)
+    #     elif "snmp" in serv:
+    #         for port in ports:
+    #             port = port.split("/")[0]
+    #             recon.multProc(recon.snmpEnum, ip_address, port)
+    #     elif "domain" in serv:
+    #         for port in ports:
+    #             port = port.split("/")[0]
+    #             recon.multProc(recon.dnsEnum, ip_address, port)
+    #     elif "ftp" in serv:
+    #         for port in ports:
+    #             port = port.split("/")[0]
+    #             recon.multProc(recon.ftpEnum, ip_address, port)
+    #     elif "microsoft-ds" in serv:
+    #         for port in ports:
+    #             port = port.split("/")[0]
+    #             recon.multProc(recon.smbEnum, ip_address, port)
+    #     elif "ms-sql" in serv:
+    #         for port in ports:
+    #             port = port.split("/")[0]
+    #             recon.multProc(recon.mssqlEnum, ip_address, port)
+    #     elif "telnet" in serv:
+    #         for port in ports:
+    #             port = port.split("/")[0]
+    #             recon.multProc(recon.telnetEnum, ip_address, port)
 
     print "INFO: TCP/UDP Nmap scans completed for {0}".format(ip_address)
     return
@@ -159,8 +159,8 @@ if __name__ == '__main__':
     except:
         pass
 
-    ips = recon.getIp()
-
+    # ips = recon.getIp()
+    ips = "192.168.17.200-254"
     # Do a quick scan to get active hosts to scan thoroughly
     print "INFO: Performing sweep to create a target list"
     fastscan = "nmap -sP %s | grep \"Nmap scan report for\" | cut -d \" \" -f5" % (str(ips))
