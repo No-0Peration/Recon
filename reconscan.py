@@ -57,51 +57,30 @@ def scanner(ip_address):
     # Start function which takes ip_address to scan as argument
     ip_address = str(ip_address)
     serv_dict = {}
-    recon.checkpath("./results/nmap")
+    recon.checkpath("./results/{0}".format(ip_address))
 
-    # if os.path.isfile("./results/nmap/%sU.nmap" % ip_address) and os.path.isfile("./results/nmap/%sU_nmap_scan_import.xml" % ip_address):
-    #     with open("./results/nmap/%sU_nmap_scan_import.xml" % ip_address) as f:
-    #         found = False
-    #         for line in f:
-    #             if 'exit="success"' in line:
-    #                 print("INFO: %s already scanned for UDP ports..." % ip_address)
-    #                 udpresults = file("./results/nmap/%sU_nmap_scan_import.xml" % ip_address, "r")
-    #                 found = True
-    #     if not found:
-    #         print("INFO: scan on %s was interrupted restarting UDP nmap scan" % ip_address)
-    #         os.remove("./results/nmap/%sU.nmap" % ip_address)
-    #         os.remove("./results/nmap/%sU_nmap_scan_import.xml" % ip_address)
-    #         udpscan = "nmap -vv -Pn -sU -sV -A -O -T4 -p 53,67,68,88,161,162,137,138,139,389,520,2049 -oN './results/nmap/%sU.nmap' -oX './results/nmap/%sU_nmap_scan_import.xml' %s" % (ip_address, ip_address, ip_address)
-    #         udpresults = subprocess.check_output(udpscan, shell=True)
-    # else:
-    #     print "INFO: Running general UDP nmap scans for " + ip_address
-    #     udpscan = "nmap -vv -Pn -sU -sV -A -O -T4 -p 53,67,68,88,161,162,137,138,139,389,520,2049 -oN './results/nmap/%sU.nmap' -oX './results/nmap/%sU_nmap_scan_import.xml' %s" % (ip_address, ip_address, ip_address)
-    #     udpresults = subprocess.check_output(udpscan, shell=True)
-
-    if os.path.isfile("./results/nmap/%s.nmap" % ip_address) and os.path.isfile("./results/nmap/%s_nmap_scan_import.xml" % ip_address):
-        with open("./results/nmap/%s_nmap_scan_import.xml" % ip_address) as f:
-            found = False
-            for line in f:
-                if 'exit="success"' in line:
-                    print("INFO: %s already scanned for TCP ports..." % ip_address)
-                    tcpresults = file("./results/nmap/%s_nmap_scan_import.xml" % ip_address, "r")
-                    found = True
-                    lines = tcpresults
-        if not found:
-            print("INFO: scan on %s was interrupted restarting TCP nmap scan" % ip_address)
-            os.remove("./results/nmap/%s.nmap" % ip_address)
-            os.remove("./results/nmap/%s_nmap_scan_import.xml" % ip_address)
-            tcpscan = "nmap -vv -Pn -A -O -sS -sV -T4 --top-ports 100 --open -oN './results/nmap/%s.nmap' -oX './results/nmap/%s_nmap_scan_import.xml' %s" % (ip_address, ip_address, ip_address)
-            with open(os.devnull, "w") as f:
-                subprocess.call(tcpscan, shell=True, stdout=f)
-            tcpresults = file("./results/nmap/%s_nmap_scan_import.xml" % ip_address, "r")
-            lines = tcpresults
+    if not recon.checknmaprun(ip_address, "U_nmap_scan_import.xml"):
+        print("INFO: {0} not scanned or interrupted, restarting UDP nmap scan".format(ip_address))
+        udpscan = "nmap -vv -Pn -sU -sV -A -O -T4 -p 53,67,68,88,161,162,137,138,139,389,520,2049 -oN './results/{0}/{0}U.nmap' -oX './results/{0}/{0}U_nmap_scan_import.xml' {0}".format(ip_address)
+        with open(os.devnull, "w") as f:
+            subprocess.call(udpscan, shell=True, stdout=f)
+        udpresults = file("./results/{0}/{0}U_nmap_scan_import.xml".format(ip_address), "r")
+        lines = udpresults
     else:
-        print "INFO: Running general TCP nmap scans for " + ip_address
-        tcpscan = "nmap -vv -Pn -A -O -sS -sV -T4 --top-ports 100 --open -oN './results/nmap/%s.nmap' -oX './results/nmap/%s_nmap_scan_import.xml' %s" % (ip_address, ip_address, ip_address)
+        print("INFO: {0} already scanned for UDP ports...".format(ip_address))
+        udpresults = file("./results/{0}/{0}U_nmap_scan_import.xml".format(ip_address), "r")
+        lines = udpresults
+
+    if not recon.checknmaprun(ip_address, "_nmap_scan_import.xml"):
+        print("INFO: {0} not scanned or interrupted, restarting TCP nmap scan".format(ip_address))
+        tcpscan = "nmap -vv -Pn -A -O -sS -sV -T4 --top-ports 100 --open -oN './results/{0}/{0}.nmap' -oX './results/{0}/{0}_nmap_scan_import.xml' {0}".format(ip_address)
         with open(os.devnull, "w") as f:
             subprocess.call(tcpscan, shell=True, stdout=f)
-        tcpresults = file("./results/nmap/%s_nmap_scan_import.xml" % ip_address, "r")
+        tcpresults = file("./results/{0}/{0}_nmap_scan_import.xml".format(ip_address), "r")
+        lines = tcpresults
+    else:
+        print("INFO: {0} already scanned for TCP ports...".format(ip_address))
+        tcpresults = file("./results/{0}/{0}_nmap_scan_import.xml".format(ip_address), "r")
         lines = tcpresults
 
     # The forloop below parses the nmap results and looks for open service on which it knows to act.
@@ -163,7 +142,7 @@ def scanner(ip_address):
                 port = port.split("/")[0]
                 recon.multProc(recon.telnetEnum, ip_address, port)
 
-    print "INFO: TCP/UDP Nmap scans completed for " + ip_address
+    print "INFO: TCP/UDP Nmap scans completed for {0}".format(ip_address)
     return
 
 # grab the discover scan results and start scanning up hosts
@@ -180,15 +159,15 @@ if __name__ == '__main__':
     except:
         pass
 
-    # ips = recon.getIp()
-    ips = '192.168.16.0/23'
+    ips = recon.getIp()
+
     # Do a quick scan to get active hosts to scan thoroughly
     print "INFO: Performing sweep to create a target list"
     fastscan = "nmap -sP %s | grep \"Nmap scan report for\" | cut -d \" \" -f5" % (str(ips))
     scanresults = subprocess.check_output(fastscan, shell=True)
 
-    num_threads = 1 * multiprocessing.cpu_count()
+    num_threads = 4 * multiprocessing.cpu_count()
     pool = MyPool(num_threads)
     pool.map(scanner, [ip for ip in (str(scanresults)).split()])
 
-    print "[-] all scipts finished"
+    print "INFO: All scipts finished"

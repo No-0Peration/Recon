@@ -11,9 +11,9 @@ HOSTNAME = "host %s | cut -d ' ' -f5 | cut -d '.' -f1,2,3" % (ip_address)
 DOMAINNAME = "host %s | cut -d ' ' -f5 | cut -d '.' -f2,3" % (ip_address)
 
 print "INFO: Performing nmap DNS script scan for " + ip_address + ":" + port
-DNSSCAN = "nmap -sV -Pn -vv -p T:53 U:53 --script=dns-* -oN './results/%s_dns.nmap' %s" % (ip_address, ip_address)
+DNSSCAN = "nmap -sV -Pn -vv -p T:53 U:53 --script=dns-* -oN './results/{0}/{0}_dns.nmap' {0}".format(ip_address)
 results = subprocess.check_output(DNSSCAN, shell=True)
-outfile = "results/" + ip_address + "_dnsrecon.txt"
+outfile = "results/{0}/{0}_dnsrecon.txt".format(ip_address)
 f = open(outfile, "w")
 f.write(results)
 f.close
@@ -22,13 +22,13 @@ f.close
 host = subprocess.check_output(HOSTNAME, shell=True).strip()
 domain = subprocess.check_output(DOMAINNAME, shell=True).strip()
 print "INFO: Attempting Domain Transfer on " + host
-ZT = "dig @%s %s axfr" % (host, domain)
+ZT = "dig @{0} {1} axfr".format(host, domain)
 ztresults = subprocess.check_output(ZT, shell=True)
 if "failed" in ztresults:
-    print "INFO: Zone Transfer failed for " + host
+    print "INFO: Zone Transfer failed for {0}".format(host)
 else:
-    print "[*] Zone Transfer successful for " + host + "(" + ip_address + ")!!! [see output file]"
-    outfile = "./results/" + ip_address+ "_zonetransfer.txt"
+    print "[*] Zone Transfer successful for {0}(\"{1}\")!!! [see output file]".format(host, ip_address)
+    outfile = "results/{0}/{0}_zonetransfer.txt".format(ip_address)
     dnsf = open(outfile, "w")
     dnsf.write(ztresults)
     dnsf.close()

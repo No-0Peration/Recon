@@ -23,6 +23,18 @@ def checkpath(path):
         if exception.errno != errno.EEXIST:
             raise
 
+
+def checknmaprun(ip_address, name):
+    if os.path.isfile("./results/{0}/{0}{1}".format(ip_address, name)):
+        with open("./results/{0}/{0}{1}".format(ip_address, name)) as f:
+            for line in f:
+                if 'exit="success"' in line:
+                    return True
+                if not line:
+                    return False
+    else:
+        return False
+
 def multProc(targetin, scanip, port):
     jobs = []
     p = multiprocessing.Process(target=targetin, args=(scanip, port))
@@ -64,10 +76,12 @@ def httpEnum(ip_address, port):
 def mssqlEnum(ip_address, port):
     print "INFO: Detected MS-SQL on " + ip_address + ":" + port
     print "INFO: Performing nmap mssql script scan for " + ip_address + ":" + port
-    checkpath("./results/nmap")
-    MSSQLSCAN = "nmap -vv -sV -Pn -p %s --script-args=unsafe=1 --script=mysql-vuln-cve2012-2122.nse,ms-sql-info,ms-sql-config,ms-sql-dump-hashes --script-args=mssql.instance-port=1433,smsql.username=sa,mssql.password=sa -oX ./results/nmap/%s_mssql.xml %s" % (
-    port, ip_address, ip_address)
+    MSSQLSCAN = "nmap -vv -sV -Pn -p {0} --script-args=unsafe=1 --script=mysql-vuln-cve2012-2122.nse,ms-sql-info,ms-sql-config,ms-sql-dump-hashes --script-args=mssql.instance-port=1433,smsql.username=sa,mssql.password=sa -oX ./results/{1}/{1}_mssql.xml {1}".format(port, ip_address)
     results = subprocess.check_output(MSSQLSCAN, shell=True)
+    outfile = "results/{0}/{0}_mssqlrecon.txt".format(ip_address)
+    f = open(outfile, "w")
+    f.write(results)
+    f.close
     return
 
 def sshEnum(ip_address, port):
