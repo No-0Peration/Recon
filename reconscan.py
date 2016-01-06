@@ -168,7 +168,7 @@ if __name__ == '__main__':
         pass
 
     # ips = recon.getIp()
-    ips = "192.168.13.210"
+    ips = "192.168.13.200-210"
     # Do a quick scan to get active hosts to scan thoroughly
     print "INFO: Performing sweep to create a target list"
     fastscan = "nmap -sP %s | grep \"Nmap scan report for\" | cut -d \" \" -f5" % (str(ips))
