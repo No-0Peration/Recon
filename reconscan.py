@@ -36,12 +36,12 @@ print "////////////////////////////////////////////////////////////"
 
 # Check if root
 if os.getuid() == 0:
-    print("INFO:  Rootcheck DONE..")
+    print("INFO: Rootcheck DONE..")
 else:
     sys.exit("I cannot run as a mortal. Sorry.")
 
 if os.path.isfile("/usr/share/wordlists/rockyou.txt"):
-    print("INFO:  Rockyou wordlist present")
+    print("INFO: Rockyou wordlist present")
 else:
     print("Rockyou wordlist is missing trying to decompress...")
     try:
