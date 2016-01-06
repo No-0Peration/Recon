@@ -64,7 +64,7 @@ def scanner(ip_address):
     # Start function which takes ip_address to scan as argument
     ip_address = str(ip_address)
     serv_dict = {}
-    modules = ['dns', 'ftp', 'http', 'smb', 'smtp', 'snmp', 'ssh', 'telnet']
+    modules = {'dns': recon.dnsEnum, 'ftp': recon.ftpEnum, 'http': recon.httpEnum, 'smb': recon.smbEnum, 'smtp': recon.smtpEnum, 'snmp': recon.snmpEnum, 'ssh': recon.sshEnum, 'telnet': recon.telnetEnum}
     recon.checkpath("./results/{0}".format(ip_address))
 
     if not recon.checknmaprun(ip_address, "_nmap_scan_import.xml"):
@@ -106,9 +106,11 @@ def scanner(ip_address):
 
             ports.append(port)
             serv_dict[service] = ports  # add service to the dictionary along with the associated port(2)
-        for service in serv_dict:
-            knownservices = set(modules).intersection(serv_dict)
-            print knownservices
+            knownservices = set(modules).intersection(serv_dict)  # find services for which we have a recon module
+
+        for port in ports:
+            for serv in knownservices:
+                recon.multProc(modules[serv], ip_address, port)
 
     # Go through the service dictionary to call additional targeted enumeration functions
     # for serv in serv_dict:
@@ -166,7 +168,7 @@ if __name__ == '__main__':
         pass
 
     # ips = recon.getIp()
-    ips = "192.168.13.200-210"
+    ips = "192.168.13.210"
     # Do a quick scan to get active hosts to scan thoroughly
     print "INFO: Performing sweep to create a target list"
     fastscan = "nmap -sP %s | grep \"Nmap scan report for\" | cut -d \" \" -f5" % (str(ips))
