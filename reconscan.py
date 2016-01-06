@@ -27,14 +27,21 @@ class NoDaemonProcess(multiprocessing.Process):
 class MyPool(multiprocessing.pool.Pool):
     Process = NoDaemonProcess
 
+print "////////////////////////////////////////////////////////////"
+print "///             Recon Enumeration script                 ///"
+print "///                       --                             ///"
+print "///                       by                             ///"
+print "///           N0_Operation & B0x41S & DTCTD              ///"
+print "////////////////////////////////////////////////////////////"
+
 # Check if root
 if os.getuid() == 0:
-    print("r00tness!")
+    print("[*]  r00tness!")
 else:
     sys.exit("I cannot run as a mortal. Sorry.")
 
 if os.path.isfile("/usr/share/wordlists/rockyou.txt"):
-    print("Rockyou wordlist present")
+    print("[*]  Rockyou wordlist present")
 else:
     print("Rockyou wordlist is missing trying to decompress...")
     try:
@@ -59,32 +66,20 @@ def scanner(ip_address):
     serv_dict = {}
     recon.checkpath("./results/{0}".format(ip_address))
 
-    if not recon.checknmaprun(ip_address, "U_nmap_scan_import.xml"):
-        print("INFO: {0} not scanned or interrupted, restarting UDP nmap scan".format(ip_address))
-        udpscan = "nmap -vv -Pn -sU -sV -A -O -T4 -p 53,67,68,88,161,162,137,138,139,389,520,2049 -oN './results/{0}/{0}U.nmap' -oX './results/{0}/{0}U_nmap_scan_import.xml' {0}".format(ip_address)
-        with open(os.devnull, "w") as f:
-            subprocess.call(udpscan, shell=True, stdout=f)
-        udpresults = file("./results/{0}/{0}U_nmap_scan_import.xml".format(ip_address), "r")
-        lines = udpresults
-    else:
-        print("INFO: {0} already scanned for UDP ports...".format(ip_address))
-        udpresults = file("./results/{0}/{0}U_nmap_scan_import.xml".format(ip_address), "r")
-        lines = udpresults
-
     if not recon.checknmaprun(ip_address, "_nmap_scan_import.xml"):
-        print("INFO: {0} not scanned or interrupted, restarting TCP nmap scan".format(ip_address))
+        print("INFO: {0} not scanned or interrupted, starting TCP nmap scan".format(ip_address))
         tcpscan = "nmap -vv -Pn -A -O -sS -sV -T4 --top-ports 100 --open -oN './results/{0}/{0}.nmap' -oX './results/{0}/{0}_nmap_scan_import.xml' {0}".format(ip_address)
         with open(os.devnull, "w") as f:
             subprocess.call(tcpscan, shell=True, stdout=f)
         tcpresults = file("./results/{0}/{0}_nmap_scan_import.xml".format(ip_address), "r")
-        lines = tcpresults
+        tcplines = tcpresults
     else:
         print("INFO: {0} already scanned for TCP ports...".format(ip_address))
         tcpresults = file("./results/{0}/{0}_nmap_scan_import.xml".format(ip_address), "r")
-        lines = tcpresults
+        tcplines = tcpresults
 
     # The forloop below parses the nmap results and looks for open service on which it knows to act.
-    for line in lines:
+    for line in tcplines:
         ports = []
         if ("tcp" in line) and ("open" in line) and ("service name=" in line) and not ("Discovered" in line):
             port = (re.search("portid=\"(.*?)\"", line))
@@ -97,6 +92,18 @@ def scanner(ip_address):
 
             ports.append(port)
             serv_dict[service] = ports  # add service to the dictionary along with the associated port(2)
+
+    if not recon.checknmaprun(ip_address, "U_nmap_scan_import.xml"):
+        print("INFO: {0} not scanned or interrupted, starting UDP nmap scan".format(ip_address))
+        udpscan = "nmap -vv -Pn -sU -sV -A -O -T4 -p 53,67,68,88,161,162,137,138,139,389,520,2049 -oN './results/{0}/{0}U.nmap' -oX './results/{0}/{0}U_nmap_scan_import.xml' {0}".format(ip_address)
+        with open(os.devnull, "w") as f:
+            subprocess.call(udpscan, shell=True, stdout=f)
+        udpresults = file("./results/{0}/{0}U_nmap_scan_import.xml".format(ip_address), "r")
+        udplines = udpresults
+    else:
+        print("INFO: {0} already scanned for UDP ports...".format(ip_address))
+        udpresults = file("./results/{0}/{0}U_nmap_scan_import.xml".format(ip_address), "r")
+        udplines = udpresults
 
     # Go through the service dictionary to call additional targeted enumeration functions
     # for serv in serv_dict:
@@ -146,12 +153,6 @@ def scanner(ip_address):
     return
 
 # grab the discover scan results and start scanning up hosts
-print "////////////////////////////////////////////////////////////"
-print "///                   Enumeration script                 ///"
-print "///                          --                          ///"
-print "///                          by                          ///"
-print "///          0x90:N0_Operation & B0x41S & DTCTD          ///"
-print "////////////////////////////////////////////////////////////"
 
 if __name__ == '__main__':
     try:
@@ -160,7 +161,7 @@ if __name__ == '__main__':
         pass
 
     # ips = recon.getIp()
-    ips = "192.168.17.200-254"
+    ips = "192.168.13.200-254"
     # Do a quick scan to get active hosts to scan thoroughly
     print "INFO: Performing sweep to create a target list"
     fastscan = "nmap -sP %s | grep \"Nmap scan report for\" | cut -d \" \" -f5" % (str(ips))

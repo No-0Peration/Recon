@@ -1,8 +1,9 @@
-import subprocess
+import errno
 import multiprocessing
 import multiprocessing.pool
 import os
-import errno
+import subprocess
+
 from IPy import IP
 
 
