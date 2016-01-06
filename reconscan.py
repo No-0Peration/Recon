@@ -107,7 +107,7 @@ def scanner(ip_address):
             ports.append(port)
             serv_dict[service] = ports  # add service to the dictionary along with the associated port(2)
             knownservices = set(modules).intersection(serv_dict)
-            print(k for k in knownservices)
+            print knownservices
 
 
     # Go through the service dictionary to call additional targeted enumeration functions
