@@ -110,8 +110,7 @@ def scanner(ip_address):
 
             for serv in knownservices:
                 if serv_dict in serv:
-                    port = serv_dict[service]
-                    recon.multProc(modules[serv], ip_address, port)
+                    recon.multProc(modules[serv], ip_address, port) # TODO: ports are not parsed correct
 
     # Go through the service dictionary to call additional targeted enumeration functions
     # for serv in serv_dict:
