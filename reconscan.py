@@ -64,6 +64,7 @@ def scanner(ip_address):
     # Start function which takes ip_address to scan as argument
     ip_address = str(ip_address)
     serv_dict = {}
+    modules = ['dns', 'ftp', 'http', 'smb', 'smtp', 'snmp', 'ssh', 'telnet']
     recon.checkpath("./results/{0}".format(ip_address))
 
     if not recon.checknmaprun(ip_address, "_nmap_scan_import.xml"):
@@ -93,6 +94,7 @@ def scanner(ip_address):
     # The forloop below parses the nmap results and looks for open service on which it knows to act.
     for line in tcplines:
         ports = []
+
         if ("tcp" in line) and ("open" in line) and ("service name=" in line) and not ("Discovered" in line):
             port = (re.search("portid=\"(.*?)\"", line))
             service = (re.search("service name=\"(.*?)\"", line))
@@ -104,7 +106,9 @@ def scanner(ip_address):
 
             ports.append(port)
             serv_dict[service] = ports  # add service to the dictionary along with the associated port(2)
-            print ports
+            knownservices = set(modules).intersection(serv_dict)
+            print(k for k in knownservices)
+
 
     # Go through the service dictionary to call additional targeted enumeration functions
     # for serv in serv_dict:
