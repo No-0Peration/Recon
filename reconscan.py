@@ -112,7 +112,7 @@ def scanner(ip_address):
                 ports =serv_dict[serv]
                 for port in ports:
                     port = port.split("/")[0]
-                recon.multProc(modules[serv], ip_address, port)
+                recon.multProc(modules[serv], ip_address, port)  # fire reconmodule for found service on ip with port
 
     # Go through the service dictionary to call additional targeted enumeration functions
     # for serv in serv_dict:
