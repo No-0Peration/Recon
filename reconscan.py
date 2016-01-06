@@ -78,6 +78,18 @@ def scanner(ip_address):
         tcpresults = file("./results/{0}/{0}_nmap_scan_import.xml".format(ip_address), "r")
         tcplines = tcpresults
 
+    if not recon.checknmaprun(ip_address, "U_nmap_scan_import.xml"):
+        print("INFO: {0} not scanned or interrupted, starting UDP nmap scan".format(ip_address))
+        udpscan = "nmap -vv -Pn -sU -sV -A -O -T4 -p 53,67,68,88,161,162,137,138,139,389,520,2049 -oN './results/{0}/{0}U.nmap' -oX './results/{0}/{0}U_nmap_scan_import.xml' {0}".format(ip_address)
+        with open(os.devnull, "w") as f:
+            subprocess.call(udpscan, shell=True, stdout=f)
+        udpresults = file("./results/{0}/{0}U_nmap_scan_import.xml".format(ip_address), "r")
+        udplines = udpresults
+    else:
+        print("INFO: {0} already scanned for UDP ports...".format(ip_address))
+        udpresults = file("./results/{0}/{0}U_nmap_scan_import.xml".format(ip_address), "r")
+        udplines = udpresults
+
     # The forloop below parses the nmap results and looks for open service on which it knows to act.
     for line in tcplines:
         ports = []
@@ -92,19 +104,7 @@ def scanner(ip_address):
 
             ports.append(port)
             serv_dict[service] = ports  # add service to the dictionary along with the associated port(2)
-            print serv_dict
-
-    if not recon.checknmaprun(ip_address, "U_nmap_scan_import.xml"):
-        print("INFO: {0} not scanned or interrupted, starting UDP nmap scan".format(ip_address))
-        udpscan = "nmap -vv -Pn -sU -sV -A -O -T4 -p 53,67,68,88,161,162,137,138,139,389,520,2049 -oN './results/{0}/{0}U.nmap' -oX './results/{0}/{0}U_nmap_scan_import.xml' {0}".format(ip_address)
-        with open(os.devnull, "w") as f:
-            subprocess.call(udpscan, shell=True, stdout=f)
-        udpresults = file("./results/{0}/{0}U_nmap_scan_import.xml".format(ip_address), "r")
-        udplines = udpresults
-    else:
-        print("INFO: {0} already scanned for UDP ports...".format(ip_address))
-        udpresults = file("./results/{0}/{0}U_nmap_scan_import.xml".format(ip_address), "r")
-        udplines = udpresults
+            print ports
 
     # Go through the service dictionary to call additional targeted enumeration functions
     # for serv in serv_dict:
