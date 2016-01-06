@@ -109,7 +109,7 @@ def scanner(ip_address):
             knownservices = set(modules).intersection(serv_dict)  # find services for which we have a recon module
 
             for serv in knownservices:
-                recon.multProc(modules[serv], ip_address, serv_dict[service])
+                recon.multProc(modules[serv], ip_address, str(serv_dict[service]))
 
     # Go through the service dictionary to call additional targeted enumeration functions
     # for serv in serv_dict:
