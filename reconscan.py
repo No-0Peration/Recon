@@ -36,12 +36,12 @@ print "////////////////////////////////////////////////////////////"
 
 # Check if root
 if os.getuid() == 0:
-    print("[*]  r00tness!")
+    print("INFO:  Rootcheck DONE..")
 else:
     sys.exit("I cannot run as a mortal. Sorry.")
 
 if os.path.isfile("/usr/share/wordlists/rockyou.txt"):
-    print("[*]  Rockyou wordlist present")
+    print("INFO:  Rockyou wordlist present")
 else:
     print("Rockyou wordlist is missing trying to decompress...")
     try:
@@ -107,9 +107,9 @@ def scanner(ip_address):
             ports.append(port)
             serv_dict[service] = ports  # add service to the dictionary along with the associated port(2)
             knownservices = set(modules).intersection(serv_dict)  # find services for which we have a recon module
-
+            ports = serv_dict
             for serv in knownservices:
-                recon.multProc(modules[serv], ip_address, str(serv_dict[service]))
+                recon.multProc(modules[serv], ip_address, ports)
 
     # Go through the service dictionary to call additional targeted enumeration functions
     # for serv in serv_dict:
