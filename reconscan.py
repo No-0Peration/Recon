@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 '''
- Author: Gerben Visser (0x90) -- @N0_Operation & Bas -- B0x41S & Sander -- DTCTD.
+ Author: Gerben (0x90) -- @N0_Operation & Bas -- B0x41S & Sander -- DTCTD.
  This tool is an automation script for the reconphase during a pentest, it was inspired by a few github repos.
 '''
 
@@ -92,6 +92,7 @@ def scanner(ip_address):
 
             ports.append(port)
             serv_dict[service] = ports  # add service to the dictionary along with the associated port(2)
+            print serv_dict
 
     if not recon.checknmaprun(ip_address, "U_nmap_scan_import.xml"):
         print("INFO: {0} not scanned or interrupted, starting UDP nmap scan".format(ip_address))
@@ -161,7 +162,7 @@ if __name__ == '__main__':
         pass
 
     # ips = recon.getIp()
-    ips = "192.168.13.200-254"
+    ips = "192.168.13.200-210"
     # Do a quick scan to get active hosts to scan thoroughly
     print "INFO: Performing sweep to create a target list"
     fastscan = "nmap -sP %s | grep \"Nmap scan report for\" | cut -d \" \" -f5" % (str(ips))
