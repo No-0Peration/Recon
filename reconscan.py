@@ -174,6 +174,7 @@ if __name__ == '__main__':
     # Do a quick scan to get active hosts to scan thoroughly
     print "INFO: Performing sweep to create a target list"
     fastscan = "nmap -sP %s | grep \"Nmap scan report for\" | cut -d \" \" -f5" % (str(ips))
+    # TODO: is nmap -sn not faster? Gerben
     scanresults = subprocess.check_output(fastscan, shell=True)
 
     num_threads = 4 * multiprocessing.cpu_count()
