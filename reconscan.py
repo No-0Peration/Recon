@@ -136,7 +136,8 @@ def scanner(ip_address):
     #     elif "snmp" in serv:
     #         for port in ports:
     #             port = port.split("/")[0]
-    #             recon.multProc(recon.snmpEnum, ip_address, port)
+    #             recon.multProc(recon.snmpEnum, ip_address, port)enum4linux to file
+
     #     elif "domain" in serv:
     #         for port in ports:
     #             port = port.split("/")[0]
@@ -173,8 +174,7 @@ if __name__ == '__main__':
     ips = "192.168.13.210"
     # Do a quick scan to get active hosts to scan thoroughly
     print "INFO: Performing sweep to create a target list"
-    fastscan = "nmap -sP %s | grep \"Nmap scan report for\" | cut -d \" \" -f5" % (str(ips))
-    # TODO: is nmap -sn not faster? Gerben
+    fastscan = "nmap -sn {0} | grep \"Nmap scan report for\" | cut -d \" \" -f5".format(str(ips))
     scanresults = subprocess.check_output(fastscan, shell=True)
 
     num_threads = 4 * multiprocessing.cpu_count()

@@ -8,7 +8,7 @@ if len(sys.argv) != 2:
 
 ip_address = sys.argv[1]
 print "[*] Starting SMB vulnerability checks on {0}".format(ip_address)
-VULNSCAN = "nmap -sV -Pn -vv -p445 --script=smb-check-vulns.nse,smb-vuln-ms10-054.nse,smb-vuln-ms10-061.nse --script-args=unsafe=1 -oN './results/{0}/{0}_smb.nmap' {0}".format(ip_address)
+VULNSCAN = "nmap -sV -Pn -vv -p445 --script=smb-check-vulns.nse,smb-vuln-* --script-args=unsafe=1 -oN './results/{0}/{0}_smb.nmap' {0}".format(ip_address)
 scanresults = subprocess.check_output(VULNSCAN, shell=True)
 if ("445/tcp closed" not in scanresults):
     lines = scanresults.split("\n")
