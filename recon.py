@@ -1,8 +1,9 @@
-import subprocess
+import errno
 import multiprocessing
 import multiprocessing.pool
 import os
-import errno
+import subprocess
+
 from IPy import IP
 
 
@@ -79,7 +80,7 @@ def sshEnum(ip_address, port):
 
 
 def telnetEnum(ip_address, port):
-    print "INFO: Detected Telnet on {0}:{1}".format(ip_address ,port)
+    print "INFO: Detected Telnet on {0}:{1}".format(ip_address, port)
     SCRIPT = "./telnetrecon.py {0} {1}".format(ip_address, port)
     subprocess.call(SCRIPT, shell=True)
     return
