@@ -166,7 +166,9 @@ if __name__ == '__main__':
     fastscan = "nmap -sn %s | grep \"Nmap scan report for\" | cut -d \" \" -f5" % (str(ips))
     scanresults = subprocess.check_output(fastscan, shell=True)
 
-    recon.multiscan()
+    num_threads = 4 * multiprocessing.cpu_count()
+    pool = MyPool(num_threads)
+    pool.map(scanner, [ip for ip in (str(scanresults)).split()]()
 
     print "INFO: All scipts finished"
 
