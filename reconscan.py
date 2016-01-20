@@ -60,7 +60,7 @@ def scanner(ip_address):
     recon.checkpath("./results/{0}".format(ip_address))
 
     if not recon.checknmaprun(ip_address, "U_nmap_scan_import.xml"):
-        print("INFO: {0} not scanned or interrupted, restarting UDP nmap scan".format(ip_address))
+        print("INFO: {0} not scanned or interrupted, starting new UDP nmap scan".format(ip_address))
         udpscan = "nmap -vv -Pn -sU -sV -A -O -T4 -p 53,67,68,88,161,162,137,138,139,389,520,2049 -oN './results/{0}/{0}U.nmap' -oX './results/{0}/{0}U_nmap_scan_import.xml' {0}".format(ip_address)
         with open(os.devnull, "w") as f:
             subprocess.call(udpscan, shell=True, stdout=f)
@@ -72,7 +72,7 @@ def scanner(ip_address):
         lines = udpresults
 
     if not recon.checknmaprun(ip_address, "_nmap_scan_import.xml"):
-        print("INFO: {0} not scanned or interrupted, restarting TCP nmap scan".format(ip_address))
+        print("INFO: {0} not scanned or interrupted, starting new TCP nmap scan".format(ip_address))
         tcpscan = "nmap -vv -Pn -A -O -sS -sV -T4 --top-ports 100 --open -oN './results/{0}/{0}.nmap' -oX './results/{0}/{0}_nmap_scan_import.xml' {0}".format(ip_address)
         with open(os.devnull, "w") as f:
             subprocess.call(tcpscan, shell=True, stdout=f)
@@ -163,7 +163,7 @@ if __name__ == '__main__':
 
     # Do a quick scan to get active hosts to scan thoroughly
     print "INFO: Performing sweep to create a target list"
-    fastscan = "nmap -sP %s | grep \"Nmap scan report for\" | cut -d \" \" -f5" % (str(ips))
+    fastscan = "nmap -sn %s | grep \"Nmap scan report for\" | cut -d \" \" -f5" % (str(ips))
     scanresults = subprocess.check_output(fastscan, shell=True)
 
     num_threads = 4 * multiprocessing.cpu_count()
