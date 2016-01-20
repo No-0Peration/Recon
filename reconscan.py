@@ -7,7 +7,6 @@
 import os
 import sys
 import multiprocessing
-import multiprocessing.pool
 import subprocess
 import gzip
 import re
@@ -51,6 +50,7 @@ else:
         print("Rockyou wordlist is decompressed!")
     else:
         print("Decompression of rockyou.txt failed!")
+
 
 
 def scanner(ip_address):
@@ -166,8 +166,7 @@ if __name__ == '__main__':
     fastscan = "nmap -sn %s | grep \"Nmap scan report for\" | cut -d \" \" -f5" % (str(ips))
     scanresults = subprocess.check_output(fastscan, shell=True)
 
-    num_threads = 4 * multiprocessing.cpu_count()
-    pool = MyPool(num_threads)
-    pool.map(scanner, [ip for ip in (str(scanresults)).split()])
+    recon.multiscan()
 
     print "INFO: All scipts finished"
+

@@ -19,7 +19,7 @@ if not recon.checknmaprun(ip_address, "_nmap_scan_smtp.xml"):
     print "INFO: Running SMTP nmap scan"
     results = subprocess.check_output(SMTPSCAN, shell=True)
 else:
-    print("INFO: {0} already scanned for with NMAP...".format(ip_address))
+    print("INFO: {0} already scanned with SMTP NMAP SCAN...".format(ip_address))
 
 # Test for presence of the VRFY command
 print "INFO: Trying SMTP Enum on " + ip_address
@@ -32,11 +32,11 @@ s.send('VRFY ' + "TEST" + '\r\n')
 result = s.recv(1024)
 if ("not implemented" in result) or ("disallowed" in result):
     s.close()
-    sys.exit("INFO: VRFY Command not implemented on " + ip_address)
+    print "INFO: VRFY Command not implemented on " + ip_address
 else:
     print "INFO: VRFY is enabled on {0} starting bruteforce".format(ip_address)
 
-    names = open('/usr/share/wfuzz/wordlist/fuzzdb/wordlists-user-passwd/names/namelist.txt', 'r')
+    names = open('/usr/share/dnsrecon/namelist.txt', 'r')
     for name in names:
         name = str(name.strip())
         s.send('VRFY {0} \r\n'.format(name))

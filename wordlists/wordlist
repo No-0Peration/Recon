@@ -43133,3 +43133,4 @@ mysql_upgrade_zencart_136_to_137.sql
 mysql_upgrade_zencart_137_to_138.sql
 mysql_zencart.sql
 techsupp.php
+foo.pl
