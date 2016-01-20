@@ -7,6 +7,7 @@
 import os
 import sys
 import multiprocessing
+import multiprocessing.pool
 import subprocess
 import gzip
 import re
@@ -50,7 +51,6 @@ else:
         print("Rockyou wordlist is decompressed!")
     else:
         print("Decompression of rockyou.txt failed!")
-
 
 
 def scanner(ip_address):
@@ -168,7 +168,6 @@ if __name__ == '__main__':
 
     num_threads = 4 * multiprocessing.cpu_count()
     pool = MyPool(num_threads)
-    pool.map(scanner, [ip for ip in (str(scanresults)).split()]()
+    pool.map(scanner, [ip for ip in (str(scanresults)).split()])
 
     print "INFO: All scipts finished"
-
