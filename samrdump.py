@@ -23,7 +23,6 @@ import logging
 from impacket import uuid, version
 from impacket.nt_errors import STATUS_MORE_ENTRIES
 from impacket.dcerpc.v5 import transport, samr
-from impacket.examples import logger
 import argparse
 
 
