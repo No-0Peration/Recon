@@ -46,7 +46,7 @@ def scanner(ip_address):
 
     if not recon.checknmaprun(ip_address, "U_nmap_scan_import.xml"):
         print("INFO: {0} not scanned or interrupted, starting new UDP nmap scan".format(ip_address))
-        udpscan = "nmap -vv -Pn -sU -sV -A -O -T4 -p 53,67,68,88,161,162,137,138,139,389,520,2049 -oN './results/{0}/{0}U.nmap' -oX './results/{0}/{0}U_nmap_scan_import.xml' {0}".format(ip_address)
+        udpscan = "nmap -vv -Pn -sU -sV -A -O -p 53,67,68,88,161,162,137,138,139,389,520,2049 -oN './results/{0}/{0}U.nmap' -oX './results/{0}/{0}U_nmap_scan_import.xml' {0}".format(ip_address)
         with open(os.devnull, "w") as f:
             subprocess.call(udpscan, shell=True, stdout=f)
         udpresults = file("./results/{0}/{0}U_nmap_scan_import.xml".format(ip_address), "r")
@@ -58,7 +58,7 @@ def scanner(ip_address):
 
     if not recon.checknmaprun(ip_address, "_nmap_scan_import.xml"):
         print("INFO: {0} not scanned or interrupted, starting new TCP nmap scan".format(ip_address))
-        tcpscan = "nmap -vv -Pn -A -O -sS -sV -T4 -p- --open -oN './results/{0}/{0}.nmap' -oX './results/{0}/{0}_nmap_scan_import.xml' {0}".format(ip_address)
+        tcpscan = "nmap -vv -Pn -A -O -sS -sV -p- --open -oN './results/{0}/{0}.nmap' -oX './results/{0}/{0}_nmap_scan_import.xml' {0}".format(ip_address)
         with open(os.devnull, "w") as f:
             subprocess.call(tcpscan, shell=True, stdout=f)
         tcpresults = file("./results/{0}/{0}_nmap_scan_import.xml".format(ip_address), "r")
