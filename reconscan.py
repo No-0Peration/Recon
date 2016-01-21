@@ -6,26 +6,11 @@
 
 import os
 import sys
-import multiprocessing
-import multiprocessing.pool
 import subprocess
 import gzip
 import re
 import recon  # All functions called by the main scanner function
 
-
-class NoDaemonProcess(multiprocessing.Process):
-    # make 'daemon' attribute always return False
-    def _get_daemon(self):
-        return False
-
-    def _set_daemon(self, value):
-        pass
-    daemon = property(_get_daemon, _set_daemon)
-
-
-class MyPool(multiprocessing.pool.Pool):
-    Process = NoDaemonProcess
 
 # Check if root
 if os.getuid() == 0:
@@ -166,8 +151,7 @@ if __name__ == '__main__':
     fastscan = "nmap -sn %s | grep \"Nmap scan report for\" | cut -d \" \" -f5" % (str(ips))
     scanresults = subprocess.check_output(fastscan, shell=True)
 
-    num_threads = 4 * multiprocessing.cpu_count()
-    pool = MyPool(num_threads)
-    pool.map(scanner, [ip for ip in (str(scanresults)).split()])
+    for ip in (str(scanresults)).split():
+        scanner(ip)
 
     print "INFO: All scipts finished"
