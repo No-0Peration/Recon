@@ -13,7 +13,7 @@ name = str(sys.argv[2])
 folder = "./wordlists"
 
 found = []
-print "INFO: Starting DIRBUSTER scan for " + url
+print('\033[1;34m[*]  Starting DIRBUSTER scan for {0}\033[1;m'.format(url))
 for filename in os.listdir(folder):
     outfile = " -o " + "./results/" + name + "/" + name + "_dirb_" + filename
     DIRBSCAN = "dirb %s %s/%s %s -S -r" % (url, folder, filename, outfile)
@@ -29,12 +29,13 @@ for filename in os.listdir(folder):
 
 try:
     if found[0] != "":
-        print "[*] Dirb found the following items..."
+        print('\033[1;32m[*]  Dirbuster found the following items...\033[1;m')
         for item in found:
             if ("CODE:200" in item or "DIRECTORY" in item):
-                print "   " + item
+                print "\033[1;32m    {0}\033[1;m".format(item)
 except:
-    print "INFO: No items found during dirb scan of " + url
+    print('\033[1;34m[*]  No items found during dirb scan of {0}\033[1;m'.format(url))
+
 
 
 

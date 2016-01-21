@@ -9,7 +9,7 @@ if len(sys.argv) != 3:
 
 ip_address = sys.argv[1].strip()
 port = sys.argv[2].strip()
-print "INFO: Performing nmap FTP script scan for " + ip_address + ":" + port
+print('\033[1;34m[*]  Performing nmap FTP script scan for {0}:{1}\033[1;m'.format(ip_address, port))
 FTPSCAN = "nmap -sV -Pn -vv -p {0} --script=ftp-* -oN './results/{1}/{1}_ftp.nmap' {1}".format(port, ip_address)
 results = subprocess.check_output(FTPSCAN, shell=True)
 
@@ -28,4 +28,4 @@ results = subprocess.check_output(FTPSCAN, shell=True)
 #         f.write("[*] Valid ftp credentials found: {0}".format(result))
 #         f.close
 
-print "INFO: FTP nmap script scan done..."
+

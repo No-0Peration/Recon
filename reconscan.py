@@ -11,31 +11,23 @@ import gzip
 import re
 import recon  # All functions called by the main scanner function
 
-
-# Check if root
-if os.getuid() == 0:
-    print("r00tness!")
-else:
-    sys.exit("I cannot run as a mortal. Sorry.")
-
-if os.path.isfile("/usr/share/wordlists/rockyou.txt"):
-    print("Rockyou wordlist present")
-else:
-    print("Rockyou wordlist is missing trying to decompress...")
-    try:
-        inFile = gzip.GzipFile("/usr/share/wordlists/rockyou.txt.gz", "rb")
-        s = inFile.read()
-        inFile.close()
-
-        outFile = file("/usr/share/wordlists/rockyou.txt", "wb")
-        outFile.write(s)
-        outFile.close()
-    except:
-        pass
-    if os.path.isfile("/usr/share/wordlists/rockyou.txt"):
-        print("Rockyou wordlist is decompressed!")
-    else:
-        print("Decompression of rockyou.txt failed!")
+# print '\033[1;30mGray like Ghost\033[1;m'
+# print '\033[1;31mRed like Radish\033[1;m'
+# print '\033[1;32mGreen like Grass\033[1;m'
+# print '\033[1;33mYellow like Yolk\033[1;m'
+# print '\033[1;34mBlue like Blood\033[1;m'
+# print '\033[1;35mMagenta like Mimosa\033[1;m'
+# print '\033[1;36mCyan like Caribbean\033[1;m'
+# print '\033[1;37mWhite like Whipped Cream\033[1;m'
+# print '\033[1;38mCrimson like Chianti\033[1;m'
+# print '\033[1;41mHighlighted Red like Radish\033[1;m'
+# print '\033[1;42mHighlighted Green like Grass\033[1;m'
+# print '\033[1;43mHighlighted Brown like Bear\033[1;m'
+# print '\033[1;44mHighlighted Blue like Blood\033[1;m'
+# print '\033[1;45mHighlighted Magenta like Mimosa\033[1;m'
+# print '\033[1;46mHighlighted Cyan like Caribbean\033[1;m'
+# print '\033[1;47mHighlighted Gray like Ghost\033[1;m'
+# print '\033[1;48mHighlighted Crimson like Chianti\033[1;m'
 
 
 def scanner(ip_address):
@@ -44,27 +36,15 @@ def scanner(ip_address):
     serv_dict = {}
     recon.checkpath("./results/{0}".format(ip_address))
 
-    if not recon.checknmaprun(ip_address, "U_nmap_scan_import.xml"):
-        print("INFO: {0} not scanned or interrupted, starting new UDP nmap scan".format(ip_address))
-        udpscan = "nmap -vv -Pn -sU -sV -A -O -p 53,67,68,88,161,162,137,138,139,389,520,2049 -oN './results/{0}/{0}U.nmap' -oX './results/{0}/{0}U_nmap_scan_import.xml' {0}".format(ip_address)
-        with open(os.devnull, "w") as f:
-            subprocess.call(udpscan, shell=True, stdout=f)
-        udpresults = file("./results/{0}/{0}U_nmap_scan_import.xml".format(ip_address), "r")
-        lines = udpresults
-    else:
-        print("INFO: {0} already scanned for UDP ports...".format(ip_address))
-        udpresults = file("./results/{0}/{0}U_nmap_scan_import.xml".format(ip_address), "r")
-        lines = udpresults
-
     if not recon.checknmaprun(ip_address, "_nmap_scan_import.xml"):
-        print("INFO: {0} not scanned or interrupted, starting new TCP nmap scan".format(ip_address))
+        print('\033[1;34m[*]  Starting new TCP nmap scan for {0}\033[1;m'.format(ip_address))
         tcpscan = "nmap -vv -Pn -A -O -sS -sV -p- --open -oN './results/{0}/{0}.nmap' -oX './results/{0}/{0}_nmap_scan_import.xml' {0}".format(ip_address)
         with open(os.devnull, "w") as f:
             subprocess.call(tcpscan, shell=True, stdout=f)
         tcpresults = file("./results/{0}/{0}_nmap_scan_import.xml".format(ip_address), "r")
         lines = tcpresults
     else:
-        print("INFO: {0} already scanned for TCP ports...".format(ip_address))
+        print('\033[1;34m[*]  {0} already scanned for TCP ports...\033[1;m'.format(ip_address))
         tcpresults = file("./results/{0}/{0}_nmap_scan_import.xml".format(ip_address), "r")
         lines = tcpresults
 
@@ -126,33 +106,70 @@ def scanner(ip_address):
             for port in ports:
                 port = port.split("/")[0]
                 recon.multProc(recon.telnetEnum, ip_address, port)
+        for port in ports:
+            print('\033[1;32m[*]  Open port {0} found on {1}\033[1;m'.format(port, ip_address))
 
-    print "INFO: TCP/UDP Nmap scans completed for {0}".format(ip_address)
+    if not recon.checknmaprun(ip_address, "U_nmap_scan_import.xml"):
+        print('\033[1;34m[*]  Starting new UDP nmap scan for {0}\033[1;m'.format(ip_address))
+        udpscan = "nmap -vv -Pn -sU -sV -A -O -p 53,67,68,88,161,162,137,138,139,389,520,2049 -oN './results/{0}/{0}U.nmap' -oX './results/{0}/{0}U_nmap_scan_import.xml' {0}".format(ip_address)
+        with open(os.devnull, "w") as f:
+            subprocess.call(udpscan, shell=True, stdout=f)
+        udpresults = file("./results/{0}/{0}U_nmap_scan_import.xml".format(ip_address), "r")
+        lines = udpresults
+    else:
+        print('\033[1;34m[*]  {0} already scanned for UDP ports...\033[1;m'.format(ip_address))
+        udpresults = file("./results/{0}/{0}U_nmap_scan_import.xml".format(ip_address), "r")
+        lines = udpresults
+
+    print('\033[1;34m[*]  TCP/UDP Nmap scans completed for {0}\033[1;m'.format(ip_address))
     return
 
 # grab the discover scan results and start scanning up hosts
-print "////////////////////////////////////////////////////////////"
-print "///                   Enumeration script                 ///"
-print "///                          --                          ///"
-print "///                          by                          ///"
-print "///          0x90:N0_Operation & B0x41S & DTCTD          ///"
-print "////////////////////////////////////////////////////////////"
+print '\033[1;32m////////////////////////////////////////////////////////////\033[1;m'
+print '\033[1;32m///                   Enumeration script                 ///\033[1;m'
+print '\033[1;32m///                          --                          ///\033[1;m'
+print '\033[1;32m///                          by                          ///\033[1;m'
+print '\033[1;32m///          0x90:N0_Operation & B0x41S & DTCTD          ///\033[1;m'
+print '\033[1;32m////////////////////////////////////////////////////////////\033[1;m'
 
-print "Heel veel succes met je Examen Bas!! doorzetten he!"
 if __name__ == '__main__':
     try:
         recon.checkpath("./results/")
     except:
         pass
 
-    ips = recon.getIp()
+    # Check if root
+if os.getuid() == 0:
+    print('\033[1;32m[*]  Checking permissions\033[1;m')
+else:
+    sys.exit("I cannot run as a mortal. Sorry.")
 
-    # Do a quick scan to get active hosts to scan thoroughly
-    print "INFO: Performing sweep to create a target list"
-    fastscan = "nmap -sn %s | grep \"Nmap scan report for\" | cut -d \" \" -f5" % (str(ips))
-    scanresults = subprocess.check_output(fastscan, shell=True)
+if os.path.isfile("/usr/share/wordlists/rockyou.txt"):
+    print('\033[1;32m[*]  Rockyou wordlist present\033[1;m')
+else:
+    print('\033[1;31m[*]  Rockyou wordlist is missing trying to decompress...\033[1;m')
+    try:
+        inFile = gzip.GzipFile("/usr/share/wordlists/rockyou.txt.gz", "rb")
+        s = inFile.read()
+        inFile.close()
 
-    for ip in (str(scanresults)).split():
-        scanner(ip)
+        outFile = file("/usr/share/wordlists/rockyou.txt", "wb")
+        outFile.write(s)
+        outFile.close()
+    except:
+        pass
+    if os.path.isfile("/usr/share/wordlists/rockyou.txt"):
+        print('\033[1;32m[*]  Rockyou wordlist is decompressed!\033[1;m')
+    else:
+        print('\033[1;31m[*]  Decompression of rockyou.txt failed!\033[1;m')
 
-    print "INFO: All scipts finished"
+ips = recon.getIp()
+
+# Do a quick scan to get active hosts to scan thoroughly
+
+print '\033[1;34m[*]  Performing sweep to create a target list\033[1;m'
+fastscan = "nmap -sn %s | grep \"Nmap scan report for\" | cut -d \" \" -f5" % (str(ips))
+scanresults = subprocess.check_output(fastscan, shell=True)
+
+for ip in (str(scanresults)).split():
+    scanner(ip)
