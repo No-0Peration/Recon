@@ -4,18 +4,19 @@ import sys
 import os
 import subprocess
 
-if len(sys.argv) != 3:
+if len(sys.argv) != 4:
     print "Usage: dirbust.py <target url> <scan name>"
     sys.exit(0)
 
 url = str(sys.argv[1])
 name = str(sys.argv[2])
+port = str(sys.argv[3])
 folder = "./wordlists"
 
 found = []
 print('\033[1;34m[*]  Starting DIRBUSTER scan for {0}\033[1;m'.format(url))
 for filename in os.listdir(folder):
-    outfile = " -o " + "./results/" + name + "/" + url + "_dirb_" + filename
+    outfile = " -o " + "./results/" + name + "/" + name + "_dirb_" + filename + "_" + port
     DIRBSCAN = "dirb %s %s/%s %s -S -r" % (url, folder, filename, outfile)
     try:
         results = subprocess.check_output(DIRBSCAN, shell=True)
