@@ -33,7 +33,7 @@ if ("not implemented" in result) or ("disallowed" in result):
     s.close()
     print('\033[1;34m[*]  VRFY command not implemented on {0}\033[1;m'.format(ip_address))
 else:
-    print('\033[1;34m[*]  VRFY command is enabled on {0} starting bruteforce\033[1;m'.format(ip_address))
+    print('\033[1;32m[*]  VRFY command is enabled on {0} starting bruteforce\033[1;m'.format(ip_address))
 
     names = open('/usr/share/dnsrecon/namelist.txt', 'r')
     for name in names:
@@ -41,7 +41,7 @@ else:
         s.send('VRFY {0} \r\n'.format(name))
         result = s.recv(1024)
         if (("250" in result) or ("252" in result) and ("Cannot VRFY" not in result)):
-            print('\033[1;34m[*]  SMTP VRFY Account found on {0} : {1}\033[1;m'.format(ip_address, name))
+            print('\033[1;32m[*]  SMTP VRFY Account found on {0} : {1}\033[1;m'.format(ip_address, name))
             outfile = "results/{0}/{0}_smtprecon.txt".format(ip_address)
             f = open(outfile, "w")
             f.write("[*]  SMTP VRFY Account found on {0} : {1}".format(ip_address, name))

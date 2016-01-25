@@ -20,7 +20,7 @@ if results != "":
         results = results.split("[public] ")[1]
         snmpdetect = 1
     if snmpdetect == 1:
-        print('\033[1;34m[*]  SNMP running on {0}; OS Detect: {1}\033[1;m'.format(ip_address, results))
+        print('\033[1;32m[*]  SNMP running on {0}; OS Detect: {1}\033[1;m'.format(ip_address, results))
         SNMPWALK = "snmpwalk -c public -v1 {0} 1 > results/{0}/{0}_snmpwalk.txt".format(ip_address)
         results = subprocess.check_output(SNMPWALK, shell=True)
 
