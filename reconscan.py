@@ -19,7 +19,7 @@ def scanner(ip_address):
 
     if not recon.checknmaprun(ip_address, "_nmap_scan_import.xml"):
         print('\033[1;34m[*]  Starting new TCP nmap scan for {0}\033[1;m'.format(ip_address))
-        tcpscan = "nmap -vv -Pn -A -O -sS -sV -p- --open -oN './results/{0}/{0}.nmap' -oX './results/{0}/{0}_nmap_scan_import.xml' {0}".format(ip_address)
+        tcpscan = "nmap -vv -Pn -A -O -sS -sV --open -oN './results/{0}/{0}.nmap' -oX './results/{0}/{0}_nmap_scan_import.xml' {0}".format(ip_address)
         with open(os.devnull, "w") as f:
             subprocess.call(tcpscan, shell=True, stdout=f)
         tcpresults = file("./results/{0}/{0}_nmap_scan_import.xml".format(ip_address), "r")
