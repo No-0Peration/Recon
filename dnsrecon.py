@@ -27,7 +27,7 @@ ztresults = subprocess.check_output(ZT, shell=True)
 if "failed" in ztresults:
     print('\033[1;34m[*]  Zone Transfer failed for {0}\033[1;m'.format(host))
 else:
-    print('\033[1;32m[*]  Zone Transfer successful for on {0} zee output file!!\033[1;m'.format(host))
+    print('\033[1;32m[*]  Zone Transfer successful for on {0} see output file!!\033[1;m'.format(host))
     outfile = "results/{0}/{0}_zonetransfer.txt".format(ip_address)
     dnsf = open(outfile, "w")
     dnsf.write(ztresults)
