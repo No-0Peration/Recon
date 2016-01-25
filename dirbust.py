@@ -15,7 +15,7 @@ folder = "./wordlists"
 found = []
 print('\033[1;34m[*]  Starting DIRBUSTER scan for {0}\033[1;m'.format(url))
 for filename in os.listdir(folder):
-    outfile = " -o " + "./results/" + name + "/" + name + "_dirb_" + filename
+    outfile = " -o " + "./results/" + name + "/" + url + "_dirb_" + filename
     DIRBSCAN = "dirb %s %s/%s %s -S -r" % (url, folder, filename, outfile)
     try:
         results = subprocess.check_output(DIRBSCAN, shell=True)
