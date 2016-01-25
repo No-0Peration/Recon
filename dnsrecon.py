@@ -9,6 +9,7 @@ if len(sys.argv) != 2:
 ip_address = sys.argv[1]
 HOSTNAME = "host %s | cut -d ' ' -f5 | cut -d '.' -f1,2,3" % (ip_address)
 DOMAINNAME = "host %s | cut -d ' ' -f5 | cut -d '.' -f2,3" % (ip_address)
+port = 25
 
 print('\033[1;34m[*]  Performing nmap DNS script scan for {0}:{1}\033[1;m'.format(ip_address, port))
 DNSSCAN = "nmap -sV -Pn -vv -p T:53 U:53 --script=dns-* -oN './results/{0}/{0}_dns.nmap' {0}".format(ip_address)

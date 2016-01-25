@@ -32,17 +32,6 @@ def multProc(targetin, scanip, port):
     p.start()
     return
 
-def multiscan():
-    num_threads = 4 * multiprocessing.cpu_count()
-    pool = MyPool(num_threads)
-    pool.map(scanner, [ip for ip in (str(scanresults)).split()])
-
-def PoolProc(targetin, scanip, port):
-    num_threads = 4 * multiprocessing.cpu_count()
-    pool = MyPool(num_threads)
-    pool.map(targetin(scanip, port))
-    return
-
 def getIp():
     """ Defines the ip range to be scanned """
     try:
@@ -62,7 +51,7 @@ def dnsEnum(ip_address, port):
 
 def httpEnum(ip_address, port):
     print('\033[1;34m[*]  Detected HTTP on {0} : {1}\033[1;m'.format(ip_address, port))
-    checkpath("./results/nmap")
+    checkpath("./results/")
     SCRIPT = "./httprecon.py %s %s" % (ip_address, port)  # execute the python script
     subprocess.call(SCRIPT, shell=True)
     return
