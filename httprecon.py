@@ -20,7 +20,7 @@ outfile = "results/{0}/{0}_HTTPrecon.txt".format(ip_address)
 NIKTOSCAN = "nikto -host {0} -p {1} > ./results/{0}/{0}.{1}_nikto".format(ip_address, port)
 print('\033[1;34m[*]  Performing NIKTO scan for {0}:{1}\033[1;m'.format(ip_address, port))
 subprocess.call(NIKTOSCAN, shell=True)
-ARACHNI = "arachni {0}{1}{2} --output-only-positives --scope-include-subdomains --report-save-path ./results/{1}_arachni_{2}".format(header, ip_address, port)
+ARACHNI = "arachni {0}{1}:{2} --output-only-positives --scope-include-subdomains --report-save-path ./results/{1}_arachni_{2}".format(header, ip_address, port)
 print('\033[1;34m[*]  Performing ARACHNI scan for {0}:{1}\033[1;m'.format(ip_address, port))
 subprocess.call(ARACHNI, shell=True)
 DIRBUST = "./dirbust.py {2}{0}:{1} {0} {1}".format(ip_address, port, header)  # execute the python script
