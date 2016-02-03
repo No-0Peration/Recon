@@ -15,7 +15,7 @@ recon.checkpath("./results/{0}".format(ip_address))
 
 print('\033[1;34m[*]  Performing nmap SMTP script scan for {0}\033[1;m'.format(ip_address))
 if not recon.checknmaprun(ip_address, "_nmap_scan_smtp.xml"):
-    SMTPSCAN = "nmap -vv -sV -Pn -p 25,465,587 --script-args=unsafe=1 --script=smtp-vuln* -oN './results/{0}/{0}_smtp.nmap' -oX './results/{0}/{0}_nmap_scan_smtp.xml' {0}".format(ip_address)
+    SMTPSCAN = "nmap -vv -sV -Pn -p 25,465,587 --script-args=unsafe=1 --script=smtp* -oN './results/{0}/{0}_smtp.nmap' -oX './results/{0}/{0}_nmap_scan_smtp.xml' {0}".format(ip_address)
     results = subprocess.check_output(SMTPSCAN, shell=True)
 else:
     print('\033[1;34m[*]  Allready performed nmap SMTP script scan for {0} Skipping..\033[1;m'.format(ip_address))
@@ -34,17 +34,20 @@ if ("not implemented" in result) or ("disallowed" in result):
     print('\033[1;34m[*]  VRFY command not implemented on {0}\033[1;m'.format(ip_address))
 else:
     print('\033[1;32m[*]  VRFY command is enabled on {0} starting bruteforce\033[1;m'.format(ip_address))
-    names = open('/usr/share/dnsrecon/namelist.txt', 'r')
-    for name in names:
-        name = str(name.strip())
-        s.send('VRFY ' + name + '\r\n')
-        result2 = s.recv(1024)
-        if (("250" in result2) or ("252" in result2) and ("Cannot VRFY" not in result2)):
-            print('\033[1;32m[*]  SMTP VRFY Account found on {0} : {1}\033[1;m'.format(ip_address, name))
-            outfile = "results/{0}/{0}_smtprecon.txt".format(ip_address)
-            f = open(outfile, "w")
-            f.write("[*]  SMTP VRFY Account found on {0} : {1}".format(ip_address, name))
-            f.close
+    try:
+        names = open('/usr/share/dnsrecon/namelist.txt', 'r')
+        for name in names:
+            name = str(name.strip())
+            s.send('VRFY ' + name + '\r\n')
+            result2 = s.recv(1024)
+            if (("250" in result2) or ("252" in result2) and ("Cannot VRFY" not in result2)):
+                print('\033[1;32m[*]  SMTP VRFY Account found on {0} : {1}\033[1;m'.format(ip_address, name))
+                outfile = "results/{0}/{0}_smtprecon.txt".format(ip_address)
+                f = open(outfile, "w")
+                f.write("[*]  SMTP VRFY Account found on {0} : {1}".format(ip_address, name))
+                f.close
+    except:
+        print('\033[1;34m[*]  VRFY command check failed for {0}\033[1;m'.format(ip_address))
     s.close()
     sys.exit()
 
