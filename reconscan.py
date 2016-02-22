@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 '''
- Author: Gerben Visser (0x90) -- @N0_Operation & Bas -- B0x41S & Sander -- DTCTD.
+ Author: Gerben (0x90) -- @N0_Operation & Bas -- B0x41S & Sander -- DTCTD.
  This tool is an automation script for the reconphase during a pentest, it was inspired by a few github repos.
 '''
 
