@@ -230,7 +230,15 @@ try:
             close("./ips")
             exit()
     except:
-        pass
+        ips = recon.getIp()
+
+        # Do a quick scan to get active hosts to scan thoroughly
+        print '\033[1;34m[*]  Performing sweep to create a target list\033[1;m'
+        fastscan = 'nmap -Pn -sn %s | grep "Nmap scan report for" | cut -d " " -f6 | cut -d "(" -f2 | cut -d ")" -f1' % (str(ips))
+        scanresults = subprocess.check_output(fastscan, shell=True)
+
+        for ip in (str(scanresults)).split():
+            scanner(ip)
 
 
     #scanner(str(ips))
@@ -241,13 +249,5 @@ except:
         subprocess.call("./killall.sh", shell=True, stdout=f)
         exit()
 
-        ips = recon.getIp()
 
-        # Do a quick scan to get active hosts to scan thoroughly
-        print '\033[1;34m[*]  Performing sweep to create a target list\033[1;m'
-        fastscan = 'nmap -Pn -sn %s | grep "Nmap scan report for" | cut -d " " -f6 | cut -d "(" -f2 | cut -d ")" -f1' % (str(ips))
-        scanresults = subprocess.check_output(fastscan, shell=True)
-
-        for ip in (str(scanresults)).split():
-            scanner(ip)
 
