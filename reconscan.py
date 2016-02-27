@@ -173,18 +173,18 @@ def scanner(ip_address):
     return
 
 # grab the discover scan results and start scanning up hosts
-print '\033[1;32m .d8888b.          .d8888b.  .d8888b. d8b                   8888888b.\033[1;m'
-print '\033[1;32md88P  Y88b        d88P  Y88bd88P  Y88b88P                   888   Y88b\033[1;m'
-print '\033[1;32m888    888        888    888888    8888P                    888    888\033[1;m'
-print '\033[1;32m888    888888  888Y88b. d888888    888  .d8888b             888   d88P .d88b.  .d8888b .d88b. 88888b.\033[1;m'
-print '\033[1;32m888    888`Y8bd8P   Y888P888888    888  88K                 8888888P  d8P  Y8bd88P    d88  88b888  88b\033[1;m'
-print '\033[1;32m888    888  X88K         888888    888  "Y8888b.   888888   888 T88b  88888888888     888  888888  888\033[1;m'
-print '\033[1;32mY88b  d88P.d8  8b.Y88b  d88PY88b  d88P       X88            888  T88b Y8b.    Y88b.   Y88..88P888  888\033[1;m'
-print '\033[1;32m "Y8888P" 888  888 "Y8888P"  "Y8888P"    88888P             888   T88b "Y8888  "Y8888P "Y88P" 888  888\033[1;m'
+print '\033[1;32m .d8888b.          .d8888b.  .d8888b. d8b                   8888888b.                                  \033[1;m'
+print '\033[1;32md88P  Y88b        d88P  Y88bd88P  Y88b88P                   888   Y88b                                 \033[1;m'
+print '\033[1;32m888    888        888    888888    8888P                    888    888                                 \033[1;m'
+print '\033[1;32m888    888888  888Y88b. d888888    888  .d8888b             888   d88P .d88b.  .d8888b .d88b. 88888b.  \033[1;m'
+print '\033[1;32m888    888`Y8bd8P   Y888P888888    888  88K                 8888888P  d8P  Y8bd88P    d88  88b888  88b \033[1;m'
+print '\033[1;32m888    888  X88K         888888    888  "Y8888b.   888888   888 T88b  88888888888     888  888888  888 \033[1;m'
+print '\033[1;32mY88b  d88P.d8  8b.Y88b  d88PY88b  d88P       X88            888  T88b Y8b.    Y88b.   Y88..88P888  888 \033[1;m'
+print '\033[1;32m "Y8888P" 888  888 "Y8888P"  "Y8888P"    88888P             888   T88b "Y8888  "Y8888P "Y88P" 888  888 \033[1;m'
 print ''
-print '\033[1;32m//////////////////////////////////////////////////////////////////////////////////////////////////////\033[1;m'
-print '\033[1;32m///                      with help from the awesome B0x41S & DTCTD                                 ///\033[1;m'
-print '\033[1;32m//////////////////////////////////////////////////////////////////////////////////////////////////////\033[1;m'
+print '\033[1;32m////////////////////////////////////////////////////////////////////////////////////////////////////// \033[1;m'
+print '\033[1;32m///                      with help from the awesome B0x41S & DTCTD                                 /// \033[1;m'
+print '\033[1;32m////////////////////////////////////////////////////////////////////////////////////////////////////// \033[1;m'
 print ''
 
 
@@ -219,17 +219,33 @@ else:
     else:
         print('\033[1;31m[*]  Decompression of rockyou.txt failed!\033[1;m')
 
-ips = recon.getIp()
+try:
+    # See if there is a target list in the file ips
+    try:
+        with open("./ips") as f:
+            print('\033[1;32m[*]  Found IP list, using as input\033[1;m')
+            ips = f.readlines()
+            for ip in ips:
+                scanner(ip.strip('\n\r'))
+            close("./ips")
+    except:
+        ips = recon.getIp()
 
-scanner(str(ips))
+        # Do a quick scan to get active hosts to scan thoroughly
+        print '\033[1;34m[*]  Performing sweep to create a target list\033[1;m'
+        fastscan = 'nmap -Pn -sn %s | grep "Nmap scan report for" | cut -d " " -f6 | cut -d "(" -f2 | cut -d ")" -f1' % (str(ips))
+        scanresults = subprocess.check_output(fastscan, shell=True)
 
-# Do a quick scan to get active hosts to scan thoroughly
-# if  in ips:
-#     print '\033[1;34m[*]  Performing sweep to create a target list\033[1;m'
-#     fastscan = 'nmap -Pn -sn %s | grep "Nmap scan report for" | cut -d " " -f6 | cut -d "(" -f2 | cut -d ")" -f1' % (str(ips))
-#     scanresults = subprocess.check_output(fastscan, shell=True)
-#
-#     for ip in (str(scanresults)).split():
-#         scanner(ip)
-# else:
-#     scanner(str(ips))
+        for ip in (str(scanresults)).split():
+            scanner(ip)
+
+    #scanner(str(ips))
+except:
+    print '\033[1;31m[*]  Something went wrong: Killing all Processes!\033[1;m'
+    kill = './killall.sh'
+    with open(os.devnull, "w") as f:
+        subprocess.call("./killall.sh", shell=True, stdout=f)
+        exit()
+
+
+
