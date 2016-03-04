@@ -1,9 +1,8 @@
 #!/usr/bin/python
 import socket
-import sys
-import multiprocessing
-import recon
 import subprocess
+import sys
+
 
 if len(sys.argv) != 2:
     print "Usage: smtprecon.py <ip address>"
@@ -11,14 +10,9 @@ if len(sys.argv) != 2:
 
 ip_address = sys.argv[1]
 
-recon.checkpath("./results/{0}".format(ip_address))
-
 print('\033[1;34m[*]  Performing nmap SMTP script scan for {0}\033[1;m'.format(ip_address))
-if not recon.checknmaprun(ip_address, "_nmap_scan_smtp.xml"):
-    SMTPSCAN = "nmap -vv -sV -Pn -p 25,465,587 --script-args=unsafe=1 --script=smtp* -oN './results/{0}/{0}_smtp.nmap' -oX './results/{0}/{0}_nmap_scan_smtp.xml' {0}".format(ip_address)
-    results = subprocess.check_output(SMTPSCAN, shell=True)
-else:
-    print('\033[1;34m[*]  Allready performed nmap SMTP script scan for {0} Skipping..\033[1;m'.format(ip_address))
+SMTPSCAN = "nmap -vv -sV -Pn -p 25,465,587 --script-args=unsafe=1 --script=smtp* -oN './results/{0}/{0}_smtp.nmap' -oX './results/{0}/{0}_nmap_scan_smtp.xml' {0}".format(ip_address)
+results = subprocess.check_output(SMTPSCAN, shell=True)
 
 # Test for presence of the VRFY command
 print('\033[1;34m[*]  Trying SMTP Enum on {0}\033[1;m'.format(ip_address))
@@ -45,7 +39,7 @@ else:
                 outfile = "results/{0}/{0}_smtprecon.txt".format(ip_address)
                 f = open(outfile, "w")
                 f.write("[*]  SMTP VRFY Account found on {0} : {1}".format(ip_address, name))
-                f.close
+                f.close()
     except:
         print('\033[1;34m[*]  VRFY command check failed for {0}\033[1;m'.format(ip_address))
     s.close()

@@ -17,7 +17,7 @@ results = subprocess.check_output(DNSSCAN, shell=True)
 outfile = "results/{0}/{0}_dnsrecon.txt".format(ip_address)
 f = open(outfile, "w")
 f.write(results)
-f.close
+f.close()
 
 # grab the hostname
 host = subprocess.check_output(HOSTNAME, shell=True).strip()

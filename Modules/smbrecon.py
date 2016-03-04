@@ -1,7 +1,8 @@
 #!/usr/bin/python
-import sys
 import subprocess
-import recon
+import sys
+
+from Modules import recon
 
 if len(sys.argv) != 2:
     print "Usage: smbrecon.py <ip address>"

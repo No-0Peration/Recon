@@ -1,10 +1,11 @@
-import subprocess
+import errno
 import multiprocessing
 import multiprocessing.pool
 import os
-import errno
-from IPy import IP
 import re
+import subprocess
+
+from IPy import IP
 
 
 def checkpath(path):
@@ -45,7 +46,7 @@ def getIp():
 def dnsEnum(ip_address, port):
     print('\033[1;34m[*]  Detected DNS on {0} : {1}\033[1;m'.format(ip_address, port))
     if port.strip() == "53":
-        SCRIPT = "./dnsrecon.py %s" % (ip_address)  # execute the python script
+        SCRIPT = "./Modules/dnsrecon.py %s" % (ip_address)  # execute the python script
         subprocess.call(SCRIPT, shell=True)
     return
 
@@ -53,7 +54,7 @@ def dnsEnum(ip_address, port):
 def httpEnum(ip_address, port):
     print('\033[1;34m[*]  Detected HTTP on {0} : {1}\033[1;m'.format(ip_address, port))
     checkpath("./results/")
-    SCRIPT = "./httprecon.py %s %s" % (ip_address, port)  # execute the python script
+    SCRIPT = "./Modules/httprecon.py %s %s" % (ip_address, port)  # execute the python script
     subprocess.call(SCRIPT, shell=True)
     return
 
@@ -71,19 +72,19 @@ def mssqlEnum(ip_address, port):
 
 def sshEnum(ip_address, port):
     print('\033[1;34m[*]  Detected SSH on {0} : {1}\033[1;m'.format(ip_address, port))
-    SCRIPT = "./sshrecon.py %s %s" % (ip_address, port)
+    SCRIPT = "./Modules/sshrecon.py %s %s" % (ip_address, port)
     subprocess.call(SCRIPT, shell=True)
     return
 
 def telnetEnum(ip_address, port):
     print('\033[1;34m[*]  Detected TELNET on {0} : {1}\033[1;m'.format(ip_address, port))
-    SCRIPT = "./telnetrecon.py %s %s" % (ip_address, port)
+    SCRIPT = "./Modules/telnetrecon.py %s %s" % (ip_address, port)
     subprocess.call(SCRIPT, shell=True)
     return
 
 def snmpEnum(ip_address, port):
     print('\033[1;34m[*]  Detected SNMP on {0} : {1}\033[1;m'.format(ip_address, port))
-    SCRIPT = "./snmprecon.py %s" % (ip_address)
+    SCRIPT = "./Modules/snmprecon.py %s" % (ip_address)
     subprocess.call(SCRIPT, shell=True)
     return
 
@@ -91,7 +92,7 @@ def snmpEnum(ip_address, port):
 def smtpEnum(ip_address, port):
     print('\033[1;34m[*]  Detected SMTP on {0} : {1}\033[1;m'.format(ip_address, port))
     if port.strip() == "25":
-        SCRIPT = "./smtprecon.py %s" % (ip_address)
+        SCRIPT = "./Modules/smtprecon.py %s" % (ip_address)
         subprocess.call(SCRIPT, shell=True)
     else:
         print '\033[1;33mWARNING: SMTP detected on non-standard port, smtprecon skipped (must run manually)\033[1;m'
@@ -101,14 +102,14 @@ def smtpEnum(ip_address, port):
 def smbEnum(ip_address, port):
     print('\033[1;34m[*]  Detected SMB on {0} : {1}\033[1;m'.format(ip_address, port))
     if port.strip() == "445":
-        SCRIPT = "./smbrecon.py %s 2>/dev/null" % (ip_address)
+        SCRIPT = "./Modules/smbrecon.py %s 2>/dev/null" % (ip_address)
         subprocess.call(SCRIPT, shell=True)
     return
 
 
 def ftpEnum(ip_address, port):
     print('\033[1;34m[*]  Detected FTP on {0} : {1}\033[1;m'.format(ip_address, port))
-    SCRIPT = "./ftprecon.py %s %s" % (ip_address, port)
+    SCRIPT = "./Modules/ftprecon.py %s %s" % (ip_address, port)
     subprocess.call(SCRIPT, shell=True)
     return
 

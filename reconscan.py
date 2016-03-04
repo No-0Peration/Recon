@@ -4,12 +4,12 @@
  This tool is an automation script for the reconphase during a pentest, it was inspired by a few github repos.
 '''
 
-import os
-import sys
 import gzip
-import recon  # All functions called by the main scanner function
+import os
 import psutil
+import sys
 
+from Modules import recon
 
 # grab the discover scan results and start scanning up hostsprint
 
