@@ -12,11 +12,12 @@ port = sys.argv[2].strip()
 print('\033[1;34m[*]  Performing hydra SSH scan against {0}:{1}\033[1;m'.format(ip_address, port))
 HYDRA = "hydra -L /usr/share/wordlists/metasploit/unix_users.txt -P /usr/share/wordlists/rockyou.txt -t 4 -f -o ./results/{0}/{0}_sshhydra.txt -u {0} -s {1} ssh".format(ip_address, port)
 try:
-    results = subprocess.check_output(HYDRA, shell=True)
-    resultarr = results.split("\n")
-    for result in resultarr:
-        if "login:" in result:
-            print('\033[1;32m[*]  Valid SSH credentials found\033[1;m')
+    with open(os.devnull, "w") as f:
+        results = subprocess.check_output(HYDRA, shell=True, stdout=f)
+        resultarr = results.split("\n")
+        for result in resultarr:
+            if "login:" in result:
+                print('\033[1;32m[*]  Valid SSH credentials found\033[1;m')
 except:
     print('\033[1;34m[*]  No valid SSH credentials found\033[1;m')
 
@@ -26,4 +27,4 @@ results = subprocess.check_output(SSHSCAN, shell=True)
 outfile = "results/{0}/{0}_sshrecon.txt".format(ip_address)
 f = open(outfile, "w")
 f.write(results)
-f.close
+f.close()
