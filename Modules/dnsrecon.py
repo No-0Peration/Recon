@@ -35,4 +35,4 @@ try:
         dnsf.write(ztresults)
         dnsf.close()
 except:
-    print('\033[1;34m[*] Domain Transfer failed on {0}\033[1;m'.format(host))
+    print('\033[1;34m[*]  Domain Transfer failed on {0}\033[1;m'.format(host))
