@@ -24,25 +24,12 @@ ARACHNI = "arachni {0}{1}:{2} --output-only-positives --scope-include-subdomains
 print('\033[1;34m[*]  Performing ARACHNI scan for {0}:{1}\033[1;m'.format(ip_address, port))
 results2 = subprocess.check_output(ARACHNI, shell=True)
 outfile2 = "results/{0}/{0}_Arachnirecon.txt".format(ip_address)
-DIRBUST = "./dirbust.py {2}{0}:{1} {0} {1}".format(ip_address, port, header)  # execute the python script
+DIRBUST = "./Modules/dirbust.py {2}{0}:{1} {0} {1}".format(ip_address, port, header)  # execute the python script
 subprocess.call(DIRBUST, shell=True)
 f = open(outfile, "w")
 f.write(results)
-f.close
+f.close()
 f = open(outfile2, "w")
 f.write(results2)
-f.close
+f.close()
 
-
-#TODO: incorporate Wafw00f // whatweb // xsstracer // wpscan // sqlmap // arachni
-#wafw00f http://$TARGET
-
-#whatweb http://$TARGET
-
-#xsstracer $TARGET 80
-
-#wpscan --url http://$TARGET --batch
-
-#sqlmap -u "http://$TARGET" --batch --crawl=5 -f
-
-#uniscan -h
