@@ -202,5 +202,4 @@ def scanner(ip_address, protocol):
             for port in ports:
                 port = port.split("/")[0]
                 multProc(telnetEnum, ip_address, port)
-
     return

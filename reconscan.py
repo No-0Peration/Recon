@@ -8,10 +8,9 @@ import gzip
 import os
 import psutil
 import sys
-
 from Modules import recon
 
-# grab the discover scan results and start scanning up hostsprint
+
 
 print '\033[1;30m ########:: ########:: ######::: #######:: ##::: ##:::::\033[1;m'
 print '\033[1;30m ##.... ##: ##.....:: ##... ##: ##.... ##: ###:: ##:::::\033[1;m'
