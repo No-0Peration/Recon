@@ -12,6 +12,7 @@ ip_address = sys.argv[1]
 ONESIXONESCAN = "onesixtyone %s" % (ip_address)
 results = subprocess.check_output(ONESIXONESCAN, shell=True).strip()
 
+
 if results != "":
     if "Windows" in results:
         results = results.split("Software: ")[1]
@@ -21,13 +22,15 @@ if results != "":
         snmpdetect = 1
     if snmpdetect == 1:
         print('\033[1;32m[*]  SNMP running on {0}; OS Detect: {1}\033[1;m'.format(ip_address, results))
-        SNMPWALK = "snmpwalk -c public -v1 {0} 1 > results/{0}/{0}_snmpwalk.txt".format(ip_address)
+        SNMPWALK = "snmpwalk -c public -v1 {0} 1 >> ./results/{0}/{0}_snmp.txt".format(ip_address)
         results = subprocess.check_output(SNMPWALK, shell=True)
+        SNMPCHECK = "snmp-check -t {0} >> ./results/{0}/{0}_snmp.txt".format(ip_address)
+        results = subprocess.check_output(SNMPCHECK, shell=True)
 
 NMAPSCAN = "nmap -vv -sV -sU -Pn -p 161,162 --script=snmp-* {0}".format(ip_address)
 results = subprocess.check_output(NMAPSCAN, shell=True)
 outfile = "results/{0}/{0}_snmprecon.txt".format(ip_address)
 f = open(outfile, "w")
 f.write(results)
-f.close
+f.close()
 
