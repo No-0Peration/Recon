@@ -141,6 +141,7 @@ def scanner(ip_address, protocol):
             lines = tcpresults
 
     print('\033[1;34m[*]  {0} Nmap scan completed for {1}\033[1;m'.format(protocol, ip_address))
+    logparser(ip_address, protocol)
 
     serv_dict = {}
     for line in lines:
@@ -157,7 +158,7 @@ def scanner(ip_address, protocol):
             if port not in ports:
                 ports.append(port)
             serv_dict[service] = ports  # add service to the dictionary along with the associated port(2)
-            print('\033[1;32m[*]  Open {0} port {1} found on {2}\033[1;m'.format(protocol, port, ip_address))
+            #print('\033[1;32m[*]  Open {0} port {1} found on {2}\033[1;m'.format(protocol, port, ip_address))
 
     # Go through the service dictionary to call additional targeted enumeration functions
     for serv in serv_dict:
@@ -202,4 +203,106 @@ def scanner(ip_address, protocol):
             for port in ports:
                 port = port.split("/")[0]
                 multProc(telnetEnum, ip_address, port)
+    return
+
+def logparser(ip, protocol):
+    from xml.etree import ElementTree
+    from libnmap.parser import NmapParser
+
+    with open ('./results/{0}/{0}{1}_nmap_scan_import.xml'.format(ip, protocol), 'rt') as file: #ElementTree module is opening the XML file
+        tree = ElementTree.parse(file)
+
+    rep = NmapParser.parse_fromfile('./results/{0}/{0}{1}_nmap_scan_import.xml'.format(ip, protocol)) #NmapParse module is opening the XML file
+    #For loop used by NmapParser to print the hostname and the IP
+    for _host in rep.hosts:
+        host = ', '.join(_host.hostnames)
+        ip = (_host.address)
+        print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
+        print "\033[1;37m[*]  HostName: "'{0: >35}\033[1;m'.format(host,"--", ip)
+
+
+    #Lists in order to store Additional information, Product and version next to the port information.
+    list_product=[]
+    list_version=[]
+    list_extrainf=[]
+    for node_4 in tree.iter('service'): #ElementTree manipulation. Service Element which included the sub-elements product, version, extrainfo
+        product = node_4.attrib.get('product')
+        version = node_4.attrib.get('version')
+        extrainf = node_4.attrib.get('extrainfo')
+        list_product.append(product)
+        list_version.append(version)
+        list_extrainf.append(extrainf)
+
+    for osmatch in _host.os.osmatches: #NmapParser manipulation to detect OS and accuracy of detection.
+        os = osmatch.name
+        accuracy = osmatch.accuracy
+        print "\033[1;37m[*]  Operating System Guess: \033[1;m", os, "\033[1;37m- Accuracy Detection\033[1;m", accuracy
+        break
+    print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
+
+    if protocol == 'UDP':
+        os = 'UDP'
+    if 'Microsoft' in os:
+        counter = 0
+        for services in _host.services: #NmapParser manipulation to list services, their ports and their state. The list elements defined above are printed next to each line.
+            #print "Port: "'{0: <5}'.format(services.port), "Product: "'{0: <15}'.format(list_product[counter],list_version[counter],list_extrainf[counter]), "State: "'{0: <5}'.format(services.state), "Protocol: "'{0: <5}'.format(services.protocol)
+            print "\033[1;37m[*]  Port: "'{0: <5}\033[1;m'.format(services.port), "\033[1;37mState: "'{0: <5}\033[1;m'.format(services.state), "\033[1;37mProtocol: "'{0: <2}\033[1;m'.format(services.protocol),"\033[1;37mProduct: "'{0: <15}\033[1;m'.format(list_product[counter]),"\033[1;37mVersion: "'{0: <15}\033[1;m'.format(list_version[counter]),"\033[1;37mExtrInfo: "'{0: <10}\033[1;m'.format(list_extrainf[counter])
+            findsploit(list_product[counter], list_version[counter])
+            counter = counter + 1
+
+    if 'Linux' in os:
+        counter = 0
+        for services in _host.services: #NmapParser manipulation to list services, their ports and their state. The list elements defined above are printed next to each line.
+            #print "Port: "'{0: <5}'.format(services.port), "Product: "'{0: <15}'.format(list_product[counter],list_version[counter],list_extrainf[counter]), "State: "'{0: <5}'.format(services.state), "Protocol: "'{0: <5}'.format(services.protocol)
+            print "\033[1;37m[*]  Port: "'{0: <5}\033[1;m'.format(services.port), "\033[1;37mState: "'{0: <5}\033[1;m'.format(services.state), "\033[1;37mProtocol: "'{0: <2}\033[1;m'.format(services.protocol),"\033[1;37mProduct: "'{0: <15}\033[1;m'.format(list_product[counter]),"\033[1;37mVersion: "'{0: <15}\033[1;m'.format(list_version[counter]),"\033[1;37mExtrInfo: "'{0: <10}\033[1;m'.format(list_extrainf[counter])
+            findsploit(list_product[counter], list_version[counter])
+            counter = counter + 1
+
+    if 'UDP' in os:
+        counter = 0
+        for services in _host.services: #NmapParser manipulation to list services, their ports and their state. The list elements defined above are printed next to each line.
+            #print "Port: "'{0: <5}'.format(services.port), "Product: "'{0: <15}'.format(list_product[counter],list_version[counter],list_extrainf[counter]), "State: "'{0: <5}'.format(services.state), "Protocol: "'{0: <5}'.format(services.protocol)
+            print "\033[1;37m[*]  Port: "'{0: <5}\033[1;m'.format(services.port), "\033[1;37mState: "'{0: <15}\033[1;m'.format(services.state), "\033[1;37mProtocol: "'{0: <2}\033[1;m'.format(services.protocol),"\033[1;37mProduct: "'{0: <15}\033[1;m'.format(list_product[counter]),"\033[1;37mVersion: "'{0: <10}\033[1;m'.format(list_version[counter]),"\033[1;37mExtrInfo: "'{0: <10}\033[1;m'.format(list_extrainf[counter])
+            findsploit(list_product[counter], list_version[counter])
+            counter = counter + 1
+
+
+def findsploit(product, version):
+    found = []
+    found2 = []
+
+    try:
+        majorversion = version.split(" ")
+        majorproduct = product.split(" ")
+        versiontop = majorversion[0].split(".")
+        try:
+            SCRIPT = "searchsploit {0} {1}| grep -v dos | grep remote".format(majorproduct[0], versiontop[0])  # find possible sploits
+            sploitresults = subprocess.check_output(SCRIPT, shell=True)
+            sploits = sploitresults.split("\n")
+
+            for line in sploits:
+                found.append(line)
+
+            if len(found) <= 5:
+                print('\033[1;32m[*]  Found the following exploits for {0} {1}\033[1;m'.format(majorproduct[0], versiontop[0]))
+                for item in found:
+                    print "\033[1;37m    {0}\033[1;m".format(item)
+            else:
+                print('\033[1;32m[*]  Found too many exploits for {0} {1}\033[1;m'.format(majorproduct[0], versiontop[0]))
+        except:
+            SCRIPT2 = "searchsploit {0}| grep -v dos | grep remote".format(majorproduct[0])  # find possible sploits
+            sploitresults2 = subprocess.check_output(SCRIPT2, shell=True)
+            sploits2 = sploitresults2.split("\n")
+
+            for line in sploits2:
+                found2.append(line)
+            print found2
+            if len(found2) <= 5:
+                print('\033[1;32m[*]  Found the following exploits for {0} without version\033[1;m'.format(majorproduct[0]))
+                for item in found2:
+                    print "\033[1;37m    {0}\033[1;m".format(item)
+            else:
+                print('\033[1;32m[*]  Found too many exploits for {0} without version\033[1;m'.format(majorproduct[0]))
+    except:
+        pass
     return

@@ -31,10 +31,10 @@ try:
 
     try:
         if found[0] != "":
-            print('\033[1;32m[*]  Dirbuster found the following items...\033[1;m')
+            print('\033[1;37m[*]  Dirbuster found the following items...\033[1;m')
             for item in found:
                 if ("CODE:200" in item or "DIRECTORY" in item):
-                    print "\033[1;32m    {0}\033[1;m".format(item)
+                    print "\033[1;37m    {0}\033[1;m".format(item)
     except:
         print('\033[1;34m[*]  No items found during dirb scan of {0}\033[1;m'.format(url))
 except:
