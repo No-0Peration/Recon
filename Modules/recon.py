@@ -296,7 +296,6 @@ def findsploit(product, version):
 
             for line in sploits2:
                 found2.append(line)
-            print found2
             if len(found2) <= 5:
                 print('\033[1;32m[*]  Found the following exploits for {0} without version\033[1;m'.format(majorproduct[0]))
                 for item in found2:
