@@ -7,7 +7,7 @@
 import os
 from Modules import recon
 import psutil
-import sys
+
 
 os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -53,5 +53,6 @@ except:
     exit()
 finally:
     os.system('stty echo')
+    print('\033[1;32m[*]  Recon has finished!\033[1;m')
 
 

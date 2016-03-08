@@ -7,9 +7,11 @@ import subprocess
 import gzip
 import sys
 
+
 from IPy import IP
 
 def checkpreq():
+    print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
     # Check if root
     if os.getuid() == 0:
         print('\033[1;32m[*]  Checking permissions\033[1;m')
@@ -60,6 +62,7 @@ def multProc(targetin, scanip, port):
         p = multiprocessing.Process(target=targetin, args=(scanip, port))
         jobs.append(p)
         p.start()
+        p.join()
         return
     except:
         pass
@@ -68,14 +71,14 @@ def multProc(targetin, scanip, port):
 def getIp():
     """ Defines the ip range to be scanned """
     try:
-        ip_start = raw_input("\033[1;37m[*]  Please enter the ip's to scan (example 192.168.0.1/24)  : \033[1;m")
+        ip_start = raw_input("\033[1;37m[*]  Please enter the ip to scan (example 192.168.0.1)  : \033[1;m")
         ip = IP(ip_start)
         return ip
     except Exception as e:
         raise Exception(e)
 
 def dnsEnum(ip_address, port):
-    print('\033[1;34m[*]  Detected DNS on {0} : {1}\033[1;m'.format(ip_address, port))
+    #print('\033[1;34m[*]  Detected DNS on {0} : {1}\033[1;m'.format(ip_address, port))
     if port.strip() == "53":
         SCRIPT = "./Modules/dnsrecon.py %s" % (ip_address)  # execute the python script
         subprocess.call(SCRIPT, shell=True)
@@ -83,7 +86,7 @@ def dnsEnum(ip_address, port):
 
 
 def httpEnum(ip_address, port):
-    print('\033[1;34m[*]  Detected HTTP on {0} : {1}\033[1;m'.format(ip_address, port))
+    #print('\033[1;34m[*]  Detected HTTP on {0} : {1}\033[1;m'.format(ip_address, port))
     checkpath("./results/")
     try:
         SCRIPT = "./Modules/httprecon.py %s %s" % (ip_address, port)  # execute the python script
@@ -94,8 +97,10 @@ def httpEnum(ip_address, port):
 
 
 def mssqlEnum(ip_address, port):
-    print('\033[1;34m[*]  Detected SQL on {0} : {1}\033[1;m'.format(ip_address, port))
-    print('\033[1;34m[*]  Performing nmap MSSQL script scan for {0} : {1}\033[1;m'.format(ip_address, port))
+    #print('\033[1;34m[*]  Detected SQL on {0} : {1}\033[1;m'.format(ip_address, port))
+    print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
+    print('\033[1;37m[*]  |     Starting MSSQL script scan for {0} : {1}\033[1;m'.format(ip_address, port))
+    print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
     MSSQLSCAN = "nmap -vv -sV -Pn -p {0} --script-args=unsafe=1 --script=mysql-vuln-cve2012-2122.nse,ms-sql-info,ms-sql-config,ms-sql-dump-hashes --script-args=mssql.instance-port=1433,smsql.username=sa,mssql.password=sa -oX ./results/{1}/{1}_mssql.xml {1}".format(port, ip_address)
     results = subprocess.check_output(MSSQLSCAN, shell=True)
     outfile = "results/{0}/{0}_mssqlrecon.txt".format(ip_address)
@@ -105,26 +110,26 @@ def mssqlEnum(ip_address, port):
     return
 
 def sshEnum(ip_address, port):
-    print('\033[1;34m[*]  Detected SSH on {0} : {1}\033[1;m'.format(ip_address, port))
+    #print('\033[1;34m[*]  Detected SSH on {0} : {1}\033[1;m'.format(ip_address, port))
     SCRIPT = "./Modules/sshrecon.py %s %s" % (ip_address, port)
     subprocess.call(SCRIPT, shell=True)
     return
 
 def telnetEnum(ip_address, port):
-    print('\033[1;34m[*]  Detected TELNET on {0} : {1}\033[1;m'.format(ip_address, port))
+    #print('\033[1;34m[*]  Detected TELNET on {0} : {1}\033[1;m'.format(ip_address, port))
     SCRIPT = "./Modules/telnetrecon.py %s %s" % (ip_address, port)
     subprocess.call(SCRIPT, shell=True)
     return
 
 def snmpEnum(ip_address, port):
-    print('\033[1;34m[*]  Detected SNMP on {0} : {1}\033[1;m'.format(ip_address, port))
+    #print('\033[1;34m[*]  Detected SNMP on {0} : {1}\033[1;m'.format(ip_address, port))
     SCRIPT = "./Modules/snmprecon.py %s" % (ip_address)
     subprocess.call(SCRIPT, shell=True)
     return
 
 
 def smtpEnum(ip_address, port):
-    print('\033[1;34m[*]  Detected SMTP on {0} : {1}\033[1;m'.format(ip_address, port))
+    #print('\033[1;34m[*]  Detected SMTP on {0} : {1}\033[1;m'.format(ip_address, port))
     if port.strip() == "25":
         SCRIPT = "./Modules/smtprecon.py %s" % (ip_address)
         subprocess.call(SCRIPT, shell=True)
@@ -134,7 +139,7 @@ def smtpEnum(ip_address, port):
 
 
 def smbEnum(ip_address, port):
-    print('\033[1;34m[*]  Detected SMB on {0} : {1}\033[1;m'.format(ip_address, port))
+    #print('\033[1;34m[*]  Detected SMB on {0} : {1}\033[1;m'.format(ip_address, port))
     if port.strip() == "445":
         SCRIPT = "./Modules/smbrecon.py %s 2>/dev/null" % (ip_address)
         subprocess.call(SCRIPT, shell=True)
@@ -142,7 +147,7 @@ def smbEnum(ip_address, port):
 
 
 def ftpEnum(ip_address, port):
-    print('\033[1;34m[*]  Detected FTP on {0} : {1}\033[1;m'.format(ip_address, port))
+    #print('\033[1;34m[*]  Detected FTP on {0} : {1}\033[1;m'.format(ip_address, port))
     SCRIPT = "./Modules/ftprecon.py %s %s" % (ip_address, port)
     subprocess.call(SCRIPT, shell=True)
     return
@@ -152,7 +157,9 @@ def scanner(ip_address, protocol):
     ip_address = str(ip_address)
     checkpath("./results/{0}".format(ip_address))
     if not checknmaprun(ip_address, "{0}_nmap_scan_import.xml".format(protocol)):
-        print('\033[1;34m[*]  Starting new {0} nmap scan for {1}\033[1;m'.format(protocol, ip_address))
+        print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
+        print('\033[1;37m[*]  |     Starting new {0} nmap scan for {1}\033[1;m'.format(protocol, ip_address))
+        print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
         if protocol == "UDP":
             udpscan = "nmap -vv -Pn -sU -sV -A -O -p 53,67,68,88,161,162,137,138,139,389,520,2049 -oN './results/{0}/{0}U.nmap' -oX './results/{0}/{0}{1}_nmap_scan_import.xml' {0}".format(ip_address, protocol)
             with open(os.devnull, "w") as f:
@@ -166,15 +173,16 @@ def scanner(ip_address, protocol):
             tcpresults = file("./results/{0}/{0}{1}_nmap_scan_import.xml".format(ip_address, protocol), "r")
             lines = tcpresults
     else:
-        print('\033[1;34m[*]  {0} already scanned for {1} ports...\033[1;m'.format(ip_address, protocol))
+        print('\033[1;33m[*]  {0} already scanned for {1} ports...\033[1;m'.format(ip_address, protocol))
         if protocol == "UDP":
             udpresults = file("./results/{0}/{0}{1}_nmap_scan_import.xml".format(ip_address, protocol), "r")
             lines = udpresults
         else:
             tcpresults = file("./results/{0}/{0}{1}_nmap_scan_import.xml".format(ip_address, protocol), "r")
             lines = tcpresults
-
-    print('\033[1;34m[*]  {0} Nmap scan completed for {1}\033[1;m'.format(protocol, ip_address))
+    print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
+    print('\033[1;37m[*]  |     {0} Nmap scan being parsed for {1}\033[1;m'.format(protocol, ip_address))
+    print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
     logparser(ip_address, protocol)
 
     serv_dict = {}
@@ -251,7 +259,7 @@ def logparser(ip, protocol):
     for _host in rep.hosts:
         host = ', '.join(_host.hostnames)
         ip = (_host.address)
-        print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
+
         print "\033[1;37m[*]  HostName: "'{0: >35}\033[1;m'.format(host,"--", ip)
 
 
@@ -305,6 +313,11 @@ def logparser(ip, protocol):
     except:
         print('\033[1;31m[*]  NMAP parsing script {0} had some errors.\033[1;m'.format(ip))
 
+def logparsertxt(results):
+    for line in results:
+        if ("|" in line) or (" . " in line):
+                print '\033[1;32m[+]  ' + line + '\033[1;m'
+    return
 
 def findsploit(product, version):
     found = []
@@ -324,10 +337,12 @@ def findsploit(product, version):
 
             if len(found) <= 5:
                 print('\033[1;32m[*]  Found the following exploits for {0} {1}\033[1;m'.format(majorproduct[0], versiontop[0]))
+
                 for item in found:
                     print "\033[1;37m    {0}\033[1;m".format(item)
+
             else:
-                print('\033[1;32m[*]  Found too many exploits for {0} {1}\033[1;m'.format(majorproduct[0], versiontop[0]))
+                print('\033[1;33m[*]  Found too many exploits for {0} {1}\033[1;m'.format(majorproduct[0], versiontop[0]))
         except:
             SCRIPT2 = "searchsploit {0}| grep -v dos | grep remote".format(majorproduct[0])  # find possible sploits
             sploitresults2 = subprocess.check_output(SCRIPT2, shell=True)
@@ -337,10 +352,12 @@ def findsploit(product, version):
                 found2.append(line)
             if len(found2) <= 5:
                 print('\033[1;32m[*]  Found the following exploits for {0} without version\033[1;m'.format(majorproduct[0]))
+
                 for item in found2:
                     print "\033[1;37m    {0}\033[1;m".format(item)
+
             else:
-                print('\033[1;32m[*]  Found too many exploits for {0} without version\033[1;m'.format(majorproduct[0]))
+                print('\033[1;33m[*]  Found too many exploits for {0} without version\033[1;m'.format(majorproduct[0]))
     except:
         pass
     return
