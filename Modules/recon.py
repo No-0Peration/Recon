@@ -56,6 +56,17 @@ def checknmaprun(ip_address, name):
     else:
         return False
 
+def checknmaprunmod(ip_address, name):
+    if os.path.isfile("./results/{0}/{0}{1}".format(ip_address, name)):
+        with open("./results/{0}/{0}{1}".format(ip_address, name)) as f:
+            for line in f:
+                if 'Nmap done' in line:
+                    return True
+                if not line:
+                    return False
+    else:
+        return False
+
 def multProc(targetin, scanip, port):
     jobs = []
     try:
@@ -314,7 +325,8 @@ def logparser(ip, protocol):
         print('\033[1;31m[*]  NMAP parsing script {0} had some errors.\033[1;m'.format(ip))
 
 def logparsertxt(results):
-    for line in results:
+    lines = results.split("\n")
+    for line in lines:
         if ("|" in line) or (" . " in line):
                 print '\033[1;32m[+]  ' + line + '\033[1;m'
     return
@@ -337,9 +349,9 @@ def findsploit(product, version):
 
             if len(found) <= 5:
                 print('\033[1;32m[*]  Found the following exploits for {0} {1}\033[1;m'.format(majorproduct[0], versiontop[0]))
-
                 for item in found:
-                    print "\033[1;37m    {0}\033[1;m".format(item)
+                    founditems = item.split("|")
+                    print "\033[1;32m[*]  {0} {1}\033[1;m".format(founditems[0], founditems[1])
 
             else:
                 print('\033[1;33m[*]  Found too many exploits for {0} {1}\033[1;m'.format(majorproduct[0], versiontop[0]))
@@ -354,7 +366,8 @@ def findsploit(product, version):
                 print('\033[1;32m[*]  Found the following exploits for {0} without version\033[1;m'.format(majorproduct[0]))
 
                 for item in found2:
-                    print "\033[1;37m    {0}\033[1;m".format(item)
+                    founditems = item.split("|")
+                    print "\033[1;32m[*]  {0} {1}\033[1;m".format(founditems[0], founditems[1])
 
             else:
                 print('\033[1;33m[*]  Found too many exploits for {0} without version\033[1;m'.format(majorproduct[0]))

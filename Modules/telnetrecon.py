@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import subprocess
 import sys
+import recon
 
 if len(sys.argv) != 3:
     print "Usage: telnetrecon.py <ip address> <port>"
@@ -29,6 +30,7 @@ try:
     print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
     TELNETSCAN = "nmap -sV -Pn -vv -p %s --script=telnet-* -oN './results/%s/%s_telnet.nmap' %s" % (port, ip_address, ip_address, ip_address)
     results = subprocess.check_output(TELNETSCAN, shell=True)
+    recon.logparsertxt(results)
     outfile = "results/{0}/{0}_telnetrecon.txt".format(ip_address)
     f = open(outfile, "w")
     f.write(results)

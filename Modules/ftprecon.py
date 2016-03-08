@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import subprocess
 import sys
-import os
+import recon
 
 if len(sys.argv) != 3:
     print "Usage: ftprecon.py <ip address> <port>"
@@ -12,9 +12,15 @@ port = sys.argv[2].strip()
 print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
 print('\033[1;37m[*]  |     Starting FTP script scan for {0}:{1}\033[1;m'.format(ip_address, port))
 print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
-FTPSCAN = "nmap -sV -Pn -vv -p {0} --script=ftp-* -oN './results/{1}/{1}_ftp.nmap' {1}".format(port, ip_address)
-results = subprocess.check_output(FTPSCAN, shell=True)
 
+if not recon.checknmaprunmod(ip_address, "{1}_ftp{0}.nmap".format(port, ip_address)):
+    FTPSCAN = "nmap -sV -Pn -vv -p {0} --script=ftp-* -oN './results/{1}/{1}_ftp{0}.nmap' {1}".format(port, ip_address)
+    results = subprocess.check_output(FTPSCAN, shell=True)
+    recon.logparsertxt(results)
+else:
+    print('\033[1;33m[*]  {0} already scanned for FTP port {1}...\033[1;m'.format(ip_address, port))
+    results = file("./results/{0}/{0}_ftp{1}.nmap".format(ip_address, port), "r")
+    recon.logparsertxt(results)
 
 # ==> Hydrascan disabled due to there is a brutescan allready in the nmap modules. if wanting to brute with own list it can be disabled and user and passwordlist added to wordlists
 

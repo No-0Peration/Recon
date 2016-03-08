@@ -3,6 +3,7 @@ import socket
 import subprocess
 import sys
 import os
+import recon
 
 
 if len(sys.argv) != 2:
@@ -17,6 +18,7 @@ try:
     print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
     SMTPSCAN = "nmap -vv -sV -Pn -p 25,465,587 --script-args=unsafe=1 --script=smtp* -oN './results/{0}/{0}_smtp.nmap' -oX './results/{0}/{0}_nmap_scan_smtp.xml' {0}".format(ip_address)
     results = subprocess.check_output(SMTPSCAN, shell=True)
+    recon.logparsertxt(results)
 
     # Test for presence of the VRFY command
     print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
@@ -48,7 +50,7 @@ try:
                         f.write("[*]  SMTP VRFY Account found on {0} : {1}".format(ip_address, name))
                         f.close()
             except:
-                print('\033[1;34m[*]  VRFY command check failed for {0}\033[1;m'.format(ip_address))
+                print('\033[1;31m[*]  VRFY command check failed for {0}\033[1;m'.format(ip_address))
             s.close()
             sys.exit()
     except:

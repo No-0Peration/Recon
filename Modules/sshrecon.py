@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import subprocess
 import sys
+import recon
 
 if len(sys.argv) != 3:
     print "Usage: sshrecon.py <ip address> <port>"
@@ -29,6 +30,7 @@ try:
     print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
     SSHSCAN = "nmap -sV -Pn -vv -p {0} --script=ssh-* -oN './results/{1}/{1}_ssh.nmap' {1}".format(port, ip_address)
     results = subprocess.check_output(SSHSCAN, shell=True)
+    recon.logparsertxt(results)
     outfile = "results/{0}/{0}_sshrecon.txt".format(ip_address)
     f = open(outfile, "w")
     f.write(results)

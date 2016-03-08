@@ -2,6 +2,7 @@
 import subprocess
 import sys
 import os
+import recon
 
 if len(sys.argv) != 2:
     print "Usage: snmprecon.py <ip address>"
@@ -34,6 +35,7 @@ try:
 
     NMAPSCAN = "nmap -vv -sV -sU -Pn -p 161,162 --script=snmp-* {0}".format(ip_address)
     results = subprocess.check_output(NMAPSCAN, shell=True)
+    recon.logparsertxt(results)
     outfile = "results/{0}/{0}_snmprecon.txt".format(ip_address)
     f = open(outfile, "w")
     f.write(results)
