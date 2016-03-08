@@ -31,7 +31,7 @@ try:
         try:
             # See if there is a target list in the file ips
             with open("./ips") as f:
-                print('\033[1;32m[*]  Found IP list, using as input\033[1;m')
+                print('\033[1;33m[+]  Found IP list, using as input\033[1;m')
                 ips = f.readlines()
                 for ip in ips:
                     recon.scanner(ip.strip('\n\r'), 'TCP')
@@ -44,7 +44,7 @@ try:
                 recon.scanner(ip, 'UDP')
 
 except:
-    print '\033[1;31m[*]  Recon is ending: Killing all Processes!\033[1;m'
+    print '\033[1;31m[-]  Recon is ending: Killing all Processes!\033[1;m'
     PROCNAME = ("python", "nmap", "dirb", "hydra")
     for proc in psutil.process_iter():
         if proc.name() in PROCNAME:

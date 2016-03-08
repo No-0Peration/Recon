@@ -23,7 +23,7 @@ try:
                 if "login:" in result:
                     print('\033[1;32m[*]  Valid SSH credentials found\033[1;m')
     except:
-        print('\033[1;31m[*]  No valid SSH credentials found\033[1;m')
+        print('\033[1;31m[-]  No valid SSH credentials found\033[1;m')
 
     print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
     print('\033[1;37m[*]  |     Starting SSH script scan for {0}:{1}\033[1;m'.format(ip_address, port))
@@ -36,4 +36,4 @@ try:
     f.write(results)
     f.close()
 except:
-    print('\033[1;31m[*]  SSH script scan for {0}:{1} had some errors.\033[1;m'.format(ip_address, port))
+    print('\033[1;31m[-]  SSH script scan for {0}:{1} had some errors.\033[1;m'.format(ip_address, port))

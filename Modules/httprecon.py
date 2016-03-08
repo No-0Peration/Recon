@@ -25,8 +25,11 @@ try:
         results = subprocess.check_output(HTTPSCAN, shell=True)
         recon.logparsertxt(results)
         outfile = "results/{0}/{0}_HTTPrecon.txt".format(ip_address)
+        f = open(outfile, "w")
+        f.write(results)
+        f.close()
     else:
-        print('\033[1;33m[*]  {0} already scanned for HTTP port {1}...\033[1;m'.format(ip_address, port))
+        print('\033[1;33m[+]  {0} already scanned for HTTP port {1}...\033[1;m'.format(ip_address, port))
         results = file("./results/{0}/{0}_http.nmap.{1}".format(ip_address, port), "r")
         recon.logparsertxt(results)
 
@@ -45,9 +48,6 @@ try:
     outfile2 = "./results/{0}/{0}_Arachnirecon_{1}.txt".format(ip_address, port)
     DIRBUST = "./Modules/dirbust.py {2}{0}:{1} {0} {1}".format(ip_address, port, header)  # execute the python script
     subprocess.call(DIRBUST, shell=True)
-    f = open(outfile, "w")
-    f.write(results)
-    f.close()
     f = open(outfile2, "w")
     f.write(results2)
     f.close()

@@ -14,12 +14,12 @@ def checkpreq():
     print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
     # Check if root
     if os.getuid() == 0:
-        print('\033[1;32m[*]  Checking permissions\033[1;m')
+        print('\033[1;33m[*]  Checking permissions\033[1;m')
     else:
         sys.exit("I cannot run as a mortal. Sorry.")
 
     if os.path.isfile("/usr/share/wordlists/rockyou.txt"):
-        print('\033[1;32m[*]  Rockyou wordlist present\033[1;m')
+        print('\033[1;33m[*]  Rockyou wordlist present\033[1;m')
     else:
         print('\033[1;31m[*]  Rockyou wordlist is missing trying to decompress...\033[1;m')
         try:
@@ -302,7 +302,7 @@ def logparser(ip, protocol):
             counter = 0
             for services in _host.services: #NmapParser manipulation to list services, their ports and their state. The list elements defined above are printed next to each line.
                 #print "Port: "'{0: <5}'.format(services.port), "Product: "'{0: <15}'.format(list_product[counter],list_version[counter],list_extrainf[counter]), "State: "'{0: <5}'.format(services.state), "Protocol: "'{0: <5}'.format(services.protocol)
-                print "\033[1;37m[*]  Port: "'{0: <5}\033[1;m'.format(services.port), "\033[1;37mState: "'{0: <5}\033[1;m'.format(services.state), "\033[1;37mProtocol: "'{0: <2}\033[1;m'.format(services.protocol),"\033[1;37mProduct: "'{0: <15}\033[1;m'.format(list_product[counter]),"\033[1;37mVersion: "'{0: <15}\033[1;m'.format(list_version[counter]),"\033[1;37mExtrInfo: "'{0: <10}\033[1;m'.format(list_extrainf[counter])
+                print "\033[1;37m[+]  Port: "'{0: <5}\033[1;m'.format(services.port), "\033[1;37mState: "'{0: <5}\033[1;m'.format(services.state), "\033[1;37mProtocol: "'{0: <2}\033[1;m'.format(services.protocol),"\033[1;37mProduct: "'{0: <15}\033[1;m'.format(list_product[counter]),"\033[1;37mVersion: "'{0: <15}\033[1;m'.format(list_version[counter]),"\033[1;37mExtrInfo: "'{0: <10}\033[1;m'.format(list_extrainf[counter])
                 findsploit(list_product[counter], list_version[counter])
                 counter = counter + 1
 
@@ -310,7 +310,7 @@ def logparser(ip, protocol):
             counter = 0
             for services in _host.services: #NmapParser manipulation to list services, their ports and their state. The list elements defined above are printed next to each line.
                 #print "Port: "'{0: <5}'.format(services.port), "Product: "'{0: <15}'.format(list_product[counter],list_version[counter],list_extrainf[counter]), "State: "'{0: <5}'.format(services.state), "Protocol: "'{0: <5}'.format(services.protocol)
-                print "\033[1;37m[*]  Port: "'{0: <5}\033[1;m'.format(services.port), "\033[1;37mState: "'{0: <5}\033[1;m'.format(services.state), "\033[1;37mProtocol: "'{0: <2}\033[1;m'.format(services.protocol),"\033[1;37mProduct: "'{0: <15}\033[1;m'.format(list_product[counter]),"\033[1;37mVersion: "'{0: <15}\033[1;m'.format(list_version[counter]),"\033[1;37mExtrInfo: "'{0: <10}\033[1;m'.format(list_extrainf[counter])
+                print "\033[1;37m[+]  Port: "'{0: <5}\033[1;m'.format(services.port), "\033[1;37mState: "'{0: <5}\033[1;m'.format(services.state), "\033[1;37mProtocol: "'{0: <2}\033[1;m'.format(services.protocol),"\033[1;37mProduct: "'{0: <15}\033[1;m'.format(list_product[counter]),"\033[1;37mVersion: "'{0: <15}\033[1;m'.format(list_version[counter]),"\033[1;37mExtrInfo: "'{0: <10}\033[1;m'.format(list_extrainf[counter])
                 findsploit(list_product[counter], list_version[counter])
                 counter = counter + 1
 
@@ -318,11 +318,11 @@ def logparser(ip, protocol):
             counter = 0
             for services in _host.services: #NmapParser manipulation to list services, their ports and their state. The list elements defined above are printed next to each line.
                 #print "Port: "'{0: <5}'.format(services.port), "Product: "'{0: <15}'.format(list_product[counter],list_version[counter],list_extrainf[counter]), "State: "'{0: <5}'.format(services.state), "Protocol: "'{0: <5}'.format(services.protocol)
-                print "\033[1;37m[*]  Port: "'{0: <5}\033[1;m'.format(services.port), "\033[1;37mState: "'{0: <15}\033[1;m'.format(services.state), "\033[1;37mProtocol: "'{0: <2}\033[1;m'.format(services.protocol),"\033[1;37mProduct: "'{0: <15}\033[1;m'.format(list_product[counter]),"\033[1;37mVersion: "'{0: <10}\033[1;m'.format(list_version[counter]),"\033[1;37mExtrInfo: "'{0: <10}\033[1;m'.format(list_extrainf[counter])
+                print "\033[1;37m[+]  Port: "'{0: <5}\033[1;m'.format(services.port), "\033[1;37mState: "'{0: <15}\033[1;m'.format(services.state), "\033[1;37mProtocol: "'{0: <2}\033[1;m'.format(services.protocol),"\033[1;37mProduct: "'{0: <15}\033[1;m'.format(list_product[counter]),"\033[1;37mVersion: "'{0: <10}\033[1;m'.format(list_version[counter]),"\033[1;37mExtrInfo: "'{0: <10}\033[1;m'.format(list_extrainf[counter])
                 findsploit(list_product[counter], list_version[counter])
                 counter = counter + 1
     except:
-        print('\033[1;31m[*]  NMAP parsing script {0} had some errors.\033[1;m'.format(ip))
+        print('\033[1;31m[-]  NMAP parsing script {0} had some errors.\033[1;m'.format(ip))
 
 def logparsertxt(results):
     lines = results.split("\n")
@@ -348,13 +348,13 @@ def findsploit(product, version):
                 found.append(line)
 
             if len(found) <= 5:
-                print('\033[1;32m[*]  Found the following exploits for {0} {1}\033[1;m'.format(majorproduct[0], versiontop[0]))
+                print('\033[1;32m[+]  Found the following exploits for {0} {1}\033[1;m'.format(majorproduct[0], versiontop[0]))
                 for item in found:
                     founditems = item.split("|")
-                    print "\033[1;32m[*]  {0} {1}\033[1;m".format(founditems[0], founditems[1])
+                    print "\033[1;32m[+]  {0} {1}\033[1;m".format(founditems[0], founditems[1])
 
             else:
-                print('\033[1;33m[*]  Found too many exploits for {0} {1}\033[1;m'.format(majorproduct[0], versiontop[0]))
+                print('\033[1;33m[-]  Found too many exploits for {0} {1}\033[1;m'.format(majorproduct[0], versiontop[0]))
         except:
             SCRIPT2 = "searchsploit {0}| grep -v dos | grep remote".format(majorproduct[0])  # find possible sploits
             sploitresults2 = subprocess.check_output(SCRIPT2, shell=True)
@@ -363,14 +363,14 @@ def findsploit(product, version):
             for line in sploits2:
                 found2.append(line)
             if len(found2) <= 5:
-                print('\033[1;32m[*]  Found the following exploits for {0} without version\033[1;m'.format(majorproduct[0]))
+                print('\033[1;32m[+]  Found the following exploits for {0} without version\033[1;m'.format(majorproduct[0]))
 
                 for item in found2:
                     founditems = item.split("|")
-                    print "\033[1;32m[*]  {0} {1}\033[1;m".format(founditems[0], founditems[1])
+                    print "\033[1;32m[+]  {0} {1}\033[1;m".format(founditems[0], founditems[1])
 
             else:
-                print('\033[1;33m[*]  Found too many exploits for {0} without version\033[1;m'.format(majorproduct[0]))
+                print('\033[1;33m[-]  Found too many exploits for {0} without version\033[1;m'.format(majorproduct[0]))
     except:
         pass
     return
