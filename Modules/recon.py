@@ -56,10 +56,14 @@ def checknmaprun(ip_address, name):
 
 def multProc(targetin, scanip, port):
     jobs = []
-    p = multiprocessing.Process(target=targetin, args=(scanip, port))
-    jobs.append(p)
-    p.start()
-    return
+    try:
+        p = multiprocessing.Process(target=targetin, args=(scanip, port))
+        jobs.append(p)
+        p.start()
+        return
+    except:
+        pass
+
 
 def getIp():
     """ Defines the ip range to be scanned """
@@ -81,8 +85,11 @@ def dnsEnum(ip_address, port):
 def httpEnum(ip_address, port):
     print('\033[1;34m[*]  Detected HTTP on {0} : {1}\033[1;m'.format(ip_address, port))
     checkpath("./results/")
-    SCRIPT = "./Modules/httprecon.py %s %s" % (ip_address, port)  # execute the python script
-    subprocess.call(SCRIPT, shell=True)
+    try:
+        SCRIPT = "./Modules/httprecon.py %s %s" % (ip_address, port)  # execute the python script
+        subprocess.call(SCRIPT, shell=True)
+    except:
+        pass
     return
 
 

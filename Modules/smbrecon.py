@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import subprocess
 import sys
+import os
 
 from Modules import recon
 
@@ -29,3 +30,4 @@ try:
                 print '\033[1;32m[+]  ' + line + '\033[1;m'
 except:
     print('\033[1;31m[*]  SMB script scan for {0}:{1} had some errors.\033[1;m'.format(ip_address, port))
+    os.system('stty echo')

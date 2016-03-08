@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import subprocess
 import sys
+import os
 
 if len(sys.argv) != 3:
     print "Usage: httprecon.py <ip address> <port>"
@@ -35,3 +36,4 @@ try:
     f.close()
 except:
     print('\033[1;31m[*]  HTTP script scan for {0}:{1} had some errors.\033[1;m'.format(ip_address, port))
+    os.system('stty echo')

@@ -2,6 +2,7 @@
 import socket
 import subprocess
 import sys
+import os
 
 
 if len(sys.argv) != 2:
@@ -17,33 +18,38 @@ try:
 
     # Test for presence of the VRFY command
     print('\033[1;34m[*]  Trying SMTP Enum on {0}\033[1;m'.format(ip_address))
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    connect = s.connect((ip_address,25))
-    banner = s.recv(1024)
-    s.send('HELO test@test.org \r\n')
-    result = s.recv(1024)
-    s.send('VRFY ' + "TEST" + '\r\n')
-    result = s.recv(1024)
-    if ("not implemented" in result) or ("disallowed" in result):
-        s.close()
-        print('\033[1;34m[*]  VRFY command not implemented on {0}\033[1;m'.format(ip_address))
-    else:
-        print('\033[1;32m[*]  VRFY command is enabled on {0} starting bruteforce\033[1;m'.format(ip_address))
-        try:
-            names = open('/usr/share/dnsrecon/namelist.txt', 'r')
-            for name in names:
-                name = str(name.strip())
-                s.send('VRFY ' + name + '\r\n')
-                result2 = s.recv(1024)
-                if (("250" in result2) or ("252" in result2) and ("Cannot VRFY" not in result2)):
-                    print('\033[1;32m[*]  SMTP VRFY Account found on {0} : {1}\033[1;m'.format(ip_address, name))
-                    outfile = "results/{0}/{0}_smtprecon.txt".format(ip_address)
-                    f = open(outfile, "w")
-                    f.write("[*]  SMTP VRFY Account found on {0} : {1}".format(ip_address, name))
-                    f.close()
-        except:
-            print('\033[1;34m[*]  VRFY command check failed for {0}\033[1;m'.format(ip_address))
-        s.close()
-        sys.exit()
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        connect = s.connect((ip_address,25))
+        banner = s.recv(1024)
+        s.send('HELO test@test.org \r\n')
+        result = s.recv(1024)
+        s.send('VRFY ' + "TEST" + '\r\n')
+        result = s.recv(1024)
+        if ("not implemented" in result) or ("disallowed" in result):
+            s.close()
+            print('\033[1;34m[*]  VRFY command not implemented on {0}\033[1;m'.format(ip_address))
+        else:
+            print('\033[1;32m[*]  VRFY command is enabled on {0} starting bruteforce\033[1;m'.format(ip_address))
+            try:
+                names = open('/usr/share/dnsrecon/namelist.txt', 'r')
+                for name in names:
+                    name = str(name.strip())
+                    s.send('VRFY ' + name + '\r\n')
+                    result2 = s.recv(1024)
+                    if (("250" in result2) or ("252" in result2) and ("Cannot VRFY" not in result2)):
+                        print('\033[1;32m[*]  SMTP VRFY Account found on {0} : {1}\033[1;m'.format(ip_address, name))
+                        outfile = "results/{0}/{0}_smtprecon.txt".format(ip_address)
+                        f = open(outfile, "w")
+                        f.write("[*]  SMTP VRFY Account found on {0} : {1}".format(ip_address, name))
+                        f.close()
+            except:
+                print('\033[1;34m[*]  VRFY command check failed for {0}\033[1;m'.format(ip_address))
+            s.close()
+            sys.exit()
+    except:
+        pass
 except:
     print('\033[1;31m[*]  SMTP script scan for {0} had some errors.\033[1;m'.format(ip_address))
+    os.system('stty echo')
+

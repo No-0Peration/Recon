@@ -7,6 +7,7 @@
 import os
 from Modules import recon
 import psutil
+import sys
 
 os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -48,6 +49,9 @@ except:
     for proc in psutil.process_iter():
         if proc.name() in PROCNAME:
             proc.kill()
+    os.system('stty echo ; clear')
     exit()
+finally:
+    os.system('stty echo ; clear')
 
 
