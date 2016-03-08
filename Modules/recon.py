@@ -11,7 +11,6 @@ import sys
 from IPy import IP
 
 def checkpreq():
-    print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
     # Check if root
     if os.getuid() == 0:
         print('\033[1;33m[+]  Checking permissions\033[1;m')
@@ -184,7 +183,7 @@ def scanner(ip_address, protocol):
             tcpresults = file("./results/{0}/{0}{1}_nmap_scan_import.xml".format(ip_address, protocol), "r")
             lines = tcpresults
     else:
-        print('\033[1;33m[*]  {0} already scanned for {1} ports...\033[1;m'.format(ip_address, protocol))
+        print('\033[1;33m[-]  {0} already scanned for {1} ports...\033[1;m'.format(ip_address, protocol))
         if protocol == "UDP":
             udpresults = file("./results/{0}/{0}{1}_nmap_scan_import.xml".format(ip_address, protocol), "r")
             lines = udpresults
@@ -328,14 +327,20 @@ def logparsertxt(results):
     lines = results.split("\n")
     for line in lines:
         if ("|" in line) or (" . " in line):
-                print '\033[1;32m[+]  ' + line + '\033[1;m'
+                print '\033[1;32m[+]  \033[1;37m' + line + '\033[1;m'
     return
 
 def logparserfile(results):
     for line in results:
-        line.strip('/n')
+        line.strip('\n\r')
         if ("|" in line) or (" . " in line):
-                print '\033[1;32m[+]  ' + line + '\033[1;m'
+                print '\033[1;32m[+]  \033[1;37m' + line + '\033[1;m'
+    return
+def logparsernikto(results):
+    for line in results:
+        line.strip('\n\r')
+        if ("+" in line):
+                print '\033[1;32m[+]  \033[1;37m' + line + '\033[1;m'
     return
 
 def findsploit(product, version):
