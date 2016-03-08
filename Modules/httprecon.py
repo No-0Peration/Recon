@@ -17,7 +17,7 @@ else:
 
 try:
     print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
-    print('\033[1;37m[*]  |     Starting HTTP script scan for {0}:{1}\033[1;m'.format(ip_address, port))
+    print('\033[1;37m[*]  |     Starting HTTP script scan for {0}:{1} - [This can take a long time]\033[1;m'.format(ip_address, port))
     print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
 
     if not recon.checknmaprunmod(ip_address, "_http.nmap.{0}".format(port, ip_address)):
@@ -35,13 +35,13 @@ try:
 
     NIKTOSCAN = "nikto -host {0} -p {1} > ./results/{0}/{0}.{1}_nikto".format(ip_address, port)
     print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
-    print('\033[1;37m[*]  |     Starting NIKTO scan for {0}:{1}\033[1;m'.format(ip_address, port))
+    print('\033[1;37m[*]  |     Starting NIKTO scan for {0}:{1} - [This can take a long time]\033[1;m'.format(ip_address, port))
     print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
     resultsnikto = subprocess.check_output(NIKTOSCAN, shell=True)
 
     ARACHNI = "arachni {0}{1}:{2} --output-only-positives --scope-include-subdomains".format(header, ip_address, port)
     print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
-    print('\033[1;37m[*]  |     Starting ARACHNI scan for {0}:{1}\033[1;m'.format(ip_address, port))
+    print('\033[1;37m[*]  |     Starting ARACHNI scan for {0}:{1} - [This can take a long time]\033[1;m'.format(ip_address, port))
     print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
     results2 = subprocess.check_output(ARACHNI, shell=True)
 

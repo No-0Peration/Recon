@@ -10,7 +10,7 @@ if len(sys.argv) != 3:
 ip_address = sys.argv[1].strip()
 port = sys.argv[2].strip()
 print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
-print('\033[1;37m[*]  |     Starting FTP script scan for {0}:{1}\033[1;m'.format(ip_address, port))
+print('\033[1;37m[*]  |     Starting FTP script scan for {0}:{1} - [This can take a long time]\033[1;m'.format(ip_address, port))
 print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
 
 if not recon.checknmaprunmod(ip_address, "_ftp{0}.nmap".format(port)):
