@@ -6,6 +6,7 @@
 
 import os
 from Modules import recon
+import psutil
 
 os.system('cls' if os.name == 'nt' else 'clear')
 
