@@ -23,7 +23,7 @@ try:
                 if "login:" in result:
                     print('\033[1;32m[+]  Valid TELNET credentials found\033[1;m')
     except:
-        print('\033[1;31m[-]  No valid TELNET credentials found\033[1;m')
+        print('\033[1;33m[-]  No valid TELNET credentials found\033[1;m')
 
     print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
     print('\033[1;37m[-]  |     Starting TELNET script scan for {0}:{1}\033[1;m'.format(ip_address, port))

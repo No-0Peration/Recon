@@ -33,7 +33,7 @@ try:
         results = open("./results/{0}/{0}_http.nmap.{1}".format(ip_address, port), "r")
         recon.logparserfile(results)
 
-    NIKTOSCAN = "nikto -host {0} -p {1} -o ./results/{0}/{0}.{1}_nikto".format(ip_address, port)
+    NIKTOSCAN = "nikto -host {0} -p {1} -o ./results/{0}/{0}.{1}_nikto.txt".format(ip_address, port)
     print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
     print('\033[1;37m[-]  |     Starting NIKTO scan for {0}:{1} \033[1;m'.format(ip_address, port))
     print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"

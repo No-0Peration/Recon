@@ -331,14 +331,14 @@ def logparsertxt(results):
     return
 
 def logparserfile(results):
-    for line in results:
-        line.strip('\n\r')
+    lines = results.read().strip().split('\n')
+    for line in lines:
         if ("|" in line) or (" . " in line):
                 print '\033[1;32m[+]  \033[1;37m' + line + '\033[1;m'
     return
 def logparsernikto(results):
-    for line in results:
-        line.strip('\n\r')
+    lines = results.split("\n")
+    for line in lines:
         if ("+" in line):
                 print '\033[1;32m[+]  \033[1;37m' + line + '\033[1;m'
     return
@@ -360,13 +360,13 @@ def findsploit(product, version):
                 found.append(line)
 
             if len(found) <= 5:
-                print('\033[1;32m[+]  Found the following exploits for {0} {1}\033[1;m'.format(majorproduct[0], versiontop[0]))
+                print('\033[1;32m[+]  \033[1;37mFound the following exploits for \033[1;31m{0} {1}\033[1;m'.format(majorproduct[0], versiontop[0]))
                 for item in found:
-                    founditems = item.split("|")
+                    founditems = item.strip().split("|")
                     print "\033[1;32m[+]  {0} {1}\033[1;m".format(founditems[0], founditems[1])
 
             else:
-                print('\033[1;33m[-]  Found too many exploits for {0} {1}\033[1;m'.format(majorproduct[0], versiontop[0]))
+                print('\033[1;33m[-]  Found too many exploits for {0} {1} please check manualy\033[1;m'.format(majorproduct[0], versiontop[0]))
         except:
             SCRIPT2 = "searchsploit {0}| grep -v dos | grep remote".format(majorproduct[0])  # find possible sploits
             sploitresults2 = subprocess.check_output(SCRIPT2, shell=True)
@@ -375,14 +375,14 @@ def findsploit(product, version):
             for line in sploits2:
                 found2.append(line)
             if len(found2) <= 5:
-                print('\033[1;32m[+]  Found the following exploits for {0} without version\033[1;m'.format(majorproduct[0]))
+                print('\033[1;32m[+]  \033[1;37mFound the following exploits for \033[1;31m{0}\033[1;37m without version \033[1;m'.format(majorproduct[0]))
 
                 for item in found2:
                     founditems = item.split("|")
                     print "\033[1;32m[+]  {0} {1}\033[1;m".format(founditems[0], founditems[1])
 
             else:
-                print('\033[1;33m[-]  Found too many exploits for {0} without version\033[1;m'.format(majorproduct[0]))
+                print('\033[1;33m[-]  Found too many exploits for {0} without version please check manualy\033[1;m'.format(majorproduct[0]))
     except:
         pass
     return

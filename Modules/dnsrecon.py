@@ -32,7 +32,7 @@ try:
         with open(os.devnull, "w") as f:
             ztresults = subprocess.check_output(ZT, shell=True, stdout=f)
             if "failed" in ztresults:
-                print('\033[1;31m[-]  Zone Transfer failed for {0}\033[1;m'.format(host))
+                print('\033[1;33m[-]  Zone Transfer failed for {0}\033[1;m'.format(host))
             else:
                 print('\033[1;32m[+]  Zone Transfer successful for on {0} see output file!!\033[1;m'.format(host))
                 outfile = "results/{0}/{0}_zonetransfer.txt".format(ip_address)
@@ -40,7 +40,7 @@ try:
                 dnsf.write(ztresults)
                 dnsf.close()
     except:
-        print('\033[1;31m[-]  Domain Transfer failed on {0}\033[1;m'.format(host))
+        print('\033[1;33m[-]  Domain Transfer failed on {0}\033[1;m'.format(host))
 except:
     print('\033[1;31m[-]  DNS script scan for {0} had some errors.\033[1;m'.format(ip_address))
 os.system('stty echo')

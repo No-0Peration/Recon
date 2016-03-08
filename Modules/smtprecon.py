@@ -34,9 +34,9 @@ try:
         result = s.recv(1024)
         if ("not implemented" in result) or ("disallowed" in result):
             s.close()
-            print('\033[1;34m[-]  VRFY command not implemented on {0}\033[1;m'.format(ip_address))
+            print('\033[1;33m[-]  VRFY command not implemented on {0}\033[1;m'.format(ip_address))
         else:
-            print('\033[1;32m[+]  VRFY command is enabled on {0} starting bruteforce\033[1;m'.format(ip_address))
+            print('\033[1;32m[+]  \033[1;37mVRFY command is enabled on {0} starting bruteforce\033[1;m'.format(ip_address))
             try:
                 names = open('/usr/share/dnsrecon/namelist.txt', 'r')
                 for name in names:
@@ -50,7 +50,7 @@ try:
                         f.write("[+]  SMTP VRFY Account found on {0} : {1}".format(ip_address, name))
                         f.close()
             except:
-                print('\033[1;31m[-]  VRFY command check failed for {0}\033[1;m'.format(ip_address))
+                print('\033[1;33m[-]  VRFY command check failed for {0}\033[1;m'.format(ip_address))
             s.close()
             sys.exit()
     except:
