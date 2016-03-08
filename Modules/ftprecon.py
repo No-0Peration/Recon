@@ -19,7 +19,7 @@ if not recon.checknmaprunmod(ip_address, "_ftp{0}.nmap".format(port)):
     recon.logparsertxt(results)
 else:
     print('\033[1;33m[+]  {0} already scanned for FTP port {1}...\033[1;m'.format(ip_address, port))
-    results = file("./results/{0}/{0}_ftp{1}.nmap".format(ip_address, port), "r")
+    results = str(file("./results/{0}/{0}_ftp{1}.nmap".format(ip_address, port), "r"))
     recon.logparsertxt(results)
 
 # ==> Hydrascan disabled due to there is a brutescan allready in the nmap modules. if wanting to brute with own list it can be disabled and user and passwordlist added to wordlists
