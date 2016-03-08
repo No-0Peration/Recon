@@ -12,9 +12,9 @@ if len(sys.argv) != 2:
 ip = sys.argv[1]
 recon.checkpath("./results/" + ip)
 try:
-    print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
-    print('\033[1;37m[*]  |     Starting SMB script scan for {0}\033[1;m'.format(ip))
-    print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
+    print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
+    print('\033[1;37m[-]  |     Starting SMB script scan for {0}\033[1;m'.format(ip))
+    print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
     VULNSCAN = "nmap -sV -Pn -vv -p445,139 --script=smb-vuln* --script-args=unsafe=1 -oN './results/{0}/{0}_smb.nmap' {0}".format(ip)
     scanresults = subprocess.check_output(VULNSCAN, shell=True)
     recon.logparsertxt(scanresults)

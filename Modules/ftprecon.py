@@ -9,9 +9,9 @@ if len(sys.argv) != 3:
 
 ip_address = sys.argv[1].strip()
 port = sys.argv[2].strip()
-print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
-print('\033[1;37m[*]  |     Starting FTP script scan for {0}:{1} - [This can take a long time]\033[1;m'.format(ip_address, port))
-print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
+print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
+print('\033[1;37m[-]  |     Starting FTP script scan for {0}:{1} - [This can take a long time]\033[1;m'.format(ip_address, port))
+print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
 
 if not recon.checknmaprunmod(ip_address, "_ftp{0}.nmap".format(port)):
     FTPSCAN = "nmap -sV -Pn -vv -p {0} --script=ftp-* -oN './results/{1}/{1}_ftp{0}.nmap' {1}".format(port, ip_address)
@@ -19,8 +19,8 @@ if not recon.checknmaprunmod(ip_address, "_ftp{0}.nmap".format(port)):
     recon.logparsertxt(results)
 else:
     print('\033[1;33m[+]  {0} already scanned for FTP port {1}...\033[1;m'.format(ip_address, port))
-    results = str(file("./results/{0}/{0}_ftp{1}.nmap".format(ip_address, port), "r"))
-    recon.logparsertxt(results)
+    results = open("./results/{0}/{0}_ftp{1}.nmap".format(ip_address, port), "r")
+    recon.logparserfile(results)
 
 # ==> Hydrascan disabled due to there is a brutescan allready in the nmap modules. if wanting to brute with own list it can be disabled and user and passwordlist added to wordlists
 

@@ -13,9 +13,9 @@ try:
     DOMAINNAME = "host %s | cut -d ' ' -f5 | cut -d '.' -f2,3" % (ip_address)
     port = 53
 
-    print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
-    print('\033[1;37m[*]  |     Starting DNS script scan for {0}:{1}\033[1;m'.format(ip_address, port))
-    print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
+    print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
+    print('\033[1;37m[-]  |     Starting DNS script scan for {0}:{1}\033[1;m'.format(ip_address, port))
+    print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
     DNSSCAN = "nmap -sV -sSU -Pn -vv -p53 --script=dns-* -oN './results/{0}/{0}_dns.nmap' {0}".format(ip_address)
     results = subprocess.check_output(DNSSCAN, shell=True)
     outfile = "results/{0}/{0}_dnsrecon.txt".format(ip_address)

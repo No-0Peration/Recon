@@ -11,17 +11,17 @@ import sys
 from IPy import IP
 
 def checkpreq():
-    print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
+    print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
     # Check if root
     if os.getuid() == 0:
-        print('\033[1;33m[*]  Checking permissions\033[1;m')
+        print('\033[1;33m[+]  Checking permissions\033[1;m')
     else:
         sys.exit("I cannot run as a mortal. Sorry.")
 
     if os.path.isfile("/usr/share/wordlists/rockyou.txt"):
-        print('\033[1;33m[*]  Rockyou wordlist present\033[1;m')
+        print('\033[1;33m[+]  Rockyou wordlist present\033[1;m')
     else:
-        print('\033[1;31m[*]  Rockyou wordlist is missing trying to decompress...\033[1;m')
+        print('\033[1;31m[-]  Rockyou wordlist is missing trying to decompress...\033[1;m')
         try:
             inFile = gzip.GzipFile("/usr/share/wordlists/rockyou.txt.gz", "rb")
             s = inFile.read()
@@ -32,9 +32,9 @@ def checkpreq():
         except:
             pass
         if os.path.isfile("/usr/share/wordlists/rockyou.txt"):
-            print('\033[1;32m[*]  Rockyou wordlist is decompressed!\033[1;m')
+            print('\033[1;32m[+]  Rockyou wordlist is decompressed!\033[1;m')
         else:
-            print('\033[1;31m[*]  Decompression of rockyou.txt failed!\033[1;m')
+            print('\033[1;31m[-]  Decompression of rockyou.txt failed!\033[1;m')
 
 
 def checkpath(path):
@@ -82,7 +82,7 @@ def multProc(targetin, scanip, port):
 def getIp():
     """ Defines the ip range to be scanned """
     try:
-        ip_start = raw_input("\033[1;37m[*]  Please enter the ip to scan (example 192.168.0.1)  : \033[1;m")
+        ip_start = raw_input("\033[1;37m[-]  Please enter the ip to scan (example 192.168.0.1)  : \033[1;m")
         ip = IP(ip_start)
         return ip
     except Exception as e:
@@ -109,9 +109,9 @@ def httpEnum(ip_address, port):
 
 def mssqlEnum(ip_address, port):
     #print('\033[1;34m[*]  Detected SQL on {0} : {1}\033[1;m'.format(ip_address, port))
-    print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
-    print('\033[1;37m[*]  |     Starting MSSQL script scan for {0} : {1}\033[1;m'.format(ip_address, port))
-    print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
+    print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
+    print('\033[1;37m[-]  |     Starting MSSQL script scan for {0} : {1}\033[1;m'.format(ip_address, port))
+    print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
     MSSQLSCAN = "nmap -vv -sV -Pn -p {0} --script-args=unsafe=1 --script=mysql-vuln-cve2012-2122.nse,ms-sql-info,ms-sql-config,ms-sql-dump-hashes --script-args=mssql.instance-port=1433,smsql.username=sa,mssql.password=sa -oX ./results/{1}/{1}_mssql.xml {1}".format(port, ip_address)
     results = subprocess.check_output(MSSQLSCAN, shell=True)
     outfile = "results/{0}/{0}_mssqlrecon.txt".format(ip_address)
@@ -168,9 +168,9 @@ def scanner(ip_address, protocol):
     ip_address = str(ip_address)
     checkpath("./results/{0}".format(ip_address))
     if not checknmaprun(ip_address, "{0}_nmap_scan_import.xml".format(protocol)):
-        print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
-        print('\033[1;37m[*]  |     Starting new {0} nmap scan for {1}\033[1;m'.format(protocol, ip_address))
-        print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
+        print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
+        print('\033[1;37m[-]  |     Starting new {0} nmap scan for {1}\033[1;m'.format(protocol, ip_address))
+        print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
         if protocol == "UDP":
             udpscan = "nmap -vv -Pn -sU -sV -A -O -p 53,67,68,88,161,162,137,138,139,389,520,2049 -oN './results/{0}/{0}U.nmap' -oX './results/{0}/{0}{1}_nmap_scan_import.xml' {0}".format(ip_address, protocol)
             with open(os.devnull, "w") as f:
@@ -191,9 +191,9 @@ def scanner(ip_address, protocol):
         else:
             tcpresults = file("./results/{0}/{0}{1}_nmap_scan_import.xml".format(ip_address, protocol), "r")
             lines = tcpresults
-    print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
-    print('\033[1;37m[*]  |     {0} Nmap scan being parsed for {1}\033[1;m'.format(protocol, ip_address))
-    print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
+    print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
+    print('\033[1;37m[-]  |     {0} Nmap scan being parsed for {1}\033[1;m'.format(protocol, ip_address))
+    print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
     logparser(ip_address, protocol)
 
     serv_dict = {}
@@ -271,7 +271,7 @@ def logparser(ip, protocol):
         host = ', '.join(_host.hostnames)
         ip = (_host.address)
 
-        print "\033[1;37m[+]  HostName: "'{0: >35}\033[1;m'.format(host,"--", ip)
+        print "\033[1;32m[+]\033[1;37m  HostName: "'{0: >35}\033[1;m'.format(host,"--", ip)
 
 
     #Lists in order to store Additional information, Product and version next to the port information.
@@ -290,11 +290,11 @@ def logparser(ip, protocol):
         for osmatch in _host.os.osmatches: #NmapParser manipulation to detect OS and accuracy of detection.
             os = osmatch.name
             accuracy = osmatch.accuracy
-            print "\033[1;37m[+]  Operating System Guess: \033[1;m", os, "\033[1;37m- Accuracy Detection\033[1;m", accuracy
+            print "\033[1;32m[+]\033[1;37m  Operating System Guess: \033[1;m", os, "\033[1;37m- Accuracy Detection\033[1;m", accuracy
             break
     except:
         os = "Microsoft"
-        print "\033[1;37m[+]  ----------------------------------------------------------------------------- \033[1;m"
+        print "\033[1;32m[+]\033[1;37m  ----------------------------------------------------------------------------- \033[1;m"
     try:
         if protocol == 'UDP':
             os = 'UDP'
@@ -302,7 +302,7 @@ def logparser(ip, protocol):
             counter = 0
             for services in _host.services: #NmapParser manipulation to list services, their ports and their state. The list elements defined above are printed next to each line.
                 #print "Port: "'{0: <5}'.format(services.port), "Product: "'{0: <15}'.format(list_product[counter],list_version[counter],list_extrainf[counter]), "State: "'{0: <5}'.format(services.state), "Protocol: "'{0: <5}'.format(services.protocol)
-                print "\033[1;37m[+]  Port: "'{0: <5}\033[1;m'.format(services.port), "\033[1;37mState: "'{0: <5}\033[1;m'.format(services.state), "\033[1;37mProtocol: "'{0: <2}\033[1;m'.format(services.protocol),"\033[1;37mProduct: "'{0: <15}\033[1;m'.format(list_product[counter]),"\033[1;37mVersion: "'{0: <15}\033[1;m'.format(list_version[counter]),"\033[1;37mExtrInfo: "'{0: <10}\033[1;m'.format(list_extrainf[counter])
+                print "\033[1;32m[+]\033[1;37m  Port: "'{0: <5}\033[1;m'.format(services.port), "\033[1;37mState: "'{0: <5}\033[1;m'.format(services.state), "\033[1;37mProtocol: "'{0: <2}\033[1;m'.format(services.protocol),"\033[1;37mProduct: "'{0: <15}\033[1;m'.format(list_product[counter]),"\033[1;37mVersion: "'{0: <15}\033[1;m'.format(list_version[counter]),"\033[1;37mExtrInfo: "'{0: <10}\033[1;m'.format(list_extrainf[counter])
                 findsploit(list_product[counter], list_version[counter])
                 counter = counter + 1
 
@@ -310,7 +310,7 @@ def logparser(ip, protocol):
             counter = 0
             for services in _host.services: #NmapParser manipulation to list services, their ports and their state. The list elements defined above are printed next to each line.
                 #print "Port: "'{0: <5}'.format(services.port), "Product: "'{0: <15}'.format(list_product[counter],list_version[counter],list_extrainf[counter]), "State: "'{0: <5}'.format(services.state), "Protocol: "'{0: <5}'.format(services.protocol)
-                print "\033[1;37m[+]  Port: "'{0: <5}\033[1;m'.format(services.port), "\033[1;37mState: "'{0: <5}\033[1;m'.format(services.state), "\033[1;37mProtocol: "'{0: <2}\033[1;m'.format(services.protocol),"\033[1;37mProduct: "'{0: <15}\033[1;m'.format(list_product[counter]),"\033[1;37mVersion: "'{0: <15}\033[1;m'.format(list_version[counter]),"\033[1;37mExtrInfo: "'{0: <10}\033[1;m'.format(list_extrainf[counter])
+                print "\033[1;32m[+]\033[1;37m  Port: "'{0: <5}\033[1;m'.format(services.port), "\033[1;37mState: "'{0: <5}\033[1;m'.format(services.state), "\033[1;37mProtocol: "'{0: <2}\033[1;m'.format(services.protocol),"\033[1;37mProduct: "'{0: <15}\033[1;m'.format(list_product[counter]),"\033[1;37mVersion: "'{0: <15}\033[1;m'.format(list_version[counter]),"\033[1;37mExtrInfo: "'{0: <10}\033[1;m'.format(list_extrainf[counter])
                 findsploit(list_product[counter], list_version[counter])
                 counter = counter + 1
 
@@ -318,7 +318,7 @@ def logparser(ip, protocol):
             counter = 0
             for services in _host.services: #NmapParser manipulation to list services, their ports and their state. The list elements defined above are printed next to each line.
                 #print "Port: "'{0: <5}'.format(services.port), "Product: "'{0: <15}'.format(list_product[counter],list_version[counter],list_extrainf[counter]), "State: "'{0: <5}'.format(services.state), "Protocol: "'{0: <5}'.format(services.protocol)
-                print "\033[1;37m[+]  Port: "'{0: <5}\033[1;m'.format(services.port), "\033[1;37mState: "'{0: <15}\033[1;m'.format(services.state), "\033[1;37mProtocol: "'{0: <2}\033[1;m'.format(services.protocol),"\033[1;37mProduct: "'{0: <15}\033[1;m'.format(list_product[counter]),"\033[1;37mVersion: "'{0: <10}\033[1;m'.format(list_version[counter]),"\033[1;37mExtrInfo: "'{0: <10}\033[1;m'.format(list_extrainf[counter])
+                print "\033[1;32m[+]\033[1;37m  Port: "'{0: <5}\033[1;m'.format(services.port), "\033[1;37mState: "'{0: <15}\033[1;m'.format(services.state), "\033[1;37mProtocol: "'{0: <2}\033[1;m'.format(services.protocol),"\033[1;37mProduct: "'{0: <15}\033[1;m'.format(list_product[counter]),"\033[1;37mVersion: "'{0: <10}\033[1;m'.format(list_version[counter]),"\033[1;37mExtrInfo: "'{0: <10}\033[1;m'.format(list_extrainf[counter])
                 findsploit(list_product[counter], list_version[counter])
                 counter = counter + 1
     except:
@@ -328,7 +328,14 @@ def logparsertxt(results):
     lines = results.split("\n")
     for line in lines:
         if ("|" in line) or (" . " in line):
-                print '\033[1;32m[*]  ' + line + '\033[1;m'
+                print '\033[1;32m[+]  ' + line + '\033[1;m'
+    return
+
+def logparserfile(results):
+    for line in results:
+        line.strip('/n')
+        if ("|" in line) or (" . " in line):
+                print '\033[1;32m[+]  ' + line + '\033[1;m'
     return
 
 def findsploit(product, version):

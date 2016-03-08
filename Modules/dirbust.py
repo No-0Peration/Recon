@@ -16,9 +16,9 @@ folder = "./wordlists"
 
 found = []
 try:
-    print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
-    print('\033[1;37m[*]  |     Starting DIRBUSTER scan for {0}\033[1;m'.format(url))
-    print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
+    print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
+    print('\033[1;37m[-]  |     Starting DIRBUSTER scan for {0}\033[1;m'.format(url))
+    print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
     for filename in os.listdir(folder):
         outfile = " -o " + "./results/" + name + "/" + name + "_dirb_" + filename + "_" + port
         DIRBSCAN = "dirb %s %s/%s %s -S -r" % (url, folder, filename, outfile)
@@ -37,7 +37,7 @@ try:
             print('\033[1;37m[+]  Dirbuster found the following items...\033[1;m')
             for item in found:
                 if ("CODE:200" in item or "DIRECTORY" in item):
-                    print "\033[1;37m    {0}\033[1;m".format(item)
+                    print "\033[1;32m[+]  {0}\033[1;m".format(item)
     except:
         print('\033[1;33m[-]  No items found during dirb scan of {0}\033[1;m'.format(url))
 except:
