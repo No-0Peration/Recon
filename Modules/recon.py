@@ -4,8 +4,35 @@ import multiprocessing.pool
 import os
 import re
 import subprocess
+import gzip
+import sys
 
 from IPy import IP
+
+def checkpreq():
+    # Check if root
+    if os.getuid() == 0:
+        print('\033[1;32m[*]  Checking permissions\033[1;m')
+    else:
+        sys.exit("I cannot run as a mortal. Sorry.")
+
+    if os.path.isfile("/usr/share/wordlists/rockyou.txt"):
+        print('\033[1;32m[*]  Rockyou wordlist present\033[1;m')
+    else:
+        print('\033[1;31m[*]  Rockyou wordlist is missing trying to decompress...\033[1;m')
+        try:
+            inFile = gzip.GzipFile("/usr/share/wordlists/rockyou.txt.gz", "rb")
+            s = inFile.read()
+            inFile.close()
+            outFile = file("/usr/share/wordlists/rockyou.txt", "wb")
+            outFile.write(s)
+            outFile.close()
+        except:
+            pass
+        if os.path.isfile("/usr/share/wordlists/rockyou.txt"):
+            print('\033[1;32m[*]  Rockyou wordlist is decompressed!\033[1;m')
+        else:
+            print('\033[1;31m[*]  Decompression of rockyou.txt failed!\033[1;m')
 
 
 def checkpath(path):
