@@ -233,38 +233,43 @@ def logparser(ip, protocol):
         list_version.append(version)
         list_extrainf.append(extrainf)
 
-    for osmatch in _host.os.osmatches: #NmapParser manipulation to detect OS and accuracy of detection.
-        os = osmatch.name
-        accuracy = osmatch.accuracy
-        print "\033[1;37m[*]  Operating System Guess: \033[1;m", os, "\033[1;37m- Accuracy Detection\033[1;m", accuracy
-        break
-    print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
+    try:
+        for osmatch in _host.os.osmatches: #NmapParser manipulation to detect OS and accuracy of detection.
+            os = osmatch.name
+            accuracy = osmatch.accuracy
+            print "\033[1;37m[*]  Operating System Guess: \033[1;m", os, "\033[1;37m- Accuracy Detection\033[1;m", accuracy
+            break
+    except:
+        os = "Microsoft"
+        print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
+    try:
+        if protocol == 'UDP':
+            os = 'UDP'
+        if 'Microsoft' in os:
+            counter = 0
+            for services in _host.services: #NmapParser manipulation to list services, their ports and their state. The list elements defined above are printed next to each line.
+                #print "Port: "'{0: <5}'.format(services.port), "Product: "'{0: <15}'.format(list_product[counter],list_version[counter],list_extrainf[counter]), "State: "'{0: <5}'.format(services.state), "Protocol: "'{0: <5}'.format(services.protocol)
+                print "\033[1;37m[*]  Port: "'{0: <5}\033[1;m'.format(services.port), "\033[1;37mState: "'{0: <5}\033[1;m'.format(services.state), "\033[1;37mProtocol: "'{0: <2}\033[1;m'.format(services.protocol),"\033[1;37mProduct: "'{0: <15}\033[1;m'.format(list_product[counter]),"\033[1;37mVersion: "'{0: <15}\033[1;m'.format(list_version[counter]),"\033[1;37mExtrInfo: "'{0: <10}\033[1;m'.format(list_extrainf[counter])
+                findsploit(list_product[counter], list_version[counter])
+                counter = counter + 1
 
-    if protocol == 'UDP':
-        os = 'UDP'
-    if 'Microsoft' in os:
-        counter = 0
-        for services in _host.services: #NmapParser manipulation to list services, their ports and their state. The list elements defined above are printed next to each line.
-            #print "Port: "'{0: <5}'.format(services.port), "Product: "'{0: <15}'.format(list_product[counter],list_version[counter],list_extrainf[counter]), "State: "'{0: <5}'.format(services.state), "Protocol: "'{0: <5}'.format(services.protocol)
-            print "\033[1;37m[*]  Port: "'{0: <5}\033[1;m'.format(services.port), "\033[1;37mState: "'{0: <5}\033[1;m'.format(services.state), "\033[1;37mProtocol: "'{0: <2}\033[1;m'.format(services.protocol),"\033[1;37mProduct: "'{0: <15}\033[1;m'.format(list_product[counter]),"\033[1;37mVersion: "'{0: <15}\033[1;m'.format(list_version[counter]),"\033[1;37mExtrInfo: "'{0: <10}\033[1;m'.format(list_extrainf[counter])
-            findsploit(list_product[counter], list_version[counter])
-            counter = counter + 1
+        if 'Linux' in os:
+            counter = 0
+            for services in _host.services: #NmapParser manipulation to list services, their ports and their state. The list elements defined above are printed next to each line.
+                #print "Port: "'{0: <5}'.format(services.port), "Product: "'{0: <15}'.format(list_product[counter],list_version[counter],list_extrainf[counter]), "State: "'{0: <5}'.format(services.state), "Protocol: "'{0: <5}'.format(services.protocol)
+                print "\033[1;37m[*]  Port: "'{0: <5}\033[1;m'.format(services.port), "\033[1;37mState: "'{0: <5}\033[1;m'.format(services.state), "\033[1;37mProtocol: "'{0: <2}\033[1;m'.format(services.protocol),"\033[1;37mProduct: "'{0: <15}\033[1;m'.format(list_product[counter]),"\033[1;37mVersion: "'{0: <15}\033[1;m'.format(list_version[counter]),"\033[1;37mExtrInfo: "'{0: <10}\033[1;m'.format(list_extrainf[counter])
+                findsploit(list_product[counter], list_version[counter])
+                counter = counter + 1
 
-    if 'Linux' in os:
-        counter = 0
-        for services in _host.services: #NmapParser manipulation to list services, their ports and their state. The list elements defined above are printed next to each line.
-            #print "Port: "'{0: <5}'.format(services.port), "Product: "'{0: <15}'.format(list_product[counter],list_version[counter],list_extrainf[counter]), "State: "'{0: <5}'.format(services.state), "Protocol: "'{0: <5}'.format(services.protocol)
-            print "\033[1;37m[*]  Port: "'{0: <5}\033[1;m'.format(services.port), "\033[1;37mState: "'{0: <5}\033[1;m'.format(services.state), "\033[1;37mProtocol: "'{0: <2}\033[1;m'.format(services.protocol),"\033[1;37mProduct: "'{0: <15}\033[1;m'.format(list_product[counter]),"\033[1;37mVersion: "'{0: <15}\033[1;m'.format(list_version[counter]),"\033[1;37mExtrInfo: "'{0: <10}\033[1;m'.format(list_extrainf[counter])
-            findsploit(list_product[counter], list_version[counter])
-            counter = counter + 1
-
-    if 'UDP' in os:
-        counter = 0
-        for services in _host.services: #NmapParser manipulation to list services, their ports and their state. The list elements defined above are printed next to each line.
-            #print "Port: "'{0: <5}'.format(services.port), "Product: "'{0: <15}'.format(list_product[counter],list_version[counter],list_extrainf[counter]), "State: "'{0: <5}'.format(services.state), "Protocol: "'{0: <5}'.format(services.protocol)
-            print "\033[1;37m[*]  Port: "'{0: <5}\033[1;m'.format(services.port), "\033[1;37mState: "'{0: <15}\033[1;m'.format(services.state), "\033[1;37mProtocol: "'{0: <2}\033[1;m'.format(services.protocol),"\033[1;37mProduct: "'{0: <15}\033[1;m'.format(list_product[counter]),"\033[1;37mVersion: "'{0: <10}\033[1;m'.format(list_version[counter]),"\033[1;37mExtrInfo: "'{0: <10}\033[1;m'.format(list_extrainf[counter])
-            findsploit(list_product[counter], list_version[counter])
-            counter = counter + 1
+        if 'UDP' in os:
+            counter = 0
+            for services in _host.services: #NmapParser manipulation to list services, their ports and their state. The list elements defined above are printed next to each line.
+                #print "Port: "'{0: <5}'.format(services.port), "Product: "'{0: <15}'.format(list_product[counter],list_version[counter],list_extrainf[counter]), "State: "'{0: <5}'.format(services.state), "Protocol: "'{0: <5}'.format(services.protocol)
+                print "\033[1;37m[*]  Port: "'{0: <5}\033[1;m'.format(services.port), "\033[1;37mState: "'{0: <15}\033[1;m'.format(services.state), "\033[1;37mProtocol: "'{0: <2}\033[1;m'.format(services.protocol),"\033[1;37mProduct: "'{0: <15}\033[1;m'.format(list_product[counter]),"\033[1;37mVersion: "'{0: <10}\033[1;m'.format(list_version[counter]),"\033[1;37mExtrInfo: "'{0: <10}\033[1;m'.format(list_extrainf[counter])
+                findsploit(list_product[counter], list_version[counter])
+                counter = counter + 1
+    except:
+        print('\033[1;31m[*]  NMAP parsing script {0} had some errors.\033[1;m'.format(ip))
 
 
 def findsploit(product, version):
