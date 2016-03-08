@@ -17,6 +17,7 @@ try:
     print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
     VULNSCAN = "nmap -sV -Pn -vv -p445,139 --script=smb-vuln* --script-args=unsafe=1 -oN './results/{0}/{0}_smb.nmap' {0}".format(ip)
     scanresults = subprocess.check_output(VULNSCAN, shell=True)
+    recon.logparsertxt(scanresults)
     if ("445/tcp closed" not in scanresults):
         lines = scanresults.split("\n")
         for line in lines:
@@ -31,5 +32,5 @@ try:
             if ("Found" in line) or (" . " in line):
                 print '\033[1;32m[+]  ' + line + '\033[1;m'
 except:
-    print('\033[1;31m[-]  SMB script scan for {0}:{1} had some errors.\033[1;m'.format(ip_address, port))
+    print('\033[1;31m[-]  SMB script scan for {0} had some errors.\033[1;m'.format(ip))
 os.system('stty echo')

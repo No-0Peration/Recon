@@ -271,7 +271,7 @@ def logparser(ip, protocol):
         host = ', '.join(_host.hostnames)
         ip = (_host.address)
 
-        print "\033[1;37m[*]  HostName: "'{0: >35}\033[1;m'.format(host,"--", ip)
+        print "\033[1;37m[+]  HostName: "'{0: >35}\033[1;m'.format(host,"--", ip)
 
 
     #Lists in order to store Additional information, Product and version next to the port information.
@@ -290,11 +290,11 @@ def logparser(ip, protocol):
         for osmatch in _host.os.osmatches: #NmapParser manipulation to detect OS and accuracy of detection.
             os = osmatch.name
             accuracy = osmatch.accuracy
-            print "\033[1;37m[*]  Operating System Guess: \033[1;m", os, "\033[1;37m- Accuracy Detection\033[1;m", accuracy
+            print "\033[1;37m[+]  Operating System Guess: \033[1;m", os, "\033[1;37m- Accuracy Detection\033[1;m", accuracy
             break
     except:
         os = "Microsoft"
-        print "\033[1;37m[*]  ----------------------------------------------------------------------------- \033[1;m"
+        print "\033[1;37m[+]  ----------------------------------------------------------------------------- \033[1;m"
     try:
         if protocol == 'UDP':
             os = 'UDP'
