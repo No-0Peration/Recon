@@ -328,7 +328,7 @@ def logparsertxt(results):
     lines = results.split("\n")
     for line in lines:
         if ("|" in line) or (" . " in line):
-                print '\033[1;32m[+]  ' + line + '\033[1;m'
+                print '\033[1;32m[*]  ' + line + '\033[1;m'
     return
 
 def findsploit(product, version):
