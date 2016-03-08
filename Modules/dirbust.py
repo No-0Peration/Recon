@@ -40,7 +40,7 @@ try:
         print('\033[1;34m[*]  No items found during dirb scan of {0}\033[1;m'.format(url))
 except:
     print('\033[1;31m[*]  Dirbuster script for {0}:{1} had some errors.\033[1;m'.format(ip_address, port))
-    os.system('stty echo')
+os.system('stty echo')
 
 
 

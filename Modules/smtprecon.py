@@ -51,5 +51,5 @@ try:
         pass
 except:
     print('\033[1;31m[*]  SMTP script scan for {0} had some errors.\033[1;m'.format(ip_address))
-    os.system('stty echo')
+os.system('stty echo')
 

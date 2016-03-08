@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import subprocess
 import sys
+import os
 
 if len(sys.argv) != 2:
     print "Usage: dnsrecon.py <ip address>"
@@ -40,3 +41,4 @@ try:
         print('\033[1;34m[*]  Domain Transfer failed on {0}\033[1;m'.format(host))
 except:
     print('\033[1;31m[*]  DNS script scan for {0}:{1} had some errors.\033[1;m'.format(ip_address, port))
+os.system('stty echo')

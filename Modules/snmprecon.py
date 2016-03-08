@@ -37,4 +37,4 @@ try:
     f.close()
 except:
     print('\033[1;31m[*]  SNMP script scan for {0}:{1} had some errors.\033[1;m'.format(ip_address, port))
-    os.system('stty echo')
+os.system('stty echo')

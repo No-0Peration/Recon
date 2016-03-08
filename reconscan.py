@@ -49,9 +49,9 @@ except:
     for proc in psutil.process_iter():
         if proc.name() in PROCNAME:
             proc.kill()
-    os.system('stty echo ; clear')
+    os.system('stty echo')
     exit()
 finally:
-    os.system('stty echo ; clear')
+    os.system('stty echo')
 
 
