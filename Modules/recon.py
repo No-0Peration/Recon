@@ -343,6 +343,12 @@ def logparsernikto(results):
                 print '\033[1;32m[+]  \033[1;37m' + line + '\033[1;m'
     return
 
+def logparserall(results):
+    lines = results.split("\n")
+    for line in lines:
+        print '\033[1;32m[+]  \033[1;37m' + line + '\033[1;m'
+    return
+
 def findsploit(product, version):
     found = []
     found2 = []
@@ -359,7 +365,7 @@ def findsploit(product, version):
             for line in sploits:
                 found.append(line)
 
-            if len(found) <= 5:
+            if len(found) <= 10:
                 print('\033[1;32m[+]  \033[1;37mFound the following exploits for \033[1;31m{0} {1}\033[1;m'.format(majorproduct[0], versiontop[0]))
                 for item in found:
                     founditems = item.strip().split("|")
@@ -374,7 +380,7 @@ def findsploit(product, version):
 
             for line in sploits2:
                 found2.append(line)
-            if len(found2) <= 5:
+            if len(found2) <= 10:
                 print('\033[1;32m[+]  \033[1;37mFound the following exploits for \033[1;31m{0}\033[1;37m without version \033[1;m'.format(majorproduct[0]))
 
                 for item in found2:

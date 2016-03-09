@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import subprocess
 import sys
-import recon
+from Modules import recon
 
 if len(sys.argv) != 3:
     print "Usage: sshrecon.py <ip address> <port>"

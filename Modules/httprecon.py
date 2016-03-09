@@ -2,7 +2,7 @@
 import subprocess
 import sys
 import os
-import recon
+from Modules import recon
 
 if len(sys.argv) != 3:
     print "Usage: httprecon.py <ip address> <port>"

@@ -2,6 +2,7 @@
 import subprocess
 import sys
 import os
+from Modules import recon
 
 if len(sys.argv) != 2:
     print "Usage: dnsrecon.py <ip address>"
@@ -18,6 +19,7 @@ try:
     print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
     DNSSCAN = "nmap -sV -sSU -Pn -vv -p53 --script=dns-* -oN './results/{0}/{0}_dns.nmap' {0}".format(ip_address)
     results = subprocess.check_output(DNSSCAN, shell=True)
+    recon.logparsertxt(results)
     outfile = "results/{0}/{0}_dnsrecon.txt".format(ip_address)
     f = open(outfile, "w")
     f.write(results)

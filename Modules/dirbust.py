@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
 import sys
-import os
 import subprocess
 import os
 

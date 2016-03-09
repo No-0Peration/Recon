@@ -3,7 +3,7 @@ import socket
 import subprocess
 import sys
 import os
-import recon
+from Modules import recon
 
 
 if len(sys.argv) != 2:

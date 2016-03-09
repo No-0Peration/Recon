@@ -31,6 +31,9 @@ try:
         for line in lines:
             if ("Found" in line) or (" . " in line):
                 print '\033[1;32m[+]  ' + line + '\033[1;m'
+    E4L = "enum4linux {0}".format(ip)
+    e4lresults = subprocess.check_output(E4L, shell=True)
+    recon.logparserall(e4lresults)
 except:
     print('\033[1;31m[-]  SMB script scan for {0} had some errors.\033[1;m'.format(ip))
 os.system('stty echo')
