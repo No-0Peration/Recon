@@ -17,11 +17,7 @@ try:
     VULNSCAN = "nmap -sV -Pn -vv -p445,139 --script=smb-vuln* --script-args=unsafe=1 -oN './results/{0}/{0}_smb.nmap' {0}".format(ip)
     scanresults = subprocess.check_output(VULNSCAN, shell=True)
     recon.logparsertxt(scanresults)
-    if ("445/tcp closed" not in scanresults):
-        lines = scanresults.split("\n")
-        for line in lines:
-            if ("|" in line) or (" . " in line):
-                print '\033[1;32m[+]  ' + line + '\033[1;m'
+
     NBTSCAN = "./samrdump.py %s" % (ip)
     nbtresults = subprocess.check_output(NBTSCAN, shell=True)
     if ("Connection refused" not in nbtresults) and ("Connect error" not in nbtresults) and ("Connection reset" not in nbtresults):
