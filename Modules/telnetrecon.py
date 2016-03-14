@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import subprocess
 import sys
-from Modules import recon
+import recon
 
 if len(sys.argv) != 3:
     print "Usage: telnetrecon.py <ip address> <port>"
