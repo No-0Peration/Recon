@@ -177,7 +177,7 @@ def scanner(ip_address, protocol):
             udpresults = file("./results/{0}/{0}{1}_nmap_scan_import.xml".format(ip_address, protocol), "r")
             lines = udpresults
         else:
-            tcpscan = "nmap -vv -Pn -A -O -sS -sV --open -oN './results/{0}/{0}.nmap' -oX './results/{0}/{0}{1}_nmap_scan_import.xml' {0}".format(ip_address, protocol)
+            tcpscan = "nmap -vv -Pn -A -O -sS -sV -p- --open -oN './results/{0}/{0}.nmap' -oX './results/{0}/{0}{1}_nmap_scan_import.xml' {0}".format(ip_address, protocol)
             with open(os.devnull, "w") as f:
                 subprocess.call(tcpscan, shell=True, stdout=f)
             tcpresults = file("./results/{0}/{0}{1}_nmap_scan_import.xml".format(ip_address, protocol), "r")
@@ -243,7 +243,7 @@ def scanner(ip_address, protocol):
             for port in ports:
                 port = port.split("/")[0]
                 multProc(ftpEnum, ip_address, port)
-        elif "microsoft-ds" in serv:
+        elif "microsoft-ds" or "netbios-ssn" in serv:
             for port in ports:
                 port = port.split("/")[0]
                 multProc(smbEnum, ip_address, port)
