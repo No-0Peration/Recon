@@ -27,6 +27,9 @@ try:
             if ("Found" in line) or (" . " in line):
                 print '\033[1;32m[+]  ' + line + '\033[1;m'
     E4L = "enum4linux {0}".format(ip)
+    print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
+    print('\033[1;37m[-]  |     Starting ENUM4LINUX for {0}\033[1;m'.format(ip))
+    print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
     e4lresults = subprocess.check_output(E4L, shell=True)
     recon.logparserall(e4lresults)
 except:

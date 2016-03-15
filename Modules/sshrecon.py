@@ -2,6 +2,7 @@
 import subprocess
 import sys
 import recon
+import os
 
 if len(sys.argv) != 3:
     print "Usage: sshrecon.py <ip address> <port>"
