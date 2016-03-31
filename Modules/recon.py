@@ -372,7 +372,7 @@ def findsploit(product, version):
                     print "\033[1;32m[+]\033[1;37m  |_{0} {1}\033[1;m".format(founditems[0], founditems[1])
 
             else:
-                print('\033[1;33m[-]  Found too many exploits for {0} {1} please check manualy\033[1;m'.format(majorproduct[0], versiontop[0]))
+                print('\033[1;33m[-]  Found too many possible exploits for {0} {1} please check manualy\033[1;m'.format(majorproduct[0], versiontop[0]))
         except:
             SCRIPT2 = "searchsploit {0}| grep -v dos | grep remote".format(majorproduct[0])  # find possible sploits
             sploitresults2 = subprocess.check_output(SCRIPT2, shell=True)
@@ -388,7 +388,7 @@ def findsploit(product, version):
                     print "\033[1;32m[+]\033[1;37m  |_{0} {1}\033[1;m".format(founditems[0], founditems[1])
 
             else:
-                print('\033[1;33m[-]  Found too many exploits for {0} without version please check manualy\033[1;m'.format(majorproduct[0]))
+                print('\033[1;33m[-]  Found too many possible exploits for {0} without version please check manualy\033[1;m'.format(majorproduct[0]))
     except:
         pass
     return
