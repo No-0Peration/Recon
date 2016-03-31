@@ -49,11 +49,11 @@ try:
     # recon.logparsernikto(results2)
     #
     # outfile2 = "./results/{0}/{0}_Arachnirecon_{1}.txt".format(ip_address, port)
-    # DIRBUST = "./Modules/dirbust.py {2}{0}:{1} {0} {1}".format(ip_address, port, header)  # execute the python script
-    # subprocess.call(DIRBUST, shell=True)
-    # f = open(outfile2, "w")
-    # f.write(results2)
-    # f.close()
+    DIRBUST = "./Modules/dirbust.py {2}{0}:{1} {0} {1}".format(ip_address, port, header)  # execute the python script
+    subprocess.call(DIRBUST, shell=True)
+    f = open(outfile2, "w")
+    f.write(results2)
+    f.close()
 except:
     print('\033[1;31m[-]  HTTP script scan for {0}:{1} had some errors.\033[1;m'.format(ip_address, port))
 os.system('stty echo')
