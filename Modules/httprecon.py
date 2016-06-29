@@ -36,13 +36,8 @@ try:
     print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
     print('\033[1;37m[-]  |     Starting Selenium ScreenGrab scan for {0}:{1} \033[1;m'.format(ip_address, port))
     print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
-    results2 = screenshot_http({0},{1}).format(ip_address, port)
-    recon.logparsernikto(results2)
-
-    outfile2 = "./results/{0}/{0}_Arachnirecon_{1}.txt".format(ip_address, port)
-    f = open(outfile2, "w")
-    f.write(results2)
-    f.close()
+    recon.screenshot_http(ip_address, port, header)
+    print('\033[1;33m[+]  Added screenshot to results for {0}:{1}...\033[1;m'.format(ip_address, port))
 
     NIKTOSCAN = "nikto -host {0} -p {1} -o ./results/{0}/{0}.{1}_nikto.txt".format(ip_address, port)
     print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
@@ -63,7 +58,6 @@ try:
     f.write(resultsssl)
     f.close()
 
-
     ARACHNI = "arachni {0}{1}:{2} --output-only-positives --scope-include-subdomains".format(header, ip_address, port)
     print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
     print('\033[1;37m[-]  |     Starting ARACHNI scan for {0}:{1} \033[1;m'.format(ip_address, port))
@@ -82,3 +76,4 @@ try:
 except:
     print('\033[1;31m[-]  HTTP script scan for {0}:{1} had some errors.\033[1;m'.format(ip_address, port))
 os.system('stty echo')
+

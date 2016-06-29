@@ -394,11 +394,15 @@ def findsploit(product, version):
         pass
     return
 
-def screenshot_http(ip_address, port):
-    path="results/{0}/{0}_Screenshot_{1}.png".format(ip_address, port)
+def screenshot_http(ip_address, port, header):
+    path="./results/{0}/{0}_Screenshot_{1}.png".format(ip_address, port)
+    if str(port) == "443":
+        header = "https://"
+    else:
+        header = "http://"
     url ="{0}{1}:{2}".format(header, ip_address, port)
     try:
-        driver =webdriver.Firefox()
+        driver = webdriver.Firefox()
         driver.get(url)
         driver.save_screenshot(path)
         driver.close()
