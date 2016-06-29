@@ -6,6 +6,7 @@ import re
 import subprocess
 import gzip
 import sys
+from selenium import webdriver
 
 
 from IPy import IP
@@ -392,3 +393,14 @@ def findsploit(product, version):
     except:
         pass
     return
+
+def screenshot_http(ip_address, port):
+    path="results/{0}/{0}_Screenshot_{1}.png".format(ip_address, port)
+    url ="{0}{1}:{2}".format(header, ip_address, port)
+    try:
+        driver =webdriver.Firefox()
+        driver.get(url)
+        driver.save_screenshot(path)
+        driver.close()
+    except:
+        print('\033[1;31m[-]  Selenium script for {0}:{1} had some errors.\033[1;m'.format(ip_adress, port))

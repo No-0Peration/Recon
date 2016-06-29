@@ -33,6 +33,17 @@ try:
         results = open("./results/{0}/{0}_http.nmap.{1}".format(ip_address, port), "r")
         recon.logparserfile(results)
 
+    print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
+    print('\033[1;37m[-]  |     Starting Selenium ScreenGrab scan for {0}:{1} \033[1;m'.format(ip_address, port))
+    print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
+    results2 = screenshot_http({0},{1}).format(ip_address, port)
+    recon.logparsernikto(results2)
+
+    outfile2 = "./results/{0}/{0}_Arachnirecon_{1}.txt".format(ip_address, port)
+    f = open(outfile2, "w")
+    f.write(results2)
+    f.close()
+
     NIKTOSCAN = "nikto -host {0} -p {1} -o ./results/{0}/{0}.{1}_nikto.txt".format(ip_address, port)
     print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
     print('\033[1;37m[-]  |     Starting NIKTO scan for {0}:{1} \033[1;m'.format(ip_address, port))
@@ -53,18 +64,17 @@ try:
     f.close()
 
 
+    ARACHNI = "arachni {0}{1}:{2} --output-only-positives --scope-include-subdomains".format(header, ip_address, port)
+    print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
+    print('\033[1;37m[-]  |     Starting ARACHNI scan for {0}:{1} \033[1;m'.format(ip_address, port))
+    print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
+    results2 = subprocess.check_output(ARACHNI, shell=True)
+    recon.logparsernikto(results2)
 
-    # ARACHNI = "arachni {0}{1}:{2} --output-only-positives --scope-include-subdomains".format(header, ip_address, port)
-    # print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
-    # print('\033[1;37m[-]  |     Starting ARACHNI scan for {0}:{1} \033[1;m'.format(ip_address, port))
-    # print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
-    # results2 = subprocess.check_output(ARACHNI, shell=True)
-    # recon.logparsernikto(results2)
-    #
-    # outfile2 = "./results/{0}/{0}_Arachnirecon_{1}.txt".format(ip_address, port)
-    #f = open(outfile2, "w")
-    #f.write(results2)
-    #f.close()
+    outfile2 = "./results/{0}/{0}_Arachnirecon_{1}.txt".format(ip_address, port)
+    f = open(outfile2, "w")
+    f.write(results2)
+    f.close()
 
     DIRBUST = "./Modules/dirbust.py {2}{0}:{1} {0} {1}".format(ip_address, port, header)  # execute the python script
     subprocess.call(DIRBUST, shell=True)
