@@ -1,13 +1,11 @@
 #!/usr/bin/env python
 '''
- Author: Gerben (0x90) -- @N0_Operation & Bas -- B0x41S & Sander -- DTCTD.
+ Author: Gerben (0x90) -- @N0_Operation
  This tool is an automation script for the reconphase during a pentest, it was inspired by a few github repos.
 '''
 
 import os
 from Modules import recon
-import psutil
-
 
 os.system('cls' if os.name == 'nt' else 'clear')
 print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
@@ -30,14 +28,7 @@ try:
             pass
 
         try:
-            # See if there is a target list in the file ips
-            with open("./ips") as f:
-                print('\033[1;33m[+]  Found IP list, using as input\033[1;m')
-                ips = f.readlines()
-
-                for ip in ips:
-                    recon.scanner(ip.strip('\n\r'), 'TCP')
-                    recon.scanner(ip.strip('\n\r'), 'UDP')
+            recon.startrecon()
         except:
             ips = recon.getIp()
 
@@ -47,14 +38,8 @@ try:
 
 except:
     print '\033[1;31m[-]  Recon is ending: Killing all Processes!\033[1;m'
-    PROCNAME = ("python", "nmap", "dirb", "hydra")
-    for proc in psutil.process_iter():
-        if proc.name() in PROCNAME:
-            proc.kill()
-    os.system('stty echo')
-    exit()
+    recon.killrecon()
 finally:
-    os.system('stty echo')
-    print('\033[1;33m[+]  Recon has finished!\033[1;m')
+    recon.finnished()
 
 

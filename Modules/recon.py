@@ -6,10 +6,33 @@ import re
 import subprocess
 import gzip
 import sys
+import psutil
 from selenium import webdriver
 
 
 from IPy import IP
+
+def killrecon():
+    PROCNAME = ("python", "nmap", "dirb", "hydra")
+    for proc in psutil.process_iter():
+        if proc.name() in PROCNAME:
+            proc.kill()
+    os.system('stty echo')
+    exit()
+
+def finnished():
+    os.system('stty echo')
+    print('\033[1;33m[+]  Recon has finished!\033[1;m')
+
+def startrecon():
+    # See if there is a target list in the file ips
+    with open("./ips") as f:
+        print('\033[1;33m[+]  Found IP list, using as input\033[1;m')
+        ips = f.readlines()
+
+        for ip in ips:
+            scanner(ip.strip('\n\r'), 'TCP')
+            scanner(ip.strip('\n\r'), 'UDP')
 
 def checkpreq():
     # Check if root
