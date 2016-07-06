@@ -322,7 +322,7 @@ def logparser(ip, protocol):
                 findsploit(list_product[counter], list_version[counter])
                 counter = counter + 1
     except:
-        print('\033[1;31m[-]  NMAP parsing script {0} had some errors.\033[1;m'.format(ip))
+        print('\033[1;31m[-]  NMAP parsing script {0} had some errors or no ports were found.\033[1;m'.format(ip))
 
 def logparsertxt(results):
     lines = results.split("\n")
