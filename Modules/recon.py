@@ -437,9 +437,14 @@ def screenshot_http(ip_address, port, header):
         header = "http://"
     url ="{0}{1}:{2}".format(header, ip_address, port)
     try:
-        driver = webdriver.Firefox()
-        driver.get(url)
-        driver.save_screenshot(path)
-        driver.close()
+        try:
+            driver = webdriver.Firefox()
+            driver.get(url)
+            driver.save_screenshot(path)
+            driver.close()
+        except:
+            url = 'view-source:{0}'.format(url)
+            driver.get(url)
+            driver.save_screenshot(path)
     except:
         print('\033[1;31m[-]  Selenium script for {0}:{1} had some errors.\033[1;m'.format(ip_adress, port))
