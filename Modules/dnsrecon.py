@@ -10,6 +10,13 @@ if len(sys.argv) != 2:
 
 try:
     ip_address = sys.argv[1]
+    DNSCHECK = "dnsrecon -n {0} -d bogus.crap".format(ip_address)
+    results = subprocess.check_output(DNSCHECK, shell=True)
+except:
+    print("\033[1;31m[+] DNS server is not responding, skipping DNS tests\033[1;m")
+    exit()
+    
+try:
     HOSTNAME = "host %s | cut -d ' ' -f5 | cut -d '.' -f1,2,3" % (ip_address)
     DOMAINNAME = "host %s | cut -d ' ' -f5 | cut -d '.' -f2,3" % (ip_address)
     port = 53
