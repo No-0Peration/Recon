@@ -1,3 +1,5 @@
+
+
 import errno
 import multiprocessing
 import multiprocessing.pool
@@ -202,6 +204,7 @@ def ftpEnum(ip_address, port):
 def scanner(ip_address, protocol):
     ip_address = str(ip_address)
     checkpath("./results/{0}".format(ip_address))
+    info(ip_address)
     if not checknmaprun(ip_address, "{0}_nmap_scan_import.xml".format(protocol)):
         print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
         print('\033[1;37m[-]  |     Starting new {0} nmap scan for {1}\033[1;m'.format(protocol, ip_address))
@@ -448,3 +451,20 @@ def screenshot_http(ip_address, port, header):
             driver.save_screenshot(path)
     except:
         print('\033[1;31m[-]  Selenium script for {0}:{1} had some errors.\033[1;m'.format(ip_adress, port))
+
+def info(ip_address):
+    try:
+        print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
+        print('\033[1;37m[-]  |     Getting LocalINFO\033[1;m')
+        print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
+        path="./results/{0}/".format(ip_address)
+        IFCONFIG = "ifconfig eth0"
+        EXIFCONFIG = "curl ifconfig.me"
+        resultif = subprocess.check_output(IFCONFIG, shell=True)
+        resultexif = subprocess.check_output(EXIFCONFIG, shell=True)
+        outfile = "{0}localhost.info".format(path)
+        f = open(outfile, "w")
+        f.write(resultif+resultexif)
+        f.close()
+    except:
+        print('\033[1;31m[-]  Localinfo check had some errors..maybe there is no internet connection\033[1;m')
