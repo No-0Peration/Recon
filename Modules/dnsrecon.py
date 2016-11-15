@@ -13,7 +13,7 @@ try:
     DNSCHECK = "dnsrecon -n {0} -d bogus.crap".format(ip_address)
     results = subprocess.check_output(DNSCHECK, shell=True)
 except:
-    print("\033[1;31m[+] DNS server is not responding, skipping DNS tests\033[1;m")
+    print("\033[1;31m[+]  DNS server is not responding, skipping DNS tests\033[1;m")
     exit()
     
 try:
