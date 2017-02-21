@@ -459,7 +459,7 @@ def info(ip_address):
         print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
         path="./results/{0}/".format(ip_address)
         IFCONFIG = "ifconfig eth0"
-        EXIFCONFIG = "curl ifconfig.me"
+        EXIFCONFIG = "curl v4.ident.me"
         resultif = subprocess.check_output(IFCONFIG, shell=True)
         resultexif = subprocess.check_output(EXIFCONFIG, shell=True)
         outfile = "{0}localhost.info".format(path)
