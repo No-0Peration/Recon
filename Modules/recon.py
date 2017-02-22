@@ -204,7 +204,6 @@ def ftpEnum(ip_address, port):
 def scanner(ip_address, protocol):
     ip_address = str(ip_address)
     checkpath("./results/{0}".format(ip_address))
-    info(ip_address)
     if not checknmaprun(ip_address, "{0}_nmap_scan_import.xml".format(protocol)):
         print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
         print('\033[1;37m[-]  |     Starting new {0} nmap scan for {1}\033[1;m'.format(protocol, ip_address))
