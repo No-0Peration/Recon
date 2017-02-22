@@ -21,7 +21,7 @@ try:
     print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
 
     if not recon.checknmaprunmod(ip_address, "_http.nmap.{0}".format(port, ip_address)):
-        HTTPSCAN = "nmap -sV -Pn -vv -p {0} --script-args=unsafe=1 --script='http* AND NOT broadcast AND NOT dos AND NOT http-slow*' --stats-every 10s -oN ./results/{1}/{1}_http.nmap.{0} {1}".format(port, ip_address)
+        HTTPSCAN = "nmap -sV -Pn -vv -p {0} --script-args=unsafe=1 --script='http* AND NOT broadcast AND NOT dos AND NOT http-slow* AND NOT http-comment*' --stats-every 10s -oN ./results/{1}/{1}_http.nmap.{0} {1} -oX ./results/{1}/{1}_http.nmap.{0} {1}".format(port, ip_address)
         results = subprocess.check_output(HTTPSCAN, shell=True)
         recon.logparsertxt(results)
         outfile = "results/{0}/{0}_HTTPrecon.txt".format(ip_address)
@@ -33,11 +33,11 @@ try:
         results = open("./results/{0}/{0}_http.nmap.{1}".format(ip_address, port), "r")
         recon.logparserfile(results)
 
-    print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
-    print('\033[1;37m[-]  |     Starting Selenium ScreenGrab scan for {0}:{1} \033[1;m'.format(ip_address, port))
-    print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
-    recon.screenshot_http(ip_address, port, header)
-    print('\033[1;33m[+]  Added screenshot to results for {0}:{1}...\033[1;m'.format(ip_address, port))
+  #  print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
+  #  print('\033[1;37m[-]  |     Starting Selenium ScreenGrab scan for {0}:{1} \033[1;m'.format(ip_address, port))
+  #  print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
+  #  recon.screenshot_http(ip_address, port, header)
+  #  print('\033[1;33m[+]  Added screenshot to results for {0}:{1}...\033[1;m'.format(ip_address, port))
 
     NIKTOSCAN = "nikto -host {0} -p {1} -o ./results/{0}/{0}.{1}_nikto.txt".format(ip_address, port)
     print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
