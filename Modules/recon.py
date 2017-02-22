@@ -126,7 +126,6 @@ def getIp():
         raise Exception(e)
 
 def dnsEnum(ip_address, port):
-    #print('\033[1;34m[*]  Detected DNS on {0} : {1}\033[1;m'.format(ip_address, port))
     if port.strip() == "53":
         SCRIPT = "./Modules/dnsrecon.py %s" % (ip_address)  # execute the python script
         subprocess.call(SCRIPT, shell=True)
@@ -134,7 +133,6 @@ def dnsEnum(ip_address, port):
 
 
 def httpEnum(ip_address, port):
-    #print('\033[1;34m[*]  Detected HTTP on {0} : {1}\033[1;m'.format(ip_address, port))
     checkpath("./results/")
     try:
         SCRIPT = "./Modules/httprecon.py %s %s" % (ip_address, port)  # execute the python script
@@ -145,7 +143,6 @@ def httpEnum(ip_address, port):
 
 
 def mssqlEnum(ip_address, port):
-    #print('\033[1;34m[*]  Detected SQL on {0} : {1}\033[1;m'.format(ip_address, port))
     print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
     print('\033[1;37m[-]  |     Starting MSSQL script scan for {0} : {1}\033[1;m'.format(ip_address, port))
     print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
@@ -158,26 +155,22 @@ def mssqlEnum(ip_address, port):
     return
 
 def sshEnum(ip_address, port):
-    #print('\033[1;34m[*]  Detected SSH on {0} : {1}\033[1;m'.format(ip_address, port))
     SCRIPT = "./Modules/sshrecon.py %s %s" % (ip_address, port)
     subprocess.call(SCRIPT, shell=True)
     return
 
 def telnetEnum(ip_address, port):
-    #print('\033[1;34m[*]  Detected TELNET on {0} : {1}\033[1;m'.format(ip_address, port))
     SCRIPT = "./Modules/telnetrecon.py %s %s" % (ip_address, port)
     subprocess.call(SCRIPT, shell=True)
     return
 
 def snmpEnum(ip_address, port):
-    #print('\033[1;34m[*]  Detected SNMP on {0} : {1}\033[1;m'.format(ip_address, port))
     SCRIPT = "./Modules/snmprecon.py %s" % (ip_address)
     subprocess.call(SCRIPT, shell=True)
     return
 
 
 def smtpEnum(ip_address, port):
-    #print('\033[1;34m[*]  Detected SMTP on {0} : {1}\033[1;m'.format(ip_address, port))
     if port.strip() == "25":
         SCRIPT = "./Modules/smtprecon.py %s" % (ip_address)
         subprocess.call(SCRIPT, shell=True)
@@ -187,7 +180,6 @@ def smtpEnum(ip_address, port):
 
 
 def smbEnum(ip_address, port):
-    #print('\033[1;34m[*]  Detected SMB on {0} : {1}\033[1;m'.format(ip_address, port))
     if port.strip() == "445":
         SCRIPT = "./Modules/smbrecon.py %s 2>/dev/null" % (ip_address)
         subprocess.call(SCRIPT, shell=True)
@@ -195,7 +187,6 @@ def smbEnum(ip_address, port):
 
 
 def ftpEnum(ip_address, port):
-    #print('\033[1;34m[*]  Detected FTP on {0} : {1}\033[1;m'.format(ip_address, port))
     SCRIPT = "./Modules/ftprecon.py %s %s" % (ip_address, port)
     subprocess.call(SCRIPT, shell=True)
     return
@@ -315,20 +306,25 @@ def logparser(ip, protocol):
     list_product=[]
     list_version=[]
     list_extrainf=[]
-    for node_4 in tree.iter('service'): #ElementTree manipulation. Service Element which included the sub-elements product, version, extrainfo
-        product = node_4.attrib.get('product')
-        version = node_4.attrib.get('version')
-        extrainf = node_4.attrib.get('extrainfo')
-        list_product.append(product)
-        list_version.append(version)
-        list_extrainf.append(extrainf)
+    try:
+        for node_4 in tree.iter('service'): #ElementTree manipulation. Service Element which included the sub-elements product, version, extrainfo
+            product = node_4.attrib.get('product')
+            version = node_4.attrib.get('version')
+            extrainf = node_4.attrib.get('extrainfo')
+            list_product.append(product)
+            list_version.append(version)
+            list_extrainf.append(extrainf)
+    except:
+        print "Checkpoint 3 Failed"
 
     try:
-        for osmatch in _host.os.osmatches: #NmapParser manipulation to detect OS and accuracy of detection.
+        for osmatch in _host.os.ostype: #NmapParser manipulation to detect OS and accuracy of detection.
             os = osmatch.name
-            accuracy = osmatch.accuracy
-            print "\033[1;32m[+]\033[1;37m  Operating System Guess: \033[1;m", os, "\033[1;37m- Accuracy Detection\033[1;m", accuracy
-            break
+	    print os
+            #accuracy = osmatch.accuracy
+	    #print accuracy
+            print "\033[1;32m[+]\033[1;37m  Operating System Guess: \033[1;m", os, "\033[1;37m- Accuracy Detection\033[1;m"
+            print "Checkpoint 4"
     except:
         os = "Microsoft"
         print "\033[1;32m[+]\033[1;37m  ----------------------------------------------------------------------------- \033[1;m"
