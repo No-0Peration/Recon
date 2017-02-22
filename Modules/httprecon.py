@@ -21,7 +21,7 @@ try:
     print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
 
     if not recon.checknmaprunmod(ip_address, "_http.nmap.{0}".format(port, ip_address)):
-        HTTPSCAN = "nmap -sV -Pn -vv -p {0} --script-args=unsafe=1 --script=http* --stats-every 10s -oN ./results/{1}/{1}_http.nmap.{0} {1}".format(port, ip_address)
+        HTTPSCAN = "nmap -sV -Pn -vv -p {0} --script-args=unsafe=1 --script='http* AND NOT broadcast AND NOT dos AND NOT http-slow*' --stats-every 10s -oN ./results/{1}/{1}_http.nmap.{0} {1}".format(port, ip_address)
         results = subprocess.check_output(HTTPSCAN, shell=True)
         recon.logparsertxt(results)
         outfile = "results/{0}/{0}_HTTPrecon.txt".format(ip_address)
