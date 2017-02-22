@@ -210,13 +210,13 @@ def scanner(ip_address, protocol):
         print('\033[1;37m[-]  |     Starting new {0} nmap scan for {1}\033[1;m'.format(protocol, ip_address))
         print "\033[1;37m[-]  ----------------------------------------------------------------------------- \033[1;m"
         if protocol == "UDP":
-            udpscan = "nmap -vv -Pn -sU -sV -A -O -p 53,67,68,88,161,162,137,138,139,389,520,2049 -oN './results/{0}/{0}U.nmap' -oX './results/{0}/{0}{1}_nmap_scan_import.xml' {0}".format(ip_address, protocol)
+            udpscan = "nmap -vv -Pn -sU -sV -p 53,67,68,88,161,162,137,138,139,389,520,2049 -oN './results/{0}/{0}U.nmap' -oX './results/{0}/{0}{1}_nmap_scan_import.xml' {0}".format(ip_address, protocol)
             with open(os.devnull, "w") as f:
                 subprocess.call(udpscan, shell=True, stdout=f)
             udpresults = file("./results/{0}/{0}{1}_nmap_scan_import.xml".format(ip_address, protocol), "r")
             lines = udpresults
         else:
-            tcpscan = "nmap -vv -Pn -A -O -sS -sV -p- --open -oN './results/{0}/{0}.nmap' -oX './results/{0}/{0}{1}_nmap_scan_import.xml' {0}".format(ip_address, protocol)
+            tcpscan = "nmap -vv -Pn -sS -sV -p- --open -oN './results/{0}/{0}.nmap' -oX './results/{0}/{0}{1}_nmap_scan_import.xml' {0}".format(ip_address, protocol)
             with open(os.devnull, "w") as f:
                 subprocess.call(tcpscan, shell=True, stdout=f)
             tcpresults = file("./results/{0}/{0}{1}_nmap_scan_import.xml".format(ip_address, protocol), "r")
