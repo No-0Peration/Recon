@@ -2118,6 +2118,7 @@ is
 isapi
 is-bin
 iso
+isos
 isp
 issue
 issues
@@ -3065,6 +3066,7 @@ postreview
 posts
 posttocar
 power
+powershell
 power_user
 pp
 ppc
