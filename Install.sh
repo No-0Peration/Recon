@@ -9,5 +9,5 @@ else
    echo "ERROR - This tool is intended for Kali Linux 4.0.0-kali1-amd64, it might not work as aspected"
    echo -e "[+]  Installing package dependencies..."
    apt-get install arachni dirb nmap hydra sqlmap enum4linux nikto python
-   pip install python-libnmap selenium
+   pip install python-libnmap selenium psutil
 fi
