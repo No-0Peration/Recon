@@ -1,6 +1,6 @@
 # ReconScript
 
-This tool is an automation script for the reconphase during a pentest, it was inspired by a few github repos and tied together.
+This tool is an automation script for the Active reconphase during a pentest, it was inspired by a few github repos and tied together.
 
 Intended for Kali Linux 2
 
