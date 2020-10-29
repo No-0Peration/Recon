@@ -638,6 +638,8 @@ def genShellcode(shellcode):
     print("shellcode = (")
     # Set up location of where the shellcode will be decoded:
     encodeAddress(addy1, addy2)
+    #first = str("\"\\x25\\x4A\\x4D\\x4E\\x55\\x25\\x35\\x32\\x31\\x2A\\x54\\x58\\x2D\\x66\\x4D\\x55\\x55\\x2D\\x66\\x4B\\x55\\x55\\x2D\\x6A\\x50\\x55\\x55\\x50\\x5C\"")
+    shellcode.reverse()
     for i in shellcode:
         shellcode = str(i)
         hexclean = remove(shellcode)  # Remove slashes etc
@@ -646,22 +648,28 @@ def genShellcode(shellcode):
         # Begin actual shellcode encoding:
         nullByte = checkForZero(hexzeroMin)
         if nullByte == None:
-            encodeNorm(int(hexzeroMin, base=16))
+            encodeNorm(int(str(hexzeroMin).replace("0x", ""), base=16))
         elif nullByte == 0:
-            encodeNullFirst(int(hexzeroMin, base=16))
+            encodeNullFirst(int(str(hexzeroMin).replace("0x", ""), base=16))
         elif nullByte == 1:
-            encodeNullSecond(int(hexzeroMin, base=16))
+            encodeNullSecond(int(str(hexzeroMin).replace("0x", ""), base=16))
         elif nullByte == 2:
-            encodeNullThird(int(hexzeroMin, base=16))
+            encodeNullThird(int(str(hexzeroMin).replace("0x", ""), base=16))
         elif nullByte == 3:
-            encodeNullFourth(int(hexzeroMin, base=16))
+            encodeNullFourth(int(str(hexzeroMin).replace("0x", ""), base=16))
     print(")")
+
+#0x1035e8ea
+#0x1035ffba
 
 if __name__== "__main__":
     shellcode = check_len(shellcode)
     shellcode = [shellcode[i:i + 16] for i in range(0, len(shellcode), 16)]
-    startAddress = str(input("Enter current ESP address: "))
+    startAddress = "0x1035e8ea" #str(input("Enter current ESP address: "))
     addy2 = int(startAddress, base=16)
-    decodeAddress = str(input("Enter target decode address: "))
+    decodeAddress = "0x1035ffb3" #str(input("Enter target decode address: "))
     addy1= int(decodeAddress, base=16)
     genShellcode(shellcode)
+
+
+#030
